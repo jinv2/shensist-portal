@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="TianSuan AI - Natural Algorithm R&D Lab. Defining the future of reality.">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
     <style>
@@ -23,6 +23,7 @@
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             overflow-x: hidden;
             line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
         #canvas-bg {
@@ -45,6 +46,7 @@
             top: 0;
             z-index: 100;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -65,22 +67,22 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 20px;
+            padding: 8rem 20px 2rem; /* 增加顶部padding防止被导航栏遮挡 */
             position: relative;
         }
 
         /* 故障风标题特效 */
         h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(2.5rem, 8vw, 6rem); /* 手机端最小2.5rem */
             font-weight: 800;
             letter-spacing: -2px;
             color: #fff;
             margin-bottom: 1rem;
             position: relative;
             animation: textShadow 1.6s infinite;
+            line-height: 1.1;
         }
 
-        /* 简单的微故障动画 */
         @keyframes textShadow {
             0% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
             5% { text-shadow: 2.7928974010788217px 0 1px rgba(0,30,255,0.5), -2.7928974010788217px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
@@ -88,14 +90,14 @@
         }
 
         .tagline {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--text-muted);
             max-width: 800px;
             margin-bottom: 3rem;
-            min-height: 3.2rem; /* 防止打字时高度跳动 */
+            min-height: 3.2rem;
+            padding: 0 10px;
         }
 
-        /* 光标闪烁 */
         .cursor {
             display: inline-block;
             width: 2px;
@@ -113,30 +115,36 @@
             gap: 2rem;
             margin-bottom: 4rem;
             opacity: 0;
-            animation: fadeUp 1s ease-out 1s forwards; /* 延迟出现 */
+            animation: fadeUp 1s ease-out 1s forwards;
+            width: 100%;
+            max-width: 900px;
         }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         .matrix-container {
-            padding: 4rem 5%;
+            padding: 2rem 5%;
             max-width: 1400px;
             margin: 0 auto;
         }
 
         .section-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 2rem;
             opacity: 0.8;
+            padding-left: 5px;
+            border-left: 3px solid var(--accent);
+            margin-left: 5px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            /* 手机端自适应优化：最小宽度调整为260px，防止小屏手机溢出 */
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.5rem;
         }
 
@@ -155,7 +163,7 @@
             height: 100%;
         }
 
-        .card:hover {
+        .card:hover, .card:active {
             transform: translateY(-4px);
             background: rgba(30, 30, 30, 0.8);
             border-color: var(--accent);
@@ -212,23 +220,36 @@
 
         footer {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 4rem 1rem;
             border-top: 1px solid rgba(255,255,255,0.05);
             margin-top: 4rem;
             color: #444;
+            font-size: 0.85rem;
         }
         
-        .founder { margin-bottom: 1rem; color: #666; font-size: 0.9rem; }
+        .founder { margin-bottom: 1rem; color: #666; }
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 📱 手机端深度适配 */
         @media (max-width: 768px) {
-            .stats-bar { grid-template-columns: 1fr 1fr; gap: 1rem; }
-            h1 { font-size: 2.5rem; }
-            .hero { min-height: 70vh; }
+            .hero { padding-top: 6rem; min-height: auto; }
+            .tagline { font-size: 1rem; margin-bottom: 2rem; }
+            
+            /* 手机上数据变为2列显示 */
+            .stats-bar { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 1.5rem 1rem; 
+                margin-bottom: 3rem;
+            }
+            .stat-num { font-size: 1.5rem; }
+            
+            .matrix-container { padding: 1rem 5%; }
+            .card { padding: 1.5rem; }
+            .section-title { font-size: 0.8rem; margin-bottom: 1.5rem; }
         }
     </style>
 </head>
@@ -240,7 +261,7 @@
         <div class="brand">
             SHENSIST <span>Portal</span>
         </div>
-        <div style="font-size: 0.85rem; color: var(--accent);">V2.1 LIVE</div>
+        <div style="font-size: 0.75rem; color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 4px;">V2.2</div>
     </nav>
 
     <header class="hero">
@@ -331,7 +352,7 @@
     </footer>
 
     <script>
-        // 1. 粒子特效
+        // 1. 粒子特效 (移动端优化版)
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -350,7 +371,8 @@
 
         function createParticles() {
             particles = [];
-            const count = Math.min(window.innerWidth / 10, 100); 
+            // 根据屏幕宽度决定粒子数量，手机上减少粒子以省电
+            const count = window.innerWidth < 768 ? 40 : 100; 
             for(let i=0; i<count; i++) {
                 particles.push({
                     x: Math.random() * width,
@@ -377,6 +399,7 @@
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
 
+                // 连线特效
                 for(let j = index + 1; j < particles.length; j++) {
                     const p2 = particles[j];
                     const dx = p.x - p2.x;
@@ -399,7 +422,7 @@
         window.addEventListener('resize', () => { resize(); createParticles(); });
         init();
 
-        // 2. 打字机特效 (Typewriter)
+        // 2. 打字机特效
         const textToType = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typeWriterElement = document.getElementById('typewriter');
         let i = 0;
@@ -408,12 +431,14 @@
             if (i < textToType.length) {
                 typeWriterElement.innerHTML += textToType.charAt(i);
                 i++;
-                setTimeout(typeWriter, 50); // 打字速度
+                setTimeout(typeWriter, 40);
             }
         }
         
-        // 延迟一点开始打字，更有感觉
         setTimeout(typeWriter, 500);
     </script>
+
+    <script src="https://ai-master-dashboard.netlify.app/inject-telemetry.js"></script>
+
 </body>
 </html>
