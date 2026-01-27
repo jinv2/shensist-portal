@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="TianSuan AI - Natural Algorithm R&D Lab. defining the future of reality.">
+    <meta name="description" content="TianSuan AI - Natural Algorithm R&D Lab. Defining the future of reality.">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
     <style>
         :root {
@@ -11,7 +11,7 @@
             --card-bg: rgba(20, 20, 20, 0.6);
             --text-main: #ffffff;
             --text-muted: #888888;
-            --accent: #00f0ff; /* 赛博蓝 */
+            --accent: #00f0ff;
             --accent-glow: rgba(0, 240, 255, 0.3);
         }
 
@@ -25,7 +25,6 @@
             line-height: 1.5;
         }
 
-        /* 粒子画布 */
         #canvas-bg {
             position: fixed;
             top: 0;
@@ -36,7 +35,6 @@
             background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%);
         }
 
-        /* 导航 */
         nav {
             display: flex;
             justify-content: space-between;
@@ -60,7 +58,6 @@
         }
         .brand span { color: var(--text-muted); font-weight: 400; font-size: 0.9rem; }
 
-        /* 主屏 Hero */
         .hero {
             min-height: 85vh;
             display: flex;
@@ -72,38 +69,56 @@
             position: relative;
         }
 
+        /* 故障风标题特效 */
         h1 {
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 800;
             letter-spacing: -2px;
-            background: linear-gradient(180deg, #fff, #666);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
             margin-bottom: 1rem;
-            animation: fadeUp 1s ease-out;
+            position: relative;
+            animation: textShadow 1.6s infinite;
+        }
+
+        /* 简单的微故障动画 */
+        @keyframes textShadow {
+            0% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
+            5% { text-shadow: 2.7928974010788217px 0 1px rgba(0,30,255,0.5), -2.7928974010788217px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
+            100% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
         }
 
         .tagline {
             font-size: 1.5rem;
             color: var(--text-muted);
-            max-width: 700px;
+            max-width: 800px;
             margin-bottom: 3rem;
-            animation: fadeUp 1.2s ease-out;
+            min-height: 3.2rem; /* 防止打字时高度跳动 */
         }
 
-        /* 数据展示条 (Stats) */
+        /* 光标闪烁 */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: var(--accent);
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 2rem;
             margin-bottom: 4rem;
-            animation: fadeUp 1.4s ease-out;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 1s forwards; /* 延迟出现 */
         }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 矩阵卡片 (The Matrix) */
         .matrix-container {
             padding: 4rem 5%;
             max-width: 1400px;
@@ -195,7 +210,6 @@
             opacity: 0.8;
         }
 
-        /* 底部 */
         footer {
             text-align: center;
             padding: 4rem 2rem;
@@ -206,7 +220,6 @@
         
         .founder { margin-bottom: 1rem; color: #666; font-size: 0.9rem; }
 
-        /* 动画 */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -227,12 +240,15 @@
         <div class="brand">
             SHENSIST <span>Portal</span>
         </div>
-        <div style="font-size: 0.85rem; color: var(--accent);">V2.0 LIVE</div>
+        <div style="font-size: 0.85rem; color: var(--accent);">V2.1 LIVE</div>
     </nav>
 
     <header class="hero">
-        <h1>Natural Algorithm</h1>
-        <p class="tagline">Man is not as good as AI, AI is not as good as Nature.<br>Defining the future of reality through Shensist Intelligence.</p>
+        <h1 class="glitch-text">Natural Algorithm</h1>
+        
+        <div class="tagline">
+            <span id="typewriter"></span><span class="cursor"></span>
+        </div>
 
         <div class="stats-bar">
             <div class="stat-item">
@@ -258,11 +274,10 @@
         <div class="section-title">/// SYSTEM MATRIX · 生态矩阵入口</div>
         
         <div class="grid">
-            
             <a href="https://ai.shensist.top" class="card">
                 <div class="status-dot"></div>
                 <div class="card-header">
-                    <img src="logo_ai.jpg" alt="TianSuan Logo" class="card-img">
+                    <img src="logo_ai.jpg" alt="TianSuan" class="card-img">
                     <div>
                         <h3>TianSuan AI</h3>
                         <div style="font-size:0.8rem; color:#666;">Digital Hub</div>
@@ -298,7 +313,7 @@
 
             <a href="https://dev.shensist.top" class="card">
                 <div class="card-header">
-                    <img src="logo_dev.jpg" alt="GitHub Logo" class="card-img">
+                    <img src="logo_dev.jpg" alt="GitHub" class="card-img">
                     <div>
                         <h3>Open Source</h3>
                         <div style="font-size:0.8rem; color:#666;">Codebase</div>
@@ -307,7 +322,6 @@
                 <p>Explore the architecture behind TianSuan. 16 Independent AI Tech Products open-sourced.</p>
                 <div class="card-footer">View Code →</div>
             </a>
-
         </div>
     </main>
 
@@ -317,6 +331,7 @@
     </footer>
 
     <script>
+        // 1. 粒子特效
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -335,7 +350,7 @@
 
         function createParticles() {
             particles = [];
-            const count = Math.min(window.innerWidth / 10, 100); // 自适应数量
+            const count = Math.min(window.innerWidth / 10, 100); 
             for(let i=0; i<count; i++) {
                 particles.push({
                     x: Math.random() * width,
@@ -354,18 +369,14 @@
             particles.forEach((p, index) => {
                 p.x += p.vx;
                 p.y += p.vy;
-
-                // 边界反弹
                 if(p.x < 0 || p.x > width) p.vx *= -1;
                 if(p.y < 0 || p.y > height) p.vy *= -1;
 
-                // 绘制粒子
                 ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
 
-                // 绘制连线 (神经网络感)
                 for(let j = index + 1; j < particles.length; j++) {
                     const p2 = particles[j];
                     const dx = p.x - p2.x;
@@ -382,12 +393,27 @@
                     }
                 }
             });
-
             requestAnimationFrame(animate);
         }
 
         window.addEventListener('resize', () => { resize(); createParticles(); });
         init();
+
+        // 2. 打字机特效 (Typewriter)
+        const textToType = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
+        const typeWriterElement = document.getElementById('typewriter');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                typeWriterElement.innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50); // 打字速度
+            }
+        }
+        
+        // 延迟一点开始打字，更有感觉
+        setTimeout(typeWriter, 500);
     </script>
 </body>
 </html>
