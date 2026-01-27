@@ -51,14 +51,16 @@
         }
 
         .brand {
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 10px;
         }
-        .brand span { color: var(--text-muted); font-weight: 400; font-size: 0.9rem; }
+        
+        /* Logo 图片样式调整 */
+        .brand img {
+            height: 35px; /* 控制 Logo 高度，保持比例 */
+            width: auto;
+            display: block;
+        }
 
         .hero {
             min-height: 85vh;
@@ -259,7 +261,7 @@
 
     <nav>
         <div class="brand">
-            SHENSIST <span>Portal</span>
+            <img src="logo_ts.png" alt="ShenSiST" />
         </div>
         <div style="font-size: 0.75rem; color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 4px;">V2.2</div>
     </nav>
