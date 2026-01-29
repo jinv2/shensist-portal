@@ -1,7 +1,6 @@
 /**
- * SI-OS Kernel v1.4 (LingZhu)
- * 架构终极版：三头六臂 (The 3-Head 6-Arm Matrix)
- * 生产力版：支持记忆共享、一键宏指令、自动剪贴板
+ * SI-OS Kernel v1.5 (LingZhu)
+ * 升级内容：支持 Send 按钮监听
  */
 
 const SIOS = {
@@ -18,23 +17,18 @@ const SIOS = {
         }
     },
 
-    // === 2. 模块注册表 (完全体：三头六臂) ===
+    // 2. 模块注册表
     registry: {
-        // [文曲头] Head of Literature
         "literature": { 
             path: "modules/head_literature.js", 
             keywords: ["小说", "故事", "剧本", "大纲", "story", "script", "plot", "设定"], 
             name: "HEAD OF LITERATURE (文曲)" 
         },
-        
-        // [巨灵头] Head of Visual (已指向新文件 head_visual.js)
         "visual": { 
             path: "modules/head_visual.js",     
             keywords: ["visual", "画面", "分镜", "shot", "美术", "color", "midjourney"],   
             name: "HEAD OF VISUAL (巨灵)" 
         },
-        
-        // [夔牛头] Head of Audio (已指向新文件 head_music.js)
         "music": { 
             path: "modules/head_music.js",      
             keywords: ["music", "音乐", "配乐", "sound", "音效", "sfx", "suno"],   
@@ -42,19 +36,21 @@ const SIOS = {
         }
     },
 
-    // 3. 初始化 (强力启动逻辑)
+    // 3. 初始化 (核心修改：绑定按钮事件)
     init: function() {
         if (this.state.isReady) return;
         const stream = document.getElementById('console-output');
         if (!stream) return;
         
         stream.innerHTML = ""; 
-        this.ui.log("SI-OS KERNEL V1.4 ONLINE.", "sys");
+        this.ui.log("SI-OS KERNEL V1.5 ONLINE.", "sys");
         this.ui.log("ARCH: 3-HEAD 6-ARM MATRIX.", "sys"); 
         this.ui.log("READY FOR PROFESSIONAL WORKFLOW...", "sys");
         this.state.isReady = true;
         
         const input = document.getElementById('console-input');
+        const sendBtn = document.getElementById('console-send-btn');
+
         if (input) {
             const newNode = input.cloneNode(true);
             input.parentNode.replaceChild(newNode, input);
@@ -65,6 +61,17 @@ const SIOS = {
                 }
             });
             newNode.focus();
+            
+            // 【新增】监听发送按钮点击
+            if (sendBtn) {
+                const newBtn = sendBtn.cloneNode(true);
+                sendBtn.parentNode.replaceChild(newBtn, sendBtn);
+                newBtn.addEventListener('click', () => {
+                    this.handleInput(newNode.value);
+                    newNode.value = ''; // 清空输入框
+                    newNode.focus();    // 焦点回到输入框
+                });
+            }
         }
     },
 
@@ -73,13 +80,11 @@ const SIOS = {
         if (!text.trim()) return;
         this.ui.log(`> ${text}`, "user");
 
-        // 检测“一键生成”宏指令
         if (text.includes("一键") || text.includes("全部") || text.includes("generate all")) {
             this.runMacro(text); 
             return;
         }
 
-        // 普通单模块触发
         let targetModule = null;
         for (let [key, config] of Object.entries(this.registry)) {
             if (config.keywords.some(k => text.toLowerCase().includes(k))) {
@@ -91,7 +96,6 @@ const SIOS = {
         if (targetModule) {
             this.loadModule(targetModule, text);
         } else {
-            // 默认交给文曲头处理
             this.loadModule("literature", text);
         }
     },
@@ -99,24 +103,17 @@ const SIOS = {
     // 全自动宏指令流水线
     runMacro: async function(userInput) {
         this.ui.log(">>> INITIATING 3-HEAD WORKFLOW (FULL IP CREATION) <<<", "sys");
-        
-        // 第一步：文曲 (产出剧本大纲 + 人物小传)
         await this.loadModuleSync("literature", userInput);
-        
         setTimeout(async () => {
-             // 第二步：巨灵 (读取剧本记忆 -> 生成分镜 + 美术)
             await this.loadModuleSync("visual", "AUTO_GENERATE");
-            
             setTimeout(async () => {
-                // 第三步：夔牛 (读取情绪记忆 -> 生成配乐 + 音效)
                 await this.loadModuleSync("music", "AUTO_GENERATE");
-                
                 this.ui.log(">>> IP ASSETS GENERATION COMPLETE. <<<", "sys");
             }, 1500);
         }, 1500);
     },
 
-    // 5. 动态加载器 (Promise版)
+    // 5. 动态加载器 (Promise)
     loadModule: function(moduleKey, payload) {
         this.loadModuleSync(moduleKey, payload);
     },
@@ -124,13 +121,11 @@ const SIOS = {
     loadModuleSync: function(moduleKey, payload) {
         return new Promise((resolve) => {
             const config = this.registry[moduleKey];
-            
             if (this.state.activeModules.has(moduleKey)) {
                 this.dispatchToModule(moduleKey, payload);
                 resolve();
                 return;
             }
-
             this.ui.log(`MOUNTING HEAD: [${config.name}] ...`, "sys");
             const script = document.createElement('script');
             script.src = config.path;
@@ -141,20 +136,15 @@ const SIOS = {
                 resolve();
             };
             script.onerror = () => {
-                this.ui.log(`ERROR: MODULE [${config.name}] FAILED TO LOAD. CHECK PATH: ${config.path}`, "sys");
+                this.ui.log(`ERROR: MODULE [${config.name}] FAILED.`, "sys");
             }
             document.body.appendChild(script);
         });
     },
 
-    // 6. 信号分发 (核心修改：统一命名规范)
+    // 6. 信号分发
     dispatchToModule: function(moduleKey, payload) {
-        // 统一映射规则：
-        // literature -> HeadLiterature
-        // visual -> HeadVisual
-        // music -> HeadMusic
         const moduleObjectName = "Head" + moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
-        
         if (window[moduleObjectName]) {
             window[moduleObjectName].process(payload, this);
         } else {
@@ -180,23 +170,14 @@ const SIOS = {
 
             const card = document.createElement('div');
             card.style.cssText = `
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(0, 240, 255, 0.2);
-                border-radius: 8px;
-                margin: 10px 0;
-                padding: 0;
-                overflow: hidden;
-                position: relative;
+                background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2);
+                border-radius: 8px; margin: 10px 0; padding: 0; overflow: hidden; position: relative;
             `;
 
             const header = document.createElement('div');
             header.style.cssText = `
-                background: rgba(0, 0, 0, 0.3);
-                padding: 5px 10px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                background: rgba(0, 0, 0, 0.3); padding: 5px 10px; display: flex;
+                justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             `;
 
             const titleSpan = document.createElement('span');
@@ -237,7 +218,6 @@ const SIOS = {
     }
 };
 
-// 强力启动循环
 (function autoStart() {
     const checkTimer = setInterval(() => {
         const consoleEl = document.getElementById('console-output');
