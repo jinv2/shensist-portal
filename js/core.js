@@ -1,6 +1,6 @@
 /**
- * SI-OS Kernel v1.3 (LingZhu)
- * 架构升级：三头六臂 (The 3-Head Architecture)
+ * SI-OS Kernel v1.4 (LingZhu)
+ * 架构终极版：三头六臂 (The 3-Head 6-Arm Matrix)
  * 生产力版：支持记忆共享、一键宏指令、自动剪贴板
  */
 
@@ -18,24 +18,26 @@ const SIOS = {
         }
     },
 
-    // === 2. 模块注册表 (核心修改：三头六臂架构) ===
+    // === 2. 模块注册表 (完全体：三头六臂) ===
     registry: {
-        // [文曲] 文学头：指向新建立的 head_literature.js
+        // [文曲头] Head of Literature
         "literature": { 
             path: "modules/head_literature.js", 
             keywords: ["小说", "故事", "剧本", "大纲", "story", "script", "plot", "设定"], 
             name: "HEAD OF LITERATURE (文曲)" 
         },
-        // [巨灵] 视觉头：暂时沿用 arm_visual.js，但名字升级
+        
+        // [巨灵头] Head of Visual (已指向新文件 head_visual.js)
         "visual": { 
-            path: "modules/arm_visual.js",     
-            keywords: ["visual", "画面", "分镜", "shot", "图", "midjourney", "sora"],   
+            path: "modules/head_visual.js",     
+            keywords: ["visual", "画面", "分镜", "shot", "美术", "color", "midjourney"],   
             name: "HEAD OF VISUAL (巨灵)" 
         },
-        // [夔牛] 听觉头：暂时沿用 arm_music.js，名字升级
+        
+        // [夔牛头] Head of Audio (已指向新文件 head_music.js)
         "music": { 
-            path: "modules/arm_music.js",      
-            keywords: ["music", "音乐", "配乐", "sound", "bgm", "suno", "udio"],   
+            path: "modules/head_music.js",      
+            keywords: ["music", "音乐", "配乐", "sound", "音效", "sfx", "suno"],   
             name: "HEAD OF AUDIO (夔牛)" 
         }
     },
@@ -47,8 +49,8 @@ const SIOS = {
         if (!stream) return;
         
         stream.innerHTML = ""; 
-        this.ui.log("SI-OS KERNEL V1.3 ONLINE.", "sys");
-        this.ui.log("ARCH: 3-HEAD 6-ARM MATRIX.", "sys"); // 显示架构版本
+        this.ui.log("SI-OS KERNEL V1.4 ONLINE.", "sys");
+        this.ui.log("ARCH: 3-HEAD 6-ARM MATRIX.", "sys"); 
         this.ui.log("READY FOR PROFESSIONAL WORKFLOW...", "sys");
         this.state.isReady = true;
         
@@ -89,7 +91,7 @@ const SIOS = {
         if (targetModule) {
             this.loadModule(targetModule, text);
         } else {
-            // 默认交给文学头处理
+            // 默认交给文曲头处理
             this.loadModule("literature", text);
         }
     },
@@ -102,11 +104,11 @@ const SIOS = {
         await this.loadModuleSync("literature", userInput);
         
         setTimeout(async () => {
-             // 第二步：巨灵 (读取剧本记忆 -> 生成分镜)
+             // 第二步：巨灵 (读取剧本记忆 -> 生成分镜 + 美术)
             await this.loadModuleSync("visual", "AUTO_GENERATE");
             
             setTimeout(async () => {
-                // 第三步：夔牛 (读取情绪记忆 -> 生成配乐)
+                // 第三步：夔牛 (读取情绪记忆 -> 生成配乐 + 音效)
                 await this.loadModuleSync("music", "AUTO_GENERATE");
                 
                 this.ui.log(">>> IP ASSETS GENERATION COMPLETE. <<<", "sys");
@@ -145,19 +147,13 @@ const SIOS = {
         });
     },
 
-    // 6. 信号分发
+    // 6. 信号分发 (核心修改：统一命名规范)
     dispatchToModule: function(moduleKey, payload) {
-        // 映射规则：
-        // literature -> HeadLiterature (对应 head_literature.js)
-        // visual -> ArmVisual (对应 arm_visual.js)
-        // music -> ArmMusic (对应 arm_music.js)
-        
-        let moduleObjectName = "";
-        if (moduleKey === "literature") {
-            moduleObjectName = "HeadLiterature";
-        } else {
-            moduleObjectName = "Arm" + moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
-        }
+        // 统一映射规则：
+        // literature -> HeadLiterature
+        // visual -> HeadVisual
+        // music -> HeadMusic
+        const moduleObjectName = "Head" + moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
         
         if (window[moduleObjectName]) {
             window[moduleObjectName].process(payload, this);
