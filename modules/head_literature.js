@@ -1,94 +1,112 @@
 /**
- * SI-OS Module: Head of Literature (文曲·深度重构版 v1.6)
- * 迭代目标：保留哲学深度，同时支持大师风格 (Master Style) 的透传
+ * SI-OS Module: Head of Literature (文曲·最终完整版 v4.0)
+ * 职责：输出文学系的3项核心资产 (Concept -> Structure -> Character)
  */
 
 window.HeadLiterature = {
     meta: {
         name: "Narrative Engine: Philosopher Mode",
-        version: "3.1 Style Aware"
+        version: "4.0 Full Matrix"
     },
 
     process: function(userInput, core) {
-        // 1. 获取核心层可能已经识别到的风格 (比如 "王家卫")
-        // 如果用户没说风格，默认使用 "Philosophical / Avant-Garde" (哲学/先锋派)
-        const currentStyle = core.state.sharedContext.masterStyle || "Philosophical / Avant-Garde";
+        // 1. 获取风格 (SORA2 甲板传入)
+        const currentStyle = core.state.sharedContext.masterStyle || "High Concept / Philosophical";
 
-        core.ui.log(`[文曲核心] 正在进行语义解构...`, "mod");
-        core.ui.log(`[风格锚点] 已锁定: ${currentStyle}`, "mod");
-        core.ui.log(`[思维链] 检索荣格十二原型... 匹配哲学母题...`, "mod");
+        core.ui.log(`[文曲核心] 启动... 风格锚点: ${currentStyle}`, "mod");
         
+        // === 输出 1: [HEAD] 核心概念 (立即生成) ===
+        const coreConcept = this.generateLogline(userInput, currentStyle);
+        core.ui.renderCodeCard("1_LOGLINE_CORE.MD", coreConcept);
+
+        // 模拟思考延迟
         setTimeout(() => {
-            // 生成深度剧本结构 (传入风格参数)
+            // === 输出 2: [ARM 1] 剧本结构 (骨架) ===
+            core.ui.log(`[文学臂·壹] 构建叙事骨架...`, "mod");
             const beatSheet = this.generateDeepBeatSheet(userInput, currentStyle);
-            core.ui.renderCodeCard("MASTER_SCREENPLAY_STRUCTURE.MD", beatSheet);
+            core.ui.renderCodeCard("2_BEAT_SHEET.MD", beatSheet);
             
-            // 紧接着生成人物心理侧写
             setTimeout(() => {
+                // === 输出 3: [ARM 2] 人物小传 (血肉) ===
+                core.ui.log(`[文学臂·贰] 注入人物灵魂...`, "mod");
                 const characters = this.generatePsychoProfile(userInput);
-                core.ui.renderCodeCard("CHARACTER_PSYCHOLOGY.JSON", characters);
+                core.ui.renderCodeCard("3_CHARACTER_BIBLE.JSON", characters);
                 
-                // 【核心修改点】写入共享记忆
+                // 写入共享记忆，供后续 Visual 和 Music 模块使用
                 core.state.sharedContext = {
                     theme: userInput,
-                    // 关键：将确定的风格写入记忆，供视觉头和音乐头读取
-                    masterStyle: currentStyle, 
-                    visualTags: ["Chiaroscuro (明暗对照法)", "Brutalism (野兽派建筑)", "Film Noir"],
-                    mood: "Melancholic yet Euphoric (忧郁而狂喜)",
+                    masterStyle: currentStyle,
+                    visualTags: ["Chiaroscuro", "Cinematic", "Atmospheric", currentStyle], // 传递风格tag
+                    mood: "Complex & Evolving",
                     summary: userInput
                 };
-                core.ui.log(">> 文学内核已升维。风格参数已同步至 [巨灵] 与 [夔牛]。", "sys");
-            }, 1200);
+                core.ui.log(">> [文曲] 任务完成。文学资产 (3/3) 已交付。", "sys");
+            }, 800); // 间隔 0.8秒
 
-        }, 1500);
+        }, 800); // 间隔 0.8秒
     },
 
-    // --- 升级点：在大纲头部显示风格 ---
-    generateDeepBeatSheet: function(input, style) {
+    // --- [1] 生成核心概念 (Logline) ---
+    generateLogline: function(input, style) {
         return `
-# PROJECT CODE: ${input.substring(0, 10).toUpperCase()}...
-## MASTER STYLE: ${style}  <-- 风格已注入剧本DNA
-## THEME: The Paradox of Existence (存在的悖论)
-## TONE: Elevating Horror / Speculative Fiction
+# PROJECT: ${input.substring(0, 15).toUpperCase()}...
+## STRATEGY: High Concept Pitch
+## STYLE: ${style}
 
-### [ACT I: The Lie We Live] (我们生活的谎言)
-1. **The Stasis (停滞)**: 主角处于一种"完美的痛苦"中。表面平衡，实则腐烂。
-   > *Visual Metaphor*: A bird trapped in a cage made of light.
-2. **The Inciting Incident (裂痕)**: 不是简单的事件，而是一个"无法忽视的疑问"打破了现实的各种维度。
-   > *Key Line*: "The algorithm stopped counting."
+> **LOGLINE**: 
+> "In a world where ${input} defies the laws of reality, a fractured soul must confront the paradox of existence before the silence consumes everything."
 
-### [ACT II: The Descent] (下坠与解构)
-3. **The Antithesis (反题)**: 主角进入一个与旧世界逻辑完全相反的领域。物理法则失效，道德标准重组。
-4. **The False Victory (伪胜利)**: 主角以为掌握了新世界的规则，但这只是深渊的诱饵。
-5. **All Is Lost (灵魂暗夜)**: 不仅仅是失败，而是"信仰崩塌"。主角意识到自己追求的目标本身就是错误的。
-   > *Philosophical Core*: Camus's Absurdity - 面对无意义世界的沉默。
+**CORE THEMES**:
+- The fragility of memory vs. the permanence of data.
+- Entropy as a form of art.
+- ${style} aesthetics applied to human suffering.
 
-### [ACT III: The Synthesis] (融合与升华)
-6. **The Third Way (第三条路)**: 主角不再战胜反派，而是"理解"或"成为"反派，从而超越二元对立。
-7. **The New Normal (新常态)**: 世界没有变好，但主角观看世界的眼睛变了。
-   > *Closing Image*: A single flower blooming in a circuit board.
+**TARGET AUDIENCE**: 
+- A24 / HBO Prestige Drama viewers.
 `;
     },
 
-    // --- 升级点：基于心理学的人物侧写 (保持不变) ---
+    // --- [2] 生成剧本结构 (Beat Sheet) ---
+    generateDeepBeatSheet: function(input, style) {
+        return `
+## NARRATIVE STRUCTURE: Save The Cat (Deconstructed)
+## TONE: ${style} / Elevating Horror
+
+### [ACT I: The Stasis]
+1. **The Ghost**: 主角在一个看似完美的${style}风格世界中，感觉到一种难以名状的违和感。
+   > *Visual*: A glitch in the morning coffee steam.
+2. **The Catalyst**: "${input}" 作为一个不可思议的事件发生了，打破了物理法则。
+
+### [ACT II: The Antithesis]
+3. **Fun & Games**: 主角探索这个新世界的规则。视觉风格从写实转为超现实 (${style} distortion)。
+4. **Midpoint**: 巨大的转折。主角发现自己追求的目标（寻找${input}）其实是一个陷阱。
+5. **Dark Night of the Soul**: 彻底的绝望。不是被打败，而是被"虚无"吞噬。
+
+### [ACT III: The Synthesis]
+6. **The Third Way**: 主角接受了混乱。不再试图修复世界，而是让自己进化。
+7. **Final Image**: 与开场呼应，但充满了新的、令人不安的生机。
+`;
+    },
+
+    // --- [3] 生成人物小传 (Character Bible) ---
     generatePsychoProfile: function(input) {
         return `
 {
   "PROTAGONIST (主角)": {
-    "Archetype": "The Tragic Visionary (悲剧的远见者)",
-    "Core Wound (核心创伤)": "被系统性地剥夺了爱的能力",
-    "The Lie (深信的谎言)": "只要我足够理性，就不会受伤",
-    "The Truth (真相)": "混乱才是生命的本质",
-    "MBTI": "INFJ-T (倡导者/动荡)"
+    "Archetype": "The Tragic Visionary",
+    "Core Wound": "被系统性地剥夺了爱的能力",
+    "The Lie": "只要我足够理性，就不会受伤",
+    "The Truth": "混乱才是生命的本质",
+    "MBTI": "INFJ-T"
   },
   "ANTAGONIST (反派)": {
-    "Concept": "Not a person, but an Ideology (非人，而是一种意识形态)",
-    "Manifestation": "The relentless drive for Efficiency (对效率的无情追求)",
+    "Concept": "Not a person, but an Ideology",
+    "Manifestation": "The relentless drive for Efficiency",
     "Seduction": "它承诺消除所有痛苦，代价是消除自由意志"
   },
-  "AESTHETIC_MOODBOARD": {
-    "Texture": "Rust, Glitch, Velvet, Concrete",
-    "Color Psychology": "Cobalt Blue (Melancholy) pierced by Neon Pink (Artificial Hope)"
+  "RELATIONSHIP_DYNAMIC": {
+    "Type": "Mirror Image (镜像关系)",
+    "Evolution": "Enemy -> Teacher -> Part of Self"
   }
 }
 `;
