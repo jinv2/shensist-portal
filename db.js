@@ -10,7 +10,7 @@ const appDatabase = [
 
     // 🌐 旧的 TianSuan AI (保留)
     {
-        name: "Legacy Hub",
+        name: "three-heads-six-arms",
         icon: "🌐",
         desc: "Original TianSuan AI site.",
         url: "https://main.shensist.top/",
