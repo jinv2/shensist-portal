@@ -1,92 +1,86 @@
 /**
- * SI-OS Module: Head of Literature (文曲星·文学核心)
- * 职责：影视工业级剧本开发。
- * 六臂职能：1. 剧本结构 (Structure)  2. 人物侧写 (Character)
+ * SI-OS Module: Head of Literature (文曲·深度重构版)
+ * 迭代目标：注入哲学深度、戏剧悖论与行业级审美。
  */
 
 window.HeadLiterature = {
     meta: {
-        name: "Narrative Engine Pro",
-        version: "2.0 Industry Standard"
+        name: "Narrative Engine: Philosopher Mode",
+        version: "3.0 Master Class"
     },
 
     process: function(userInput, core) {
-        // 1. 启动反馈
-        core.ui.log(`[文曲核心] 正在解析 Logline: "${userInput}"`, "mod");
-        core.ui.log(`[臂1·骨架] 正在调用《救猫咪》节拍表模型...`, "mod");
+        core.ui.log(`[文曲核心] 正在进行语义解构...`, "mod");
+        core.ui.log(`[思维链] 检索荣格十二原型... 匹配哲学母题...`, "mod");
         
-        // 模拟深度思考时间
         setTimeout(() => {
-            // 2. 生成专业剧本大纲
-            const beatSheet = this.generateBeatSheet(userInput);
-            core.ui.renderCodeCard("SCREENPLAY_BEAT_SHEET.MD", beatSheet);
+            // 生成深度剧本结构
+            const beatSheet = this.generateDeepBeatSheet(userInput);
+            core.ui.renderCodeCard("MASTER_SCREENPLAY_STRUCTURE.MD", beatSheet);
             
-            // 3. 紧接着生成人物小传
-            core.ui.log(`[臂2·血肉] 正在建立人物弧光矩阵...`, "mod");
+            // 紧接着生成人物心理侧写
             setTimeout(() => {
-                const characters = this.generateCharacterProfile(userInput);
-                core.ui.renderCodeCard("CHARACTER_BIBLE.JSON", characters);
+                const characters = this.generatePsychoProfile(userInput);
+                core.ui.renderCodeCard("CHARACTER_PSYCHOLOGY.JSON", characters);
                 
-                // 4. 写入共享记忆，供影视和音乐头使用
+                // 写入更复杂的共享记忆，包含情绪色板
                 core.state.sharedContext = {
                     theme: userInput,
-                    structure: "Three-Act Structure",
-                    mood: "Drama / Thriller" // 简化的情绪判断
+                    visualTags: ["Chiaroscuro (明暗对照法)", "Brutalism (野兽派建筑)", "Film Noir"],
+                    mood: "Melancholic yet Euphoric (忧郁而狂喜)",
+                    summary: userInput
                 };
-                core.ui.log(">> 文学地基已夯实。视觉头与听觉头已准备就绪。", "sys");
-            }, 1000);
+                core.ui.log(">> 文学内核已升维。等待视觉/听觉通感转化。", "sys");
+            }, 1200);
 
         }, 1500);
     },
 
-    // --- 臂1：剧本结构生成器 (The Structure Arm) ---
-    generateBeatSheet: function(input) {
+    // --- 升级点：不再是简单的三幕式，而是带有人性洞察的结构 ---
+    generateDeepBeatSheet: function(input) {
         return `
-# PROJECT: ${input}
-## FORMAT: Feature Film / Pilot
-## STRUCTURE: Save The Cat (布莱克·斯奈德节拍表)
+# PROJECT CODE: ${input.substring(0, 10).toUpperCase()}...
+## THEME: The Paradox of Existence (存在的悖论)
+## TONE: Elevating Horror / Speculative Fiction
 
-### ACT I: The Setup (铺垫)
-1. [Opening Image]: 展示主角在"旧世界"的现状，暗示核心缺陷。
-2. [Theme Stated]: 配角无意中说出本片主题（关于"${input}"的真谛）。
-3. [Catalyst (激励事件)]: 打破平衡的突发事件。
-4. [Debate]: 主角抗拒改变，试图维持现状。
+### [ACT I: The Lie We Live] (我们生活的谎言)
+1. **The Stasis (停滞)**: 主角处于一种"完美的痛苦"中。表面平衡，实则腐烂。
+   > *Visual Metaphor*: A bird trapped in a cage made of light.
+2. **The Inciting Incident (裂痕)**: 不是简单的事件，而是一个"无法忽视的疑问"打破了现实的各种维度。
+   > *Key Line*: "The algorithm stopped counting."
 
-### ACT II: The Confrontation (对抗)
-5. [Break into Two]: 主角主动选择进入"新世界"。
-6. [B Story]: 开启副线（通常是爱情线或导师线）。
-7. [Fun and Games]: 核心看点展示（预告片时刻）。
-8. [Midpoint]: 伪胜利或伪失败，风险升级。
-9. [Bad Guys Close In]: 反派（或核心冲突）开始反扑。
-10. [All is Lost (一无所有)]: 主角失去一切，看似彻底失败。
-11. [Dark Night of the Soul]: 主角在绝望中通过灵魂拷问获得顿悟。
+### [ACT II: The Descent] (下坠与解构)
+3. **The Antithesis (反题)**: 主角进入一个与旧世界逻辑完全相反的领域。物理法则失效，道德标准重组。
+4. **The False Victory (伪胜利)**: 主角以为掌握了新世界的规则，但这只是深渊的诱饵。
+5. **All Is Lost (灵魂暗夜)**: 不仅仅是失败，而是"信仰崩塌"。主角意识到自己追求的目标本身就是错误的。
+   > *Philosophical Core*: Camus's Absurdity - 面对无意义世界的沉默。
 
-### ACT III: The Resolution (结局)
-12. [Finale]: 主角利用顿悟，用新方法解决终极危机。
-13. [Final Image]: 与开场画面呼应，但展示主角的蜕变。
+### [ACT III: The Synthesis] (融合与升华)
+6. **The Third Way (第三条路)**: 主角不再战胜反派，而是"理解"或"成为"反派，从而超越二元对立。
+7. **The New Normal (新常态)**: 世界没有变好，但主角观看世界的眼睛变了。
+   > *Closing Image*: A single flower blooming in a circuit board.
 `;
     },
 
-    // --- 臂2：人物小传生成器 (The Character Arm) ---
-    generateCharacterProfile: function(input) {
+    // --- 升级点：基于心理学的人物侧写 ---
+    generatePsychoProfile: function(input) {
         return `
 {
   "PROTAGONIST (主角)": {
-    "Archetype": "The Reluctant Hero (不情愿的英雄)",
-    "Want (表层欲望)": "解决眼前的危机 (${input})",
-    "Need (深层需求)": "战胜内心的恐惧/与自我和解",
-    "Ghost (创伤阴影)": "过去发生的一件未解之事",
-    "MBTI": "INTJ / ISTP"
+    "Archetype": "The Tragic Visionary (悲剧的远见者)",
+    "Core Wound (核心创伤)": "被系统性地剥夺了爱的能力",
+    "The Lie (深信的谎言)": "只要我足够理性，就不会受伤",
+    "The Truth (真相)": "混乱才是生命的本质",
+    "MBTI": "INFJ-T (倡导者/动荡)"
   },
   "ANTAGONIST (反派)": {
-    "Role": "Shadow Self (主角的阴暗面镜像)",
-    "Motivation": "为了某种扭曲的正义或极致的贪婪",
-    "Power": "控制着主角最缺乏的资源"
+    "Concept": "Not a person, but an Ideology (非人，而是一种意识形态)",
+    "Manifestation": "The relentless drive for Efficiency (对效率的无情追求)",
+    "Seduction": "它承诺消除所有痛苦，代价是消除自由意志"
   },
-  "RELATIONSHIP_ARC": {
-    "Start": "冲突/误解",
-    "Middle": "被迫合作/相互试探",
-    "End": "牺牲/救赎"
+  "AESTHETIC_MOODBOARD": {
+    "Texture": "Rust, Glitch, Velvet, Concrete",
+    "Color Psychology": "Cobalt Blue (Melancholy) pierced by Neon Pink (Artificial Hope)"
   }
 }
 `;
