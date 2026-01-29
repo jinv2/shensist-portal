@@ -1,6 +1,6 @@
 /**
- * SI-OS Kernel v1.6 (LingZhu)
- * 升级内容：支持系统重置 (Reboot) + 大师风格识别 (Style Extraction)
+ * SI-OS Kernel v1.7 (LingZhu)
+ * 升级内容：集成 SORA2 风格控制甲板 (Style Deck Integration)
  */
 
 const SIOS = {
@@ -8,14 +8,13 @@ const SIOS = {
     state: {
         isReady: false,
         activeModules: new Set(),
-        // 共享上下文记忆池
         sharedContext: {
             theme: "",
             visualTags: [],
             mood: "",
             summary: "",
-            // 【新增】大师风格槽位
-            masterStyle: "Default Sci-Fi" 
+            // 默认为电影感，会被控制甲板覆盖
+            masterStyle: "Default Cinematic" 
         }
     },
 
@@ -33,15 +32,36 @@ const SIOS = {
         if (!stream) return;
         
         stream.innerHTML = ""; 
-        this.ui.log("SI-OS KERNEL V1.6 ONLINE.", "sys");
-        this.ui.log("SYSTEM REBOOTED. MEMORY CLEARED.", "sys");
-        this.ui.log("READY FOR MASTER-CLASS CREATION...", "sys");
+        this.ui.log("SI-OS KERNEL V1.7 ONLINE.", "sys");
+        this.ui.log("STYLE DECK: MOUNTED.", "sys"); 
         this.state.isReady = true;
         
         const input = document.getElementById('console-input');
         const sendBtn = document.getElementById('console-send-btn');
         const resetBtn = document.getElementById('console-reset-btn');
 
+        // === 【新增】绑定风格按钮逻辑 ===
+        const styleBtns = document.querySelectorAll('.style-btn');
+        styleBtns.forEach(btn => {
+            // 先移除旧监听器（如果有）
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            
+            newBtn.addEventListener('click', () => {
+                // 1. UI 互斥高亮 (单选逻辑)
+                document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+                newBtn.classList.add('active');
+                
+                // 2. 更新内核状态
+                const selectedStyle = newBtn.getAttribute('data-value');
+                this.state.sharedContext.masterStyle = selectedStyle;
+                
+                // 3. 屏幕反馈
+                this.ui.log(`[STYLE LOCKED]: ${selectedStyle}`, "sys");
+            });
+        });
+
+        // 绑定输入框与按钮
         if (input) {
             const newNode = input.cloneNode(true);
             input.parentNode.replaceChild(newNode, input);
@@ -53,7 +73,6 @@ const SIOS = {
             });
             newNode.focus();
             
-            // 绑定发送按钮
             if (sendBtn) {
                 const newSendBtn = sendBtn.cloneNode(true);
                 sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
@@ -64,36 +83,34 @@ const SIOS = {
                 });
             }
 
-            // 【新增】绑定重置按钮
             if (resetBtn) {
                 const newResetBtn = resetBtn.cloneNode(true);
                 resetBtn.parentNode.replaceChild(newResetBtn, resetBtn);
-                newResetBtn.addEventListener('click', () => {
-                    this.reset();
-                });
+                newResetBtn.addEventListener('click', () => { this.reset(); });
             }
         }
     },
 
-    // 【新增】重置系统
+    // 重置系统
     reset: function() {
         this.state.isReady = false;
         this.state.activeModules.clear();
-        this.state.sharedContext = { theme: "", visualTags: [], mood: "", summary: "", masterStyle: "Default Sci-Fi" };
+        this.state.sharedContext = { theme: "", visualTags: [], mood: "", summary: "", masterStyle: "Default Cinematic" };
+        
+        // 清除按钮高亮
+        document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+        
         this.init(); // 重新初始化
     },
 
-    // 4. 神经路由 & 风格识别
+    // 4. 神经路由
     handleInput: function(text) {
         if (!text.trim()) return;
         this.ui.log(`> ${text}`, "user");
 
-        // 【核心升级】简单的风格提取逻辑
-        // 如果用户输入了 "风格：王家卫" 或 "style: Cyberpunk"，我们把它存下来
-        if (text.includes("风格") || text.includes("style") || text.includes("Style")) {
-            // 这里做一个简单的模拟提取，未来可以用 NLP
-            this.ui.log("[SYSTEM] DETECTING STYLE PREFERENCE...", "sys");
-            this.state.sharedContext.masterStyle = text; // 暂时把整句作为风格参考
+        // 检查用户是否手动输入了风格，如果输入了，覆盖按钮的选择
+        if (text.includes("风格") || text.includes("style")) {
+            this.state.sharedContext.masterStyle = text; // 简单粗暴覆盖
         }
 
         if (text.includes("一键") || text.includes("全部") || text.includes("generate all")) {
@@ -116,9 +133,13 @@ const SIOS = {
         }
     },
 
-    // 全自动宏指令流水线
+    // 宏指令
     runMacro: async function(userInput) {
-        this.ui.log(">>> INITIATING 3-HEAD WORKFLOW (FULL IP CREATION) <<<", "sys");
+        this.ui.log(">>> INITIATING 3-HEAD WORKFLOW <<<", "sys");
+        // 显示当前使用的风格
+        const currentStyle = this.state.sharedContext.masterStyle;
+        this.ui.log(`[PIPELINE CONFIG]: Style = ${currentStyle}`, "mod");
+
         await this.loadModuleSync("literature", userInput);
         setTimeout(async () => {
             await this.loadModuleSync("visual", "AUTO_GENERATE");
