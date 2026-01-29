@@ -44,24 +44,23 @@
         body.zen-active .matrix-container,
         body.zen-active nav,
         body.zen-active footer {
-            filter: blur(15px);
+            filter: blur(20px); /* 加重模糊 */
             opacity: 0;
             pointer-events: none;
             transition: all 0.8s ease;
         }
-        /* 灵珠激活时不模糊灵珠自己 */
+        /* 灵珠激活时，按钮本身的状态 */
         body.zen-active .lingzhu-trigger-container {
-            z-index: 10001; /* 确保它浮在最上层 */
-            opacity: 0; /* 或者让它也消失，只留控制台？通常让它消失比较好，这里设为消失 */
+            z-index: 10001; 
+            opacity: 0; 
             pointer-events: none;
-            transform: scale(1.5);
+            transform: scale(1.1); /* 稍微放大后消失 */
             filter: blur(10px);
-            transition: all 0.5s ease;
+            transition: all 0.6s ease;
         }
 
         #canvas-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%);
             transition: opacity 0.8s ease;
         }
@@ -76,7 +75,7 @@
         .brand img { height: 40px; width: auto; border-radius: 4px; filter: brightness(1.2); }
 
         .hero {
-            min-height: 90vh; /* 拉高一点，给下面留空间 */
+            min-height: 95vh; /* 进一步拉高，占据首屏 */
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 8rem 20px 4rem; position: relative;
         }
@@ -98,7 +97,7 @@
         /* 原有数据行 */
         .stats-bar {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-            margin-bottom: 4rem; /* 增加底部间距，给灵珠留位置 */
+            margin-bottom: 3rem;
             width: 100%; max-width: 900px;
             opacity: 0; animation: fadeUp 1s ease-out 0.5s forwards;
         }
@@ -106,89 +105,101 @@
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === 【核心修改】灵珠巨型横幅 (LingZhu Mega Bar) === */
+        /* === 【核心修改】灵珠巨型拟物化控制台 (Skeuomorphic Neumorphism) === */
         .lingzhu-trigger-container {
             width: 100%;
-            max-width: 1000px; /* 和内容区同宽，甚至更宽 */
-            margin-top: 1rem;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 1s forwards; /* 最后浮现 */
+            max-width: 1200px; /* 更宽 */
+            margin-top: 2rem;
+            /* 移除淡入动画，让它像实体一样存在 */
             z-index: 10;
+            padding: 20px; /* 给阴影留空间 */
         }
 
         .lingzhu-box {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             width: 100%;
-            padding: 24px 0;
+            /* 【关键】高度最大化，形成巨大体块感 */
+            min-height: 300px; 
             
-            /* 视觉风格：AI科技硬核风 */
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-left: 4px solid var(--accent); /* 左侧加重 */
-            border-right: 4px solid var(--accent); /* 右侧加重 */
+            /* 【关键】深色新拟态风格 (Dark Neumorphism) */
+            /* 背景：模拟深色金属/塑料材质，带有微弱光照渐变 */
+            background: linear-gradient(145deg, #0c0c0c, #050505);
+            /* 圆角：柔和的物理倒角 */
+            border-radius: 40px;
+            /* 阴影：创造凸起感 (Extrusion)。左上亮影，右下暗影 */
+            box-shadow:  25px 25px 50px #020202,
+                         -25px -25px 50px #121212;
+            
+            /* 边框：不再需要明显的霓虹边框，用微妙的内发光模拟边缘反光 */
+            border: none;
             
             /* 字体设置 */
             font-family: var(--font-tech); /* Orbitron */
-            font-weight: 900; /* 最粗 */
-            font-size: clamp(1.2rem, 3vw, 2rem); /* 响应式大字体 */
-            letter-spacing: 8px; /* 极宽间距 */
-            color: #fff;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 6vw, 5rem); /* 巨大字体 */
+            letter-spacing: 12px;
+            color: #e0e0e0; /* 稍微降低纯白度，更有质感 */
+            /* 文字内部微发光，像是嵌在实体里的灯光 */
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
             
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            /* 缓慢平滑的物理过渡 */
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* 扫描线动画效果 */
-        .lingzhu-box::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
-            transform: skewX(-25deg);
-            transition: 0.5s;
-        }
-
-        .lingzhu-box:hover {
-            background: rgba(0, 240, 255, 0.05);
-            border-color: var(--accent);
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
-            letter-spacing: 12px; /* 悬停时字距拉得更开 */
-            text-shadow: 0 0 8px var(--accent);
-        }
-        
-        .lingzhu-box:hover::after {
-            left: 150%;
-            transition: 0.7s ease-in-out;
-        }
+        /* 移除旧的扫描线，拟物化不需要它 */
+        .lingzhu-box::after { display: none; }
 
         .lingzhu-sub {
-            position: absolute;
-            bottom: 4px;
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            letter-spacing: 2px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 4px;
             font-family: var(--font-main);
-            opacity: 0.7;
+            text-transform: uppercase;
+        }
+
+        /* Hover 悬停状态：轻微浮起，能量增强 */
+        .lingzhu-box:hover {
+            transform: translateY(-8px); /* 物理上浮 */
+            color: #fff;
+            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent); /* 灯光变亮 */
+            /* 阴影扩散，感觉离背景更远 */
+            box-shadow:  30px 30px 60px #020202,
+                         -30px -30px 60px #151515;
+        }
+
+        /* Active 点击状态：【拟物核心】真实的按压凹陷感 */
+        .lingzhu-box:active {
+            /* 物理下沉 */
+            transform: translateY(4px) scale(0.99); 
+            
+            /* 【关键】阴影反转：变为内阴影 (Inset)，模拟凹陷 */
+            background: linear-gradient(145deg, #050505, #0c0c0c); /* 渐变反向 */
+            box-shadow: inset 15px 15px 40px #020202,
+                        inset -15px -15px 40px #121212;
+            
+            /* 按下时文字反馈 */
+            color: var(--accent);
+            text-shadow: 0 0 5px var(--accent);
         }
 
         /* === 灵珠控制台 (保持不变) === */
         #lingzhu-console {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
             display: none; flex-direction: column; justify-content: center; align-items: center;
-            font-family: var(--font-code);
+            font-family: var(--font-code); background: rgba(5,5,5,0.9); /* 加深背景 */
         }
         #lingzhu-console.active { display: flex; animation: fadeInConsole 0.5s forwards; }
         @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         .console-header { margin-bottom: 2rem; text-align: center; border-bottom: 1px solid #333; padding-bottom: 1rem; width: 80%; max-width: 800px; }
         .console-title { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-main); font-family: var(--font-tech); }
-        .console-stream { width: 80%; max-width: 800px; height: 50vh; border-left: 1px solid #333; padding: 20px; overflow-y: auto; margin-bottom: 20px; font-size: 14px; color: #ccc; background: rgba(0,0,0,0.2); }
+        .console-stream { width: 80%; max-width: 800px; height: 50vh; border-left: 1px solid #333; padding: 20px; overflow-y: auto; margin-bottom: 20px; font-size: 14px; color: #ccc; background: rgba(0,0,0,0.3); }
         .log-entry { margin-bottom: 12px; line-height: 1.6; } .log-sys { color: var(--accent); } .log-user { color: #888; } .log-mod { color: var(--new-accent); }
         .console-input-area { width: 80%; max-width: 800px; }
         #console-input { width: 100%; background: transparent; border: none; border-bottom: 2px solid #333; color: #fff; font-family: var(--font-code); font-size: 1.2rem; padding: 10px 0; outline: none; }
@@ -211,7 +222,7 @@
         footer { text-align: center; padding: 4rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; color: #444; font-size: 0.85rem; }
         .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; position: absolute; top: 20px; right: 20px; box-shadow: 0 0 10px #00ff88; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; } .lingzhu-box { font-size: 1.2rem; letter-spacing: 4px; } }
+        @media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; } .lingzhu-box { font-size: 2rem; letter-spacing: 6px; min-height: 200px; } }
     </style>
 </head>
 <body>
@@ -238,7 +249,7 @@
         <div class="lingzhu-trigger-container">
             <div class="lingzhu-box" onclick="activateLingZhu()">
                 [ ◎ 灵 珠 ]
-                <div class="lingzhu-sub">CLICK TO ACTIVATE SI-OS</div>
+                <div class="lingzhu-sub">ACTIVATE SI-OS CORE</div>
             </div>
         </div>
 
