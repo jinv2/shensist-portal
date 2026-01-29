@@ -1,6 +1,6 @@
 /**
- * SI-OS Kernel v1.0 (LingZhu)
- * 端侧微前端神经中枢 | The Client-Side Micro-Frontend Neural Bus
+ * SI-OS Kernel v1.1 (LingZhu)
+ * 修复版：采用“暴力挂载”策略，解决无反应问题
  * Copyright 2026 TianSuan AI Lab
  */
 
@@ -8,12 +8,11 @@ const SIOS = {
     // === 1. 系统状态 ===
     state: {
         isReady: false,
-        activeModules: new Set(), // 记录已挂载的模块
-        memory: []                // 短期记忆池
+        activeModules: new Set(),
+        memory: []
     },
 
-    // === 2. 模块注册表 (Module Registry) ===
-    // 这里定义了“咒语”与“实体文件”的映射关系
+    // === 2. 模块注册表 ===
     registry: {
         "literature": {
             path: "modules/arm_literature.js",
@@ -32,31 +31,55 @@ const SIOS = {
         }
     },
 
-    // === 3. 初始化启动 ===
+    // === 3. 初始化启动 (核心修复点) ===
     init: function() {
-        this.ui.log("SI-OS KERNEL INITIALIZED...", "sys");
-        this.ui.log("AWAITING NEURAL INPUT...", "sys");
+        if (this.state.isReady) return; // 防止重复启动
+
+        console.log("SI-OS Kernel: Force Starting...");
+        
+        // 找到屏幕
+        const stream = document.getElementById('console-output');
+        if (!stream) {
+            console.error("SI-OS Error: Console screen not found.");
+            return;
+        }
+
+        // 1. 清空 HTML 里原本写死的 "LOADING..."
+        stream.innerHTML = ""; 
+
+        // 2. 打印活的系统启动日志
+        this.ui.log("SI-OS KERNEL V1.1 LOADED.", "sys");
+        this.ui.log("NEURAL LINK ESTABLISHED.", "sys");
+        this.ui.log("WAITING FOR COMMAND...", "sys");
+        
         this.state.isReady = true;
         
-        // 绑定 UI 输入事件 (接管 index.html 的输入框)
+        // 3. 强力接管输入框
         const input = document.getElementById('console-input');
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.handleInput(e.target.value);
-                e.target.value = ''; // 清空输入框
-            }
-        });
+        if (input) {
+            // 移除可能存在的旧监听器（克隆大法）
+            const newNode = input.cloneNode(true);
+            input.parentNode.replaceChild(newNode, input);
+            
+            // 绑定新事件
+            newNode.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.handleInput(e.target.value);
+                    e.target.value = ''; 
+                }
+            });
+            // 自动聚焦，让用户直接能打字
+            newNode.focus();
+        }
     },
 
-    // === 4. 神经路由 (The Neural Router) ===
-    // 分析用户说的话，决定唤醒哪只手臂
+    // === 4. 神经路由 ===
     handleInput: function(text) {
         if (!text.trim()) return;
         this.ui.log(`> ${text}`, "user");
 
-        // 简单的关键词匹配 (未来这里接入 Local LLM)
         let targetModule = null;
-        
+        // 模糊匹配意图
         for (let [key, config] of Object.entries(this.registry)) {
             if (config.keywords.some(k => text.toLowerCase().includes(k))) {
                 targetModule = key;
@@ -67,51 +90,48 @@ const SIOS = {
         if (targetModule) {
             this.loadModule(targetModule, text);
         } else {
-            // 如果没听懂
             setTimeout(() => {
-                this.ui.log("指令模糊。请指定意图 (如: 创建故事 / 生成音乐 / 渲染画面)", "sys");
+                this.ui.log("UNKNOWN COMMAND. TRY 'STORY', 'MUSIC', OR 'VISUAL'.", "sys");
             }, 500);
         }
     },
 
-    // === 5. 动态加载器 (The Loader) ===
-    // 核心科技：按需通过网络抓取 JS 代码并注入大脑
+    // === 5. 动态加载器 ===
     loadModule: function(moduleKey, payload) {
         const config = this.registry[moduleKey];
 
-        // 如果模块已经加载过，直接调用
+        // 防止重复加载
         if (this.state.activeModules.has(moduleKey)) {
             this.dispatchToModule(moduleKey, payload);
             return;
         }
 
-        // 首次加载：动态创建 <script> 标签
-        this.ui.log(`正在挂载 [${config.name}] ...`, "sys");
+        this.ui.log(`MOUNTING MODULE: [${config.name}] ...`, "sys");
         
         const script = document.createElement('script');
         script.src = config.path;
         script.onload = () => {
             this.state.activeModules.add(moduleKey);
-            this.ui.log(`[${config.name}] 挂载成功。神经连接建立。`, "sys");
+            this.ui.log(`[${config.name}] ONLINE.`, "sys");
             this.dispatchToModule(moduleKey, payload);
         };
         script.onerror = () => {
-            this.ui.log(`错误：无法加载模块 [${config.name}]。请检查 modules/ 目录。`, "sys");
+            this.ui.log(`ERROR: MODULE [${config.name}] NOT FOUND.`, "sys");
+            this.ui.log(`CHECK PATH: ${config.path}`, "sys");
         };
         
         document.body.appendChild(script);
     },
 
-    // === 6. 信号分发 (The Dispatcher) ===
+    // === 6. 信号分发 ===
     dispatchToModule: function(moduleKey, payload) {
-        // 假设每个模块加载后，都会在 window 下暴露一个同名对象
-        // 例如 arm_literature.js 会暴露 window.ArmLiterature
+        // 拼凑模块对象名：literature -> ArmLiterature
         const moduleName = "Arm" + moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
         
         if (window[moduleName]) {
-            window[moduleName].process(payload, this); // 把控制权交给模块
+            window[moduleName].process(payload, this);
         } else {
-            this.ui.log(`错误：模块 [${moduleKey}] 代码异常，未找到入口函数。`, "sys");
+            this.ui.log(`CRITICAL ERROR: MODULE [${moduleKey}] HAS NO ENTRY POINT.`, "sys");
         }
     },
 
@@ -119,6 +139,7 @@ const SIOS = {
     ui: {
         log: function(text, type) {
             const stream = document.getElementById('console-output');
+            if (!stream) return;
             const div = document.createElement('div');
             div.className = `log-entry log-${type}`;
             div.innerText = text;
@@ -128,10 +149,18 @@ const SIOS = {
     }
 };
 
-// 启动系统
-window.onload = function() {
-    // 确保 DOM 加载完后再启动
-    setTimeout(() => {
-        if(window.SIOS) SIOS.init();
-    }, 1000);
-};
+// === 🚀 V1.1 强力启动逻辑 🚀 ===
+// 不再等待 window.onload，而是每 100ms 检查一次屏幕是否存在
+// 一旦发现屏幕，立刻启动，绝不拖泥带水
+(function autoStart() {
+    const checkTimer = setInterval(() => {
+        const consoleEl = document.getElementById('console-output');
+        if (consoleEl) {
+            clearInterval(checkTimer);
+            // 稍微延迟 200ms 确保动画跑完，然后启动
+            setTimeout(() => {
+                SIOS.init();
+            }, 200);
+        }
+    }, 100);
+})();
