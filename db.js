@@ -13,7 +13,7 @@ const appDatabase = [
         name: "Legacy Hub",
         icon: "🌐",
         desc: "Original TianSuan AI site.",
-        url: "https://ai.shensist.top",
+        url: "https://main.shensist.top/",
         onHome: false // 不要在首页占位置了，只在 apps.html 显示
     }
 ];
