@@ -1,166 +1,239 @@
 /**
- * SI-OS Kernel v1.1 (LingZhu)
- * 修复版：采用“暴力挂载”策略，解决无反应问题
- * Copyright 2026 TianSuan AI Lab
+ * SI-OS Kernel v1.2 (LingZhu)
+ * 生产力版：支持记忆共享、一键宏指令、自动剪贴板
  */
 
 const SIOS = {
-    // === 1. 系统状态 ===
+    // 1. 系统状态
     state: {
         isReady: false,
         activeModules: new Set(),
-        memory: []
+        // 【核心升级】共享上下文记忆池
+        sharedContext: {
+            theme: "",      // 主题 (如：赛博朋克)
+            visualTags: [], // 视觉关键词
+            mood: "",       // 情绪基调
+            summary: ""     // 故事梗概
+        }
     },
 
-    // === 2. 模块注册表 ===
+    // 2. 模块注册表
     registry: {
-        "literature": {
-            path: "modules/arm_literature.js",
-            keywords: ["小说", "故事", "剧本", "story", "novel", "write"],
-            name: "NARRATIVE ARM"
-        },
-        "music": {
-            path: "modules/arm_music.js",
-            keywords: ["音乐", "bgm", "歌曲", "music", "sound", "audio"],
-            name: "SONIC ARM"
-        },
-        "visual": {
-            path: "modules/arm_visual.js",
-            keywords: ["画面", "图片", "视频", "分镜", "visual", "video", "image"],
-            name: "VISUAL ARM"
-        }
+        "literature": { path: "modules/arm_literature.js", keywords: ["story", "小说", "设定"], name: "NARRATIVE ARM" },
+        "visual":     { path: "modules/arm_visual.js",     keywords: ["visual", "画面", "图"],   name: "VISUAL ARM" },
+        "music":      { path: "modules/arm_music.js",      keywords: ["music", "音乐", "BGM"],   name: "SONIC ARM" }
     },
 
-    // === 3. 初始化启动 (核心修复点) ===
+    // 3. 初始化 (保持强力启动逻辑)
     init: function() {
-        if (this.state.isReady) return; // 防止重复启动
-
-        console.log("SI-OS Kernel: Force Starting...");
-        
-        // 找到屏幕
+        if (this.state.isReady) return;
         const stream = document.getElementById('console-output');
-        if (!stream) {
-            console.error("SI-OS Error: Console screen not found.");
-            return;
-        }
-
-        // 1. 清空 HTML 里原本写死的 "LOADING..."
-        stream.innerHTML = ""; 
-
-        // 2. 打印活的系统启动日志
-        this.ui.log("SI-OS KERNEL V1.1 LOADED.", "sys");
-        this.ui.log("NEURAL LINK ESTABLISHED.", "sys");
-        this.ui.log("WAITING FOR COMMAND...", "sys");
+        if (!stream) return;
         
+        stream.innerHTML = ""; 
+        this.ui.log("SI-OS KERNEL V1.2 ONLINE.", "sys");
+        this.ui.log("MEMORY POOL: ACTIVE.", "sys");
+        this.ui.log("READY FOR MACRO COMMAND...", "sys");
         this.state.isReady = true;
         
-        // 3. 强力接管输入框
         const input = document.getElementById('console-input');
         if (input) {
-            // 移除可能存在的旧监听器（克隆大法）
             const newNode = input.cloneNode(true);
             input.parentNode.replaceChild(newNode, input);
-            
-            // 绑定新事件
             newNode.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     this.handleInput(e.target.value);
                     e.target.value = ''; 
                 }
             });
-            // 自动聚焦，让用户直接能打字
             newNode.focus();
         }
     },
 
-    // === 4. 神经路由 ===
+    // 4. 神经路由 & 宏指令
     handleInput: function(text) {
         if (!text.trim()) return;
         this.ui.log(`> ${text}`, "user");
 
+        // 【核心升级】检测“一键生成”宏指令
+        if (text.includes("一键") || text.includes("全部") || text.includes("generate all")) {
+            this.runMacro(text); // 触发全自动流水线
+            return;
+        }
+
+        // 普通单模块触发
         let targetModule = null;
-        // 模糊匹配意图
         for (let [key, config] of Object.entries(this.registry)) {
             if (config.keywords.some(k => text.toLowerCase().includes(k))) {
                 targetModule = key;
                 break;
             }
         }
-
         if (targetModule) {
             this.loadModule(targetModule, text);
         } else {
-            setTimeout(() => {
-                this.ui.log("UNKNOWN COMMAND. TRY 'STORY', 'MUSIC', OR 'VISUAL'.", "sys");
-            }, 500);
+            // 默认交给文学臂处理，视为开始
+            this.loadModule("literature", text);
         }
     },
 
-    // === 5. 动态加载器 ===
+    // 【新增】全自动宏指令流水线
+    runMacro: async function(userInput) {
+        this.ui.log(">>> INITIATING SUPER-INDIVIDUAL WORKFLOW <<<", "sys");
+        
+        // 第一步：文学臂 (产出设定)
+        await this.loadModuleSync("literature", userInput);
+        
+        // 间隔 1秒
+        setTimeout(async () => {
+             // 第二步：视觉臂 (读取文学臂的记忆)
+            await this.loadModuleSync("visual", "AUTO_GENERATE");
+            
+            // 间隔 1秒
+            setTimeout(async () => {
+                // 第三步：声波臂 (读取文学臂的记忆)
+                await this.loadModuleSync("music", "AUTO_GENERATE");
+                
+                this.ui.log(">>> WORKFLOW COMPLETE. ASSETS READY. <<<", "sys");
+            }, 1500);
+        }, 1500);
+    },
+
+    // 5. 动态加载器 (支持 Promise)
     loadModule: function(moduleKey, payload) {
-        const config = this.registry[moduleKey];
-
-        // 防止重复加载
-        if (this.state.activeModules.has(moduleKey)) {
-            this.dispatchToModule(moduleKey, payload);
-            return;
-        }
-
-        this.ui.log(`MOUNTING MODULE: [${config.name}] ...`, "sys");
-        
-        const script = document.createElement('script');
-        script.src = config.path;
-        script.onload = () => {
-            this.state.activeModules.add(moduleKey);
-            this.ui.log(`[${config.name}] ONLINE.`, "sys");
-            this.dispatchToModule(moduleKey, payload);
-        };
-        script.onerror = () => {
-            this.ui.log(`ERROR: MODULE [${config.name}] NOT FOUND.`, "sys");
-            this.ui.log(`CHECK PATH: ${config.path}`, "sys");
-        };
-        
-        document.body.appendChild(script);
+        this.loadModuleSync(moduleKey, payload);
     },
 
-    // === 6. 信号分发 ===
+    loadModuleSync: function(moduleKey, payload) {
+        return new Promise((resolve) => {
+            const config = this.registry[moduleKey];
+            
+            // 如果已加载，直接运行
+            if (this.state.activeModules.has(moduleKey)) {
+                this.dispatchToModule(moduleKey, payload);
+                resolve();
+                return;
+            }
+
+            this.ui.log(`MOUNTING: [${config.name}] ...`, "sys");
+            const script = document.createElement('script');
+            script.src = config.path;
+            script.onload = () => {
+                this.state.activeModules.add(moduleKey);
+                this.ui.log(`[${config.name}] ONLINE.`, "sys");
+                this.dispatchToModule(moduleKey, payload);
+                resolve();
+            };
+            document.body.appendChild(script);
+        });
+    },
+
+    // 6. 信号分发
     dispatchToModule: function(moduleKey, payload) {
-        // 拼凑模块对象名：literature -> ArmLiterature
         const moduleName = "Arm" + moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
-        
         if (window[moduleName]) {
             window[moduleName].process(payload, this);
-        } else {
-            this.ui.log(`CRITICAL ERROR: MODULE [${moduleKey}] HAS NO ENTRY POINT.`, "sys");
         }
     },
 
-    // === 7. UI 接口 ===
+    // 7. UI 接口 (含复制按钮生成器)
     ui: {
         log: function(text, type) {
             const stream = document.getElementById('console-output');
             if (!stream) return;
             const div = document.createElement('div');
             div.className = `log-entry log-${type}`;
-            div.innerText = text;
+            div.innerText = text; // 普通文本
             stream.appendChild(div);
+            stream.scrollTop = stream.scrollHeight;
+        },
+
+        // 【新增】渲染带有复制按钮的代码块卡片
+        renderCodeCard: function(title, codeContent) {
+            const stream = document.getElementById('console-output');
+            if (!stream) return;
+
+            // 创建卡片容器
+            const card = document.createElement('div');
+            card.style.cssText = `
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(0, 240, 255, 0.2);
+                border-radius: 8px;
+                margin: 10px 0;
+                padding: 0;
+                overflow: hidden;
+                position: relative;
+            `;
+
+            // 标题栏 + 复制按钮
+            const header = document.createElement('div');
+            header.style.cssText = `
+                background: rgba(0, 0, 0, 0.3);
+                padding: 5px 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            `;
+
+            const titleSpan = document.createElement('span');
+            titleSpan.innerText = title;
+            titleSpan.style.cssText = "font-size: 10px; color: #666; font-family: 'Orbitron'; letter-spacing: 1px;";
+
+            // 复制按钮
+            const copyBtn = document.createElement('button');
+            copyBtn.innerText = "COPY";
+            copyBtn.style.cssText = `
+                background: var(--accent);
+                color: #000;
+                border: none;
+                border-radius: 4px;
+                padding: 2px 8px;
+                font-size: 10px;
+                font-weight: bold;
+                cursor: pointer;
+                font-family: 'Orbitron';
+            `;
+            
+            // 复制逻辑
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(codeContent);
+                copyBtn.innerText = "COPIED!";
+                copyBtn.style.background = "#00ff88"; // 变绿
+                setTimeout(() => {
+                    copyBtn.innerText = "COPY";
+                    copyBtn.style.background = "var(--accent)";
+                }, 2000);
+            };
+
+            // 代码内容区
+            const codeBlock = document.createElement('div');
+            codeBlock.innerText = codeContent;
+            codeBlock.style.cssText = `
+                padding: 10px;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                color: #e0e0e0;
+                white-space: pre-wrap;
+                word-break: break-all;
+            `;
+
+            header.appendChild(titleSpan);
+            header.appendChild(copyBtn);
+            card.appendChild(header);
+            card.appendChild(codeBlock);
+            stream.appendChild(card);
             stream.scrollTop = stream.scrollHeight;
         }
     }
 };
 
-// === 🚀 V1.1 强力启动逻辑 🚀 ===
-// 不再等待 window.onload，而是每 100ms 检查一次屏幕是否存在
-// 一旦发现屏幕，立刻启动，绝不拖泥带水
 (function autoStart() {
     const checkTimer = setInterval(() => {
         const consoleEl = document.getElementById('console-output');
         if (consoleEl) {
             clearInterval(checkTimer);
-            // 稍微延迟 200ms 确保动画跑完，然后启动
-            setTimeout(() => {
-                SIOS.init();
-            }, 200);
+            setTimeout(() => SIOS.init(), 200);
         }
     }, 100);
 })();
