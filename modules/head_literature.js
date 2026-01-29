@@ -1,21 +1,26 @@
 /**
- * SI-OS Module: Head of Literature (文曲·深度重构版)
- * 迭代目标：注入哲学深度、戏剧悖论与行业级审美。
+ * SI-OS Module: Head of Literature (文曲·深度重构版 v1.6)
+ * 迭代目标：保留哲学深度，同时支持大师风格 (Master Style) 的透传
  */
 
 window.HeadLiterature = {
     meta: {
         name: "Narrative Engine: Philosopher Mode",
-        version: "3.0 Master Class"
+        version: "3.1 Style Aware"
     },
 
     process: function(userInput, core) {
+        // 1. 获取核心层可能已经识别到的风格 (比如 "王家卫")
+        // 如果用户没说风格，默认使用 "Philosophical / Avant-Garde" (哲学/先锋派)
+        const currentStyle = core.state.sharedContext.masterStyle || "Philosophical / Avant-Garde";
+
         core.ui.log(`[文曲核心] 正在进行语义解构...`, "mod");
+        core.ui.log(`[风格锚点] 已锁定: ${currentStyle}`, "mod");
         core.ui.log(`[思维链] 检索荣格十二原型... 匹配哲学母题...`, "mod");
         
         setTimeout(() => {
-            // 生成深度剧本结构
-            const beatSheet = this.generateDeepBeatSheet(userInput);
+            // 生成深度剧本结构 (传入风格参数)
+            const beatSheet = this.generateDeepBeatSheet(userInput, currentStyle);
             core.ui.renderCodeCard("MASTER_SCREENPLAY_STRUCTURE.MD", beatSheet);
             
             // 紧接着生成人物心理侧写
@@ -23,23 +28,26 @@ window.HeadLiterature = {
                 const characters = this.generatePsychoProfile(userInput);
                 core.ui.renderCodeCard("CHARACTER_PSYCHOLOGY.JSON", characters);
                 
-                // 写入更复杂的共享记忆，包含情绪色板
+                // 【核心修改点】写入共享记忆
                 core.state.sharedContext = {
                     theme: userInput,
+                    // 关键：将确定的风格写入记忆，供视觉头和音乐头读取
+                    masterStyle: currentStyle, 
                     visualTags: ["Chiaroscuro (明暗对照法)", "Brutalism (野兽派建筑)", "Film Noir"],
                     mood: "Melancholic yet Euphoric (忧郁而狂喜)",
                     summary: userInput
                 };
-                core.ui.log(">> 文学内核已升维。等待视觉/听觉通感转化。", "sys");
+                core.ui.log(">> 文学内核已升维。风格参数已同步至 [巨灵] 与 [夔牛]。", "sys");
             }, 1200);
 
         }, 1500);
     },
 
-    // --- 升级点：不再是简单的三幕式，而是带有人性洞察的结构 ---
-    generateDeepBeatSheet: function(input) {
+    // --- 升级点：在大纲头部显示风格 ---
+    generateDeepBeatSheet: function(input, style) {
         return `
 # PROJECT CODE: ${input.substring(0, 10).toUpperCase()}...
+## MASTER STYLE: ${style}  <-- 风格已注入剧本DNA
 ## THEME: The Paradox of Existence (存在的悖论)
 ## TONE: Elevating Horror / Speculative Fiction
 
@@ -62,7 +70,7 @@ window.HeadLiterature = {
 `;
     },
 
-    // --- 升级点：基于心理学的人物侧写 ---
+    // --- 升级点：基于心理学的人物侧写 (保持不变) ---
     generatePsychoProfile: function(input) {
         return `
 {
