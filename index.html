@@ -47,7 +47,6 @@
         body.zen-active footer {
             filter: blur(20px); opacity: 0; pointer-events: none; transition: all 0.6s ease;
         }
-        /* 激活时，灵珠按钮本身也进行模糊和缩小，让位给控制台 */
         body.zen-active .lingzhu-trigger-container {
             z-index: 10001; opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(20px); transition: all 0.5s ease;
         }
@@ -90,10 +89,9 @@
         .stat-num { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === 【核心修改】巨型拟物化金属按钮 (Skeuomorphic Metal Button) === */
+        /* === 巨型拟物化金属按钮 === */
         .lingzhu-trigger-container {
             width: 100%; max-width: 1200px; margin-top: 1rem; z-index: 10; padding: 10px;
-            /* 整体缓慢浮动 */
             animation: float 6s ease-in-out infinite;
         }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
@@ -101,88 +99,46 @@
         .lingzhu-box {
             display: flex; justify-content: center; align-items: center; flex-direction: column;
             width: 100%; min-height: 25vh; 
-            
-            /* 【材质】深色金属复合材料渐变 */
             background: linear-gradient(145deg, #1a1a1a, #080808);
             
-            /* 【凸起感核心】深色新拟态阴影 */
-            /* 左上角亮光，右下角深影，营造巨大厚度 */
-            box-shadow: 
-                25px 25px 50px #030303, 
-                -25px -25px 50px #222222;
+            /* 凸起感核心 */
+            box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222;
             
-            border-radius: 40px; /* 更圆润的物理倒角 */
-            border: none; /* 移除边框，靠阴影塑造形体 */
-            
+            border-radius: 40px; border: none;
             font-family: var(--font-tech); font-weight: 900; 
             font-size: clamp(1.8rem, 6vw, 5rem);
             letter-spacing: clamp(4px, 1vw, 12px); 
-            color: #d0d0d0; /* 类似未激活金属的颜色 */
-            
-            /* 文字内嵌发光感 */
+            color: #d0d0d0;
             text-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
             
             cursor: pointer; position: relative; overflow: hidden;
-            /* 呼吸动画更新为匹配新阴影 */
             animation: metal-breath 5s infinite ease-in-out;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 金属呼吸：阴影和光晕的缓慢张缩 */
         @keyframes metal-breath {
-            0%, 100% {
-                box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222;
-                text-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
-            }
-            50% {
-                box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a;
-                text-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
-                color: #e0e0e0;
-            }
+            0%, 100% { box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222; text-shadow: 0 0 15px rgba(0, 240, 255, 0.1); }
+            50% { box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a; text-shadow: 0 0 25px rgba(0, 240, 255, 0.3); color: #e0e0e0; }
         }
 
-        /* Hover: 能量积蓄，准备触发 */
         .lingzhu-box:hover {
-            transform: scale(1.01) translateY(-2px); /* 轻微上浮 */
-            animation: none; /* 停止呼吸，维持高能状态 */
-            color: #fff;
-            text-shadow: 0 0 30px var(--accent);
-            /* 阴影扩散，增加能量场光晕 */
-            box-shadow: 
-                30px 30px 60px #020202, 
-                -30px -30px 60px #2a2a2a,
-                0 0 40px rgba(0, 240, 255, 0.1); 
+            transform: scale(1.01) translateY(-2px);
+            animation: none;
+            color: #fff; text-shadow: 0 0 30px var(--accent);
+            box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a, 0 0 40px rgba(0, 240, 255, 0.1); 
         }
 
-        /* Active: 【关键】真实的物理凹陷感 */
         .lingzhu-box:active {
-            /* 物理下压位移 */
             transform: scale(0.98) translateY(4px); 
-            
-            /* 材质反转：模拟陷入底座的阴影 */
             background: linear-gradient(145deg, #080808, #1a1a1a);
-            
-            /* 【核心】外阴影变为内阴影 (Inset Shadow) */
-            /* 左上角变深，右下角变亮，形成凹坑 */
-            box-shadow: 
-                inset 20px 20px 40px #030303, 
-                inset -20px -20px 40px #222222;
-            
-            color: var(--accent); /* 激活时的能量色 */
-            text-shadow: 0 0 5px var(--accent);
+            /* 凹陷感核心 */
+            box-shadow: inset 20px 20px 40px #030303, inset -20px -20px 40px #222222;
+            color: var(--accent); text-shadow: 0 0 5px var(--accent);
         }
         
-        .lingzhu-sub { 
-            margin-top: 15px; 
-            font-size: 0.7rem; 
-            color: rgba(255,255,255,0.3); 
-            letter-spacing: 3px; 
-            font-family: var(--font-tech);
-            text-transform: uppercase; 
-        }
+        .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; font-family: var(--font-tech); text-transform: uppercase; }
 
-
-        /* === 灵珠控制台 (保持之前的 Orbitron 统一风格) === */
+        /* === 灵珠控制台 === */
         #lingzhu-console {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
             display: none; 
@@ -194,69 +150,40 @@
         
         .console-container-inner {
             width: 92%; max-width: 900px;
-            /* 控制台本身也采用拟物化风格 */
             background: linear-gradient(145deg, #121212, #080808);
             box-shadow:  20px 20px 40px #010101, -20px -20px 40px #1a1a1a;
-            border-radius: 30px;
-            padding: 25px; 
+            border-radius: 30px; padding: 25px; 
             border: 1px solid rgba(255,255,255,0.05);
             display: flex; flex-direction: column; align-items: center;
-            position: relative;
-            max-height: 90vh; 
+            position: relative; max-height: 90vh; 
         }
 
-        .console-header { 
-            margin-bottom: 1.5rem; text-align: center; 
-            border-bottom: 2px solid rgba(0,0,0,0.5); 
-            padding-bottom: 1rem; width: 100%; 
-            box-shadow: 0 2px 0 rgba(255,255,255,0.05);
-        }
-        
-        .console-title { 
-            font-size: clamp(1.4rem, 6vw, 2.2rem); 
-            letter-spacing: 4px; color: var(--accent); 
-            font-family: var(--font-tech); font-weight: 900;
-            text-shadow: 0 0 15px rgba(0,240,255,0.4);
-        }
-        .console-subtitle { 
-            font-size: 0.7rem; color: #666; margin-top: 8px; text-transform: uppercase; 
-            font-family: var(--font-tech); letter-spacing: 2px;
-        }
+        .console-header { margin-bottom: 1.5rem; text-align: center; border-bottom: 2px solid rgba(0,0,0,0.5); padding-bottom: 1rem; width: 100%; box-shadow: 0 2px 0 rgba(255,255,255,0.05); }
+        .console-title { font-size: clamp(1.4rem, 6vw, 2.2rem); letter-spacing: 4px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; text-shadow: 0 0 15px rgba(0,240,255,0.4); }
+        .console-subtitle { font-size: 0.7rem; color: #666; margin-top: 8px; text-transform: uppercase; font-family: var(--font-tech); letter-spacing: 2px; }
 
         .console-stream { 
             width: 100%; height: 45vh; 
-            /* 屏幕采用凹陷风格 */
-            background: #030303;
-            box-shadow: inset 8px 8px 16px #010101, inset -8px -8px 16px #111;
-            border-radius: 15px;
-            padding: 20px; 
-            overflow-y: auto; margin-bottom: 20px; 
-            font-family: var(--font-tech); font-weight: 500;
-            font-size: clamp(12px, 3.5vw, 15px);
-            color: #ccc; line-height: 1.8;
-            border: 1px solid rgba(255,255,255,0.02);
-            -webkit-overflow-scrolling: touch; 
+            background: #030303; box-shadow: inset 8px 8px 16px #010101, inset -8px -8px 16px #111;
+            border-radius: 15px; padding: 20px; overflow-y: auto; margin-bottom: 20px; 
+            font-family: var(--font-tech); font-weight: 500; font-size: clamp(12px, 3.5vw, 15px);
+            color: #ccc; line-height: 1.8; border: 1px solid rgba(255,255,255,0.02); -webkit-overflow-scrolling: touch; 
         }
         
         .log-entry { margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .log-sys { color: var(--accent); text-shadow: 0 0 5px rgba(0,240,255,0.5); } 
+        .log-user { color: #888; font-style: italic; } 
+        .log-mod { color: var(--new-accent); text-shadow: 0 0 5px rgba(0,255,136,0.5); }
 
         .console-input-area { width: 100%; position: relative; }
-        
         #console-input { 
-            width: 100%; 
-            /* 输入框采用凹陷槽风格 */
-            background: #050505;
-            box-shadow: inset 4px 4px 8px #020202, inset -4px -4px 8px #111;
-            border-radius: 12px;
-            border: none; color: #fff; 
-            font-family: var(--font-tech); font-weight: 700;
-            font-size: 1.1rem; padding: 18px; outline: none; letter-spacing: 2px;
+            width: 100%; background: #050505; box-shadow: inset 4px 4px 8px #020202, inset -4px -4px 8px #111;
+            border-radius: 12px; border: none; color: #fff; 
+            font-family: var(--font-tech); font-weight: 700; font-size: 1.1rem; padding: 18px; outline: none; letter-spacing: 2px;
         }
         #console-input::placeholder { color: #444; font-weight: 400; }
         #console-input:focus { color: var(--accent); box-shadow: inset 4px 4px 8px #020202, inset -4px -4px 8px #111, 0 0 5px rgba(0,240,255,0.3); }
 
-
-        /* 布局部分 */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; padding-left: 5px; border-left: 3px solid var(--accent); margin-left: 5px; }
@@ -364,9 +291,7 @@
             </div>
             
             <div class="console-stream" id="console-output">
-                <div class="log-entry log-sys">> SI-OS KERNEL LOADED...</div>
-                <div class="log-entry log-sys">> NEURAL LINK ESTABLISHED.</div>
-                <div class="log-entry log-sys">> READY FOR INPUT.</div>
+                <div class="log-entry log-sys">> SI-OS KERNEL LOADING...</div>
             </div>
             
             <div class="console-input-area">
@@ -390,7 +315,9 @@
             });
             if(homeApps.length === 0) document.querySelector('.section-header:last-of-type').style.display = 'none';
         }
+    </script>
 
+    <script>
         const canvas = document.getElementById('canvas-bg'); const ctx = canvas.getContext('2d'); let width, height; let particles = [];
         function init() { resize(); createParticles(); animate(); }
         function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
@@ -405,10 +332,12 @@
         function typeWriter() { if (i < textToType.length) { typeWriterElement.innerHTML += textToType.charAt(i); i++; setTimeout(typeWriter, 40); } }
         setTimeout(typeWriter, 500);
 
+        // === 只有纯 UI 开关逻辑，大脑逻辑交给 core.js ===
         function activateLingZhu() {
             document.body.classList.add('zen-active');
             const consoleDiv = document.getElementById('lingzhu-console');
             consoleDiv.classList.add('active');
+            // 延迟聚焦，防止手机键盘弹起过快
             setTimeout(() => { document.getElementById('console-input').focus(); }, 400);
         }
 
@@ -420,42 +349,6 @@
         function handleConsoleClick(event) {
             deactivateLingZhu();
         }
-
-        const inputField = document.getElementById('console-input');
-        const outputStream = document.getElementById('console-output');
-        inputField.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                const text = e.target.value;
-                if (!text.trim()) return;
-                appendLog(`> ${text}`, 'user');
-                e.target.value = '';
-                setTimeout(() => {
-                    let response = "COMMAND RECEIVED. ROUTING...";
-                    if (text.includes("小说") || text.includes("故事")) response = "[NARRATIVE ARM] MOUNTING...";
-                    else if (text.includes("音乐")) response = "[SONIC ARM] ANALYZING FREQUENCY...";
-                    else if (text.includes("画面")) response = "[VISUAL ARM] RENDERING LIGHT PATHS...";
-                    appendLog(response, 'mod');
-                }, 600);
-            }
-        });
-        function appendLog(text, type) {
-            const div = document.createElement('div');
-            div.className = `log-entry log-${type}`;
-            div.innerText = text;
-            outputStream.appendChild(div);
-            outputStream.scrollTop = outputStream.scrollHeight;
-        }
-    </script>
-    ...
-    
-    <script src="db.js"></script> 
-    
-    <script>
-       // ... 这里是你原来的加载卡片的那些代码，保留不动 ...
-    </script>
-    
-    <script>
-       // ... 这里是你原来的背景粒子代码，保留不动 ...
     </script>
 
     <script src="js/core.js"></script>
