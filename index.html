@@ -13,6 +13,7 @@
             --text-muted: #888888;
             --accent: #00f0ff;
             --accent-glow: rgba(0, 240, 255, 0.3);
+            --new-accent: #00ff88;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,7 +41,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
+            padding: 0 5%;
+            height: 70px;
             position: fixed;
             width: 100%;
             top: 0;
@@ -50,17 +52,16 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-        }
-        
-        /* Logo 图片样式调整 */
+        .brand { display: flex; align-items: center; height: 100%; }
         .brand img {
-            height: 35px; /* 控制 Logo 高度，保持比例 */
+            height: 40px; 
             width: auto;
             display: block;
+            border-radius: 4px;
+            filter: brightness(1.2); 
+            transition: transform 0.3s ease;
         }
+        .brand img:hover { transform: scale(1.05); }
 
         .hero {
             min-height: 85vh;
@@ -69,13 +70,12 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 8rem 20px 2rem; /* 增加顶部padding防止被导航栏遮挡 */
+            padding: 8rem 20px 2rem;
             position: relative;
         }
 
-        /* 故障风标题特效 */
         h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem); /* 手机端最小2.5rem */
+            font-size: clamp(2.5rem, 8vw, 6rem);
             font-weight: 800;
             letter-spacing: -2px;
             color: #fff;
@@ -91,44 +91,25 @@
             100% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
         }
 
-        .tagline {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 800px;
-            margin-bottom: 3rem;
-            min-height: 3.2rem;
-            padding: 0 10px;
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background-color: var(--accent);
-            margin-left: 5px;
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-        }
+        .tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin-bottom: 3rem; min-height: 3.2rem; padding: 0 10px; }
+        .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-bottom: 4rem;
-            opacity: 0;
-            animation: fadeUp 1s ease-out 1s forwards;
-            width: 100%;
-            max-width: 900px;
-        }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 4rem; opacity: 0; animation: fadeUp 1s ease-out 1s forwards; width: 100%; max-width: 900px; }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        .matrix-container {
-            padding: 2rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
+        .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
 
         .section-title {
@@ -136,19 +117,26 @@
             color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 2rem;
-            opacity: 0.8;
             padding-left: 5px;
             border-left: 3px solid var(--accent);
             margin-left: 5px;
         }
+        
+        /* 扩展区标题颜色 */
+        .section-title.lab { color: var(--new-accent); border-left-color: var(--new-accent); }
 
-        .grid {
-            display: grid;
-            /* 手机端自适应优化：最小宽度调整为260px，防止小屏手机溢出 */
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
+        .view-all-btn {
+            font-size: 0.75rem;
+            color: #666;
+            text-decoration: none;
+            border: 1px solid #333;
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: 0.3s;
         }
+        .view-all-btn:hover { color: #fff; border-color: #fff; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
 
         .card {
             background: var(--card-bg);
@@ -172,87 +160,25 @@
             box-shadow: 0 0 30px var(--accent-glow);
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
+        /* 动态生成的卡片特效 */
+        .card.lab-card:hover { border-color: var(--new-accent); box-shadow: 0 0 30px rgba(0, 255, 136, 0.2); }
 
-        .card-img {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            object-fit: cover;
-            background: #222;
-        }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #222; }
         
         .card-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 10px;
         }
 
         .card h3 { font-size: 1.25rem; font-weight: 600; }
         .card p { font-size: 0.95rem; color: #999; line-height: 1.6; flex-grow: 1; }
-        
-        .status-dot {
-            width: 8px; height: 8px;
-            background: #00ff88;
-            border-radius: 50%;
-            position: absolute;
-            top: 20px; right: 20px;
-            box-shadow: 0 0 10px #00ff88;
-        }
-
-        .card-footer {
-            margin-top: 2rem;
-            font-size: 0.85rem;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            opacity: 0.8;
-        }
-
-        footer {
-            text-align: center;
-            padding: 4rem 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: 4rem;
-            color: #444;
-            font-size: 0.85rem;
-        }
-        
+        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; position: absolute; top: 20px; right: 20px; box-shadow: 0 0 10px #00ff88; }
+        .card-footer { margin-top: 2rem; font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 5px; opacity: 0.8; }
+        footer { text-align: center; padding: 4rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; color: #444; font-size: 0.85rem; }
         .founder { margin-bottom: 1rem; color: #666; }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 📱 手机端深度适配 */
-        @media (max-width: 768px) {
-            .hero { padding-top: 6rem; min-height: auto; }
-            .tagline { font-size: 1rem; margin-bottom: 2rem; }
-            
-            /* 手机上数据变为2列显示 */
-            .stats-bar { 
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 1.5rem 1rem; 
-                margin-bottom: 3rem;
-            }
-            .stat-num { font-size: 1.5rem; }
-            
-            .matrix-container { padding: 1rem 5%; }
-            .card { padding: 1.5rem; }
-            .section-title { font-size: 0.8rem; margin-bottom: 1.5rem; }
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .hero { padding-top: 6rem; min-height: auto; } .tagline { font-size: 1rem; margin-bottom: 2rem; } .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; margin-bottom: 3rem; } .stat-num { font-size: 1.5rem; } .matrix-container { padding: 1rem 5%; } .card { padding: 1.5rem; } .section-title { font-size: 0.8rem; margin-bottom: 1.5rem; } }
     </style>
 </head>
 <body>
@@ -267,84 +193,52 @@
 
     <header class="hero">
         <h1 class="glitch-text">Natural Algorithm</h1>
-        
-        <div class="tagline">
-            <span id="typewriter"></span><span class="cursor"></span>
-        </div>
-
+        <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
         <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-num">20K+</span>
-                <span class="stat-label">AI Videos</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-num">40+</span>
-                <span class="stat-label">PWA Apps</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-num">18</span>
-                <span class="stat-label">Agents</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-num">7000m</span>
-                <span class="stat-label">AI Symphony</span>
-            </div>
+            <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
+            <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
+            <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Agents</span></div>
+            <div class="stat-item"><span class="stat-num">7000m</span><span class="stat-label">AI Symphony</span></div>
         </div>
     </header>
 
     <main class="matrix-container">
-        <div class="section-title">/// SYSTEM MATRIX · 生态矩阵入口</div>
+        
+        <div class="section-header" style="margin-top:0;">
+            <div class="section-title">/// SYSTEM MATRIX</div>
+        </div>
         
         <div class="grid">
             <a href="https://ai.shensist.top" class="card">
                 <div class="status-dot"></div>
-                <div class="card-header">
-                    <img src="logo_ai.jpg" alt="TianSuan" class="card-img">
-                    <div>
-                        <h3>TianSuan AI</h3>
-                        <div style="font-size:0.8rem; color:#666;">Digital Hub</div>
-                    </div>
-                </div>
+                <div class="card-header"><img src="logo_ai.jpg" alt="TianSuan" class="card-img"><div><h3>TianSuan AI</h3><div style="font-size:0.8rem; color:#666;">Digital Hub</div></div></div>
                 <p>Digital Assets Hub & PWA Matrix. Access the Music Engine, Tourism Agents, and Office Tools.</p>
                 <div class="card-footer">Enter Hub →</div>
             </a>
-
             <a href="https://blog.shensist.top" class="card">
-                <div class="card-header">
-                    <div class="card-icon">📘</div>
-                    <div>
-                        <h3>Insights</h3>
-                        <div style="font-size:0.8rem; color:#666;">Research Blog</div>
-                    </div>
-                </div>
+                <div class="card-header"><div class="card-icon">📘</div><div><h3>Insights</h3><div style="font-size:0.8rem; color:#666;">Research Blog</div></div></div>
                 <p>Deep dives into Natural Algorithms, PRISM Agent logic, and development logs.</p>
                 <div class="card-footer">Read Logs →</div>
             </a>
-
             <a href="https://blog.shensist.top/video-gallery" class="card">
-                <div class="card-header">
-                    <div class="card-icon">🎬</div>
-                    <div>
-                        <h3>Sora Vision</h3>
-                        <div style="font-size:0.8rem; color:#666;">Visual Gallery</div>
-                    </div>
-                </div>
+                <div class="card-header"><div class="card-icon">🎬</div><div><h3>Sora Vision</h3><div style="font-size:0.8rem; color:#666;">Visual Gallery</div></div></div>
                 <p>20,000+ Original AI narratives. Cyberpunk ShanHaiJing, Zero Riot, and surreal experiments.</p>
                 <div class="card-footer">Watch Now →</div>
             </a>
-
             <a href="https://dev.shensist.top" class="card">
-                <div class="card-header">
-                    <img src="logo_dev.jpg" alt="GitHub" class="card-img">
-                    <div>
-                        <h3>Open Source</h3>
-                        <div style="font-size:0.8rem; color:#666;">Codebase</div>
-                    </div>
-                </div>
+                <div class="card-header"><img src="logo_dev.jpg" alt="GitHub" class="card-img"><div><h3>Open Source</h3><div style="font-size:0.8rem; color:#666;">Codebase</div></div></div>
                 <p>Explore the architecture behind TianSuan. 16 Independent AI Tech Products open-sourced.</p>
                 <div class="card-footer">View Code →</div>
             </a>
         </div>
+
+        <div class="section-header">
+            <div class="section-title lab">/// EXTENSIONS</div>
+            <a href="apps.html" class="view-all-btn">View All Apps →</a>
+        </div>
+        
+        <div class="grid" id="dynamic-grid"></div>
+
     </main>
 
     <footer>
@@ -352,93 +246,57 @@
         <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p>
     </footer>
 
+    <script src="db.js"></script>
+    
     <script>
-        // 1. 粒子特效 (移动端优化版)
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
+        const dynamicContainer = document.getElementById('dynamic-grid');
+        
+        // 确保 db.js 加载成功
+        if (typeof appDatabase !== 'undefined' && Array.isArray(appDatabase)) {
+            // 过滤：只找 onHome = true 的
+            const homeApps = appDatabase.filter(app => app.onHome === true);
 
-        function init() {
-            resize();
-            createParticles();
-            animate();
-        }
+            homeApps.forEach(app => {
+                const card = document.createElement('a');
+                card.href = app.url;
+                card.className = 'card lab-card'; // 加上 lab-card 样式
+                card.target = "_blank"; 
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-
-        function createParticles() {
-            particles = [];
-            // 根据屏幕宽度决定粒子数量，手机上减少粒子以省电
-            const count = window.innerWidth < 768 ? 40 : 100; 
-            for(let i=0; i<count; i++) {
-                particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.3,
-                    vy: (Math.random() - 0.5) * 0.3,
-                    size: Math.random() * 2 + 1,
-                    alpha: Math.random() * 0.5 + 0.1
-                });
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-icon">${app.icon}</div>
+                        <div>
+                            <h3>${app.name}</h3>
+                            <div style="font-size:0.8rem; color:#666;">Extension</div>
+                        </div>
+                    </div>
+                    <p>${app.desc}</p>
+                    <div class="card-footer" style="color:var(--new-accent);">Launch App →</div>
+                `;
+                dynamicContainer.appendChild(card);
+            });
+            
+            // 如果没有首页应用，隐藏标题栏（可选）
+            if(homeApps.length === 0) {
+                document.querySelector('.section-header:last-of-type').style.display = 'none';
             }
         }
+    </script>
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            particles.forEach((p, index) => {
-                p.x += p.vx;
-                p.y += p.vy;
-                if(p.x < 0 || p.x > width) p.vx *= -1;
-                if(p.y < 0 || p.y > height) p.vy *= -1;
-
-                ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                // 连线特效
-                for(let j = index + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dx = p.x - p2.x;
-                    const dy = p.y - p2.y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-
-                    if(dist < 150) {
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * (1 - dist/150)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-
+    <script>
+        const canvas = document.getElementById('canvas-bg'); const ctx = canvas.getContext('2d'); let width, height; let particles = [];
+        function init() { resize(); createParticles(); animate(); }
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        function createParticles() { particles = []; const count = window.innerWidth < 768 ? 40 : 100; for(let i=0; i<count; i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 2 + 1, alpha: Math.random() * 0.5 + 0.1 }); } }
+        function animate() { ctx.clearRect(0, 0, width, height); particles.forEach((p, index) => { p.x += p.vx; p.y += p.vy; if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1; ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); for(let j = index + 1; j < particles.length; j++) { const p2 = particles[j]; const dx = p.x - p2.x; const dy = p.y - p2.y; const dist = Math.sqrt(dx*dx + dy*dy); if(dist < 150) { ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * (1 - dist/150)})`; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } } }); requestAnimationFrame(animate); }
         window.addEventListener('resize', () => { resize(); createParticles(); });
         init();
-
-        // 2. 打字机特效
         const textToType = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typeWriterElement = document.getElementById('typewriter');
         let i = 0;
-
-        function typeWriter() {
-            if (i < textToType.length) {
-                typeWriterElement.innerHTML += textToType.charAt(i);
-                i++;
-                setTimeout(typeWriter, 40);
-            }
-        }
-        
+        function typeWriter() { if (i < textToType.length) { typeWriterElement.innerHTML += textToType.charAt(i); i++; setTimeout(typeWriter, 40); } }
         setTimeout(typeWriter, 500);
     </script>
-
     <script src="https://ai-master-dashboard.netlify.app/inject-telemetry.js"></script>
 
 </body>
