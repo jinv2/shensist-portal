@@ -16,7 +16,6 @@
             --accent: #00f0ff; --accent-glow: rgba(0, 240, 255, 0.4); --new-accent: #00ff88; --alert: #ff3366;
             --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-code: 'Courier New', Courier, monospace; --font-tech: 'Orbitron', sans-serif;
-            /* 新拟态核心色 */
             --neu-dark: #0a0a0a; --neu-light: #1a1a1a;
         }
 
@@ -47,23 +46,16 @@
         /* === 核心：深色新拟态物理按钮 (LingZhu Box) === */
         .lingzhu-box {
             display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; min-height: 25vh;
-            /* 物理材质感背景 */
             background: linear-gradient(145deg, #141414, #0a0a0a);
-            /* 巨大的凸起投影 */
             box-shadow:  20px 20px 60px #050505, -20px -20px 60px #1e1e1e;
             border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
             font-family: var(--font-tech); font-weight: 900; font-size: clamp(1.8rem, 6vw, 5rem); 
             letter-spacing: clamp(4px, 1vw, 12px); color: #888;
-            text-shadow: -1px -1px 2px rgba(0,0,0,0.8), 1px 1px 0 rgba(255,255,255,0.1); /* 字体雕刻感 */
+            text-shadow: -1px -1px 2px rgba(0,0,0,0.8), 1px 1px 0 rgba(255,255,255,0.1);
             cursor: pointer; position: relative; overflow: hidden; transition: all 0.2s ease;
         }
         .lingzhu-box:hover { color: #fff; text-shadow: 0 0 20px var(--accent); transform: translateY(-2px); }
-        .lingzhu-box:active {
-            /* 按下凹陷感 */
-            background: #0a0a0a;
-            box-shadow: inset 20px 20px 60px #050505, inset -20px -20px 60px #1e1e1e;
-            color: var(--accent); transform: translateY(2px); border-color: rgba(0,0,0,0);
-        }
+        .lingzhu-box:active { background: #0a0a0a; box-shadow: inset 20px 20px 60px #050505, inset -20px -20px 60px #1e1e1e; color: var(--accent); transform: translateY(2px); border-color: rgba(0,0,0,0); }
         .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; font-family: var(--font-tech); text-transform: uppercase; }
 
         /* === 全屏战情室控制台 === */
@@ -73,10 +65,8 @@
         
         .console-container-inner { width: 96vw; height: 94vh; max-width: 1920px; max-height: none; background: #0f0f0f; box-shadow: 0 0 100px rgba(0,0,0,0.9); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; position: relative; }
 
-        /* 顶部功能按钮组 (应用新拟态) */
+        /* 顶部功能按钮组 */
         .console-controls { position: absolute; top: 25px; right: 30px; display: flex; gap: 15px; z-index: 100; }
-        
-        /* 通用新拟态小按钮样式 */
         .neumorphic-btn {
             font-family: var(--font-tech); font-size: 0.8rem; cursor: pointer; letter-spacing: 1px; transition: all 0.2s;
             border-radius: 12px; padding: 10px 20px; border: none;
@@ -86,7 +76,6 @@
         }
         .neumorphic-btn:hover { color: #fff; transform: translateY(-2px); }
         .neumorphic-btn:active { box-shadow: inset 5px 5px 10px #050505, inset -5px -5px 10px #1e1e1e; color: var(--accent); transform: translateY(1px); }
-        
         .console-btn-refresh { color: var(--new-accent); }
         .console-btn-close { color: var(--alert); }
 
@@ -99,11 +88,8 @@
         .log-entry { margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 4px; }
         .log-sys { color: var(--accent); } .log-user { color: #888; font-style: italic; border-left: 2px solid #666; padding-left: 10px; } .log-mod { color: var(--new-accent); }
 
-        /* === SORA2 风格控制甲板 (新拟态) === */
-        .style-deck {
-            width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; padding: 15px;
-            background: transparent; /* 去掉背景，直接让按钮浮起来 */
-        }
+        /* === SORA2 风格控制甲板 === */
+        .style-deck { width: 100%; display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; padding: 15px; background: transparent; }
         .style-btn {
             background: linear-gradient(145deg, #141414, #0a0a0a);
             box-shadow: 4px 4px 8px #050505, -4px -4px 8px #1e1e1e;
@@ -111,41 +97,43 @@
             font-family: var(--font-tech); font-size: 0.75rem; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
         }
         .style-btn:hover { color: #fff; transform: translateY(-2px); }
-        .style-btn:active, .style-btn.active {
-            background: #080808;
-            box-shadow: inset 4px 4px 8px #040404, inset -4px -4px 8px #1a1a1a; /* 凹陷状态 */
-            color: var(--accent);
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
-            transform: translateY(1px);
-        }
+        .style-btn:active, .style-btn.active { background: #080808; box-shadow: inset 4px 4px 8px #040404, inset -4px -4px 8px #1a1a1a; color: var(--accent); text-shadow: 0 0 5px rgba(0, 240, 255, 0.5); transform: translateY(1px); }
 
         .console-input-area { width: 100%; position: relative; flex-shrink: 0; display: flex; gap: 20px; align-items: center; padding: 10px; }
         
+        /* === 输入框：毛玻璃风格 (Glassmorphism) === */
         #console-input { 
             flex-grow: 1; 
-            background: #080808; 
-            box-shadow: inset 6px 6px 12px #040404, inset -6px -6px 12px #121212; /* 深邃凹槽 */
-            border-radius: 15px; border: none; color: #fff; font-family: var(--font-tech); font-weight: 700; font-size: 1.2rem; padding: 20px 25px; outline: none; letter-spacing: 2px; transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.03); /* 微亮底色 */
+            backdrop-filter: blur(12px);           /* 核心模糊 */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            border-radius: 15px; 
+            color: #fff; 
+            font-family: var(--font-main); font-weight: 500; font-size: 1.1rem; 
+            padding: 20px 25px; outline: none; letter-spacing: 1px; transition: all 0.3s;
         }
-        #console-input:focus { box-shadow: inset 6px 6px 12px #000, inset -6px -6px 12px #111, 0 0 5px rgba(0,240,255,0.2); color: var(--accent); }
+        #console-input:focus { 
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0,0,0,0.5);
+            color: #fff; 
+        }
+        #console-input::placeholder { color: rgba(255, 255, 255, 0.3); font-style: normal; font-weight: 400; }
         
-        /* === 显化按钮 (Dark Neumorphism 终极版) === */
+        /* === 显化按钮 (Dark Neumorphism) === */
         #console-send-btn {
             height: 60px; padding: 0 40px; 
             background: linear-gradient(145deg, #161616, #0d0d0d);
-            box-shadow:  8px 8px 16px #060606, -8px -8px 16px #1e1e1e; /* 巨大的物理凸起 */
+            box-shadow:  8px 8px 16px #060606, -8px -8px 16px #1e1e1e; 
             border: none; border-radius: 15px; 
             color: var(--accent); font-family: var(--font-tech); font-weight: 900; font-size: 1rem; letter-spacing: 2px;
             cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             text-transform: uppercase; white-space: nowrap; position: relative; overflow: hidden;
         }
         #console-send-btn:hover { color: #fff; transform: translateY(-2px); box-shadow: 10px 10px 20px #060606, -10px -10px 20px #1e1e1e; }
-        #console-send-btn:active {
-            transform: scale(0.98) translateY(2px);
-            background: #0d0d0d;
-            box-shadow: inset 8px 8px 16px #060606, inset -8px -8px 16px #1e1e1e; /* 真实按压凹陷 */
-            color: var(--new-accent);
-        }
+        #console-send-btn:active { transform: scale(0.98) translateY(2px); background: #0d0d0d; box-shadow: inset 8px 8px 16px #060606, inset -8px -8px 16px #1e1e1e; color: var(--new-accent); }
 
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
@@ -212,7 +200,7 @@
             </div>
 
             <div class="console-input-area">
-                <input type="text" id="console-input" placeholder="ENTER COMMAND..." autocomplete="off">
+                <input type="text" id="console-input" placeholder="输入你的简单描述，或提出你的创意方向..." autocomplete="off">
                 <button id="console-send-btn">[ ✦ MATERIALIZE ]</button>
             </div>
         </div>
