@@ -101,25 +101,18 @@
 
         .console-input-area { width: 100%; position: relative; flex-shrink: 0; display: flex; gap: 20px; align-items: center; padding: 10px; }
         
-        /* === 输入框：毛玻璃风格 (Glassmorphism) === */
+        /* === 输入框：毛玻璃风格 === */
         #console-input { 
             flex-grow: 1; 
-            background: rgba(255, 255, 255, 0.03); /* 微亮底色 */
-            backdrop-filter: blur(12px);           /* 核心模糊 */
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1); 
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
             border-radius: 15px; 
-            color: #fff; 
-            font-family: var(--font-main); font-weight: 500; font-size: 1.1rem; 
+            color: #fff; font-family: var(--font-main); font-weight: 500; font-size: 1.1rem; 
             padding: 20px 25px; outline: none; letter-spacing: 1px; transition: all 0.3s;
         }
-        #console-input:focus { 
-            background: rgba(255, 255, 255, 0.07);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0,0,0,0.5);
-            color: #fff; 
-        }
+        #console-input:focus { background: rgba(255, 255, 255, 0.07); border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0,0,0,0.5); color: #fff; }
         #console-input::placeholder { color: rgba(255, 255, 255, 0.3); font-style: normal; font-weight: 400; }
         
         /* === 显化按钮 (Dark Neumorphism) === */
@@ -135,6 +128,7 @@
         #console-send-btn:hover { color: #fff; transform: translateY(-2px); box-shadow: 10px 10px 20px #060606, -10px -10px 20px #1e1e1e; }
         #console-send-btn:active { transform: scale(0.98) translateY(2px); background: #0d0d0d; box-shadow: inset 8px 8px 16px #060606, inset -8px -8px 16px #1e1e1e; color: var(--new-accent); }
 
+        /* === 找回的四大金刚方框样式 === */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; padding-left: 5px; border-left: 3px solid var(--accent); margin-left: 5px; }
@@ -144,6 +138,7 @@
         .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; } .card-img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: #222; } .card-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: rgba(255,255,255,0.1); border-radius: 8px; }
         .card h3 { font-size: 1.1rem; font-weight: 600; } .card p { font-size: 0.9rem; color: #999; line-height: 1.5; flex-grow: 1; }
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); display: flex; align-items: center; gap: 5px; opacity: 0.9; }
+        .status-dot { width: 6px; height: 6px; background: #00ff88; border-radius: 50%; position: absolute; top: 15px; right: 15px; box-shadow: 0 0 8px #00ff88; }
         footer { text-align: center; padding: 3rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 3rem; color: #555; font-size: 0.8rem; }
         @media (max-width: 768px) { .hero { padding: 6rem 15px 1rem; min-height: auto; } .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; } .lingzhu-box { min-height: 220px; border-radius: 30px; } .grid { grid-template-columns: 1fr; gap: 1rem; } .console-controls { top: 15px; right: 15px; } .style-deck { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 15px; -webkit-overflow-scrolling: touch; } .style-btn { flex-shrink: 0; } #console-send-btn { width: 100%; margin-top: 10px; padding: 15px; font-size: 1.1rem; } .console-input-area { flex-direction: column; } }
     </style>
@@ -167,10 +162,37 @@
             </div>
         </div>
     </header>
+    
     <main class="matrix-container">
         <div class="section-header" style="margin-top:0;"> <div class="section-title">/// SYSTEM MATRIX</div> </div>
+        <div class="grid">
+            <a href="https://ai.shensist.top" class="card">
+                <div class="status-dot"></div>
+                <div class="card-header"><img src="logo_ai.jpg" alt="TianSuan" class="card-img"><div><h3>TianSuan AI</h3><div style="font-size:0.8rem; color:#666;">Digital Hub</div></div></div>
+                <p>Digital Assets Hub & PWA Matrix. Access the Music Engine, Tourism Agents, and Office Tools.</p>
+                <div class="card-footer">Enter Hub →</div>
+            </a>
+            <a href="https://blog.shensist.top" class="card">
+                <div class="card-header"><div class="card-icon">📘</div><div><h3>Insights</h3><div style="font-size:0.8rem; color:#666;">Research Blog</div></div></div>
+                <p>Deep dives into Natural Algorithms, PRISM Agent logic, and development logs.</p>
+                <div class="card-footer">Read Logs →</div>
+            </a>
+            <a href="https://blog.shensist.top/video-gallery" class="card">
+                <div class="card-header"><div class="card-icon">🎬</div><div><h3>Sora Vision</h3><div style="font-size:0.8rem; color:#666;">Visual Gallery</div></div></div>
+                <p>20,000+ Original AI narratives. Cyberpunk ShanHaiJing, Zero Riot, and surreal experiments.</p>
+                <div class="card-footer">Watch Now →</div>
+            </a>
+            <a href="https://dev.shensist.top" class="card">
+                <div class="card-header"><img src="logo_dev.jpg" alt="GitHub" class="card-img"><div><h3>Open Source</h3><div style="font-size:0.8rem; color:#666;">Codebase</div></div></div>
+                <p>Explore the architecture behind TianSuan. 16 Independent AI Tech Products open-sourced.</p>
+                <div class="card-footer">View Code →</div>
+            </a>
+        </div>
+        
+        <div class="section-header"> <div class="section-title lab">/// EXTENSIONS</div> <a href="apps.html" class="view-all-btn" style="font-size:0.8rem; color:#666; text-decoration:none;">View All Apps →</a> </div>
         <div class="grid" id="dynamic-grid"></div> 
     </main>
+    
     <footer> <p class="founder">Founded by JIN V (金威) | Architect of Natural Algorithm Lab</p> <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p> </footer>
 
     <div id="lingzhu-console">
