@@ -1,31 +1,19 @@
-// 📦 TianSuan 应用数据库
-// 只有 onHome: true 的应用才会出现在 index.html 下方
-
 const appDatabase = [
-    // 1. Todo 应用 (设为 true，让它上首页)
+    // ✅ 你的 Todo 应用 (使用自定义域名)
     {
-        name: "Todo Agent",
+        name: "Neumorphism Todo",
         icon: "✅",
-        desc: "Minimalist task manager.",
-        url: "https://neumorphism-todo.shensist.top",
-        onHome: true  // <--- 这个开关决定它是否上首页
-    },
-    
-    // 2. 示例：未来的音乐应用 (设为 false，只在仓库显示)
-    {
-        name: "AI Music",
-        icon: "🎵",
-        desc: "Generate infinite melodies.",
-        url: "#",
-        onHome: false // <--- 设为 false，首页就不会拥挤
+        desc: "极简拟态风格任务管理器",
+        url: "https://neumorphism-todo.shensist.top", // 这里填你配置好的酷炫域名
+        onHome: true
     },
 
-    // 3. 示例：未来的日历 (设为 false)
+    // 🌐 旧的 TianSuan AI (保留)
     {
-        name: "AI Calendar",
-        icon: "📅",
-        desc: "Smart scheduling.",
-        url: "#",
-        onHome: false
+        name: "Legacy Hub",
+        icon: "🌐",
+        desc: "Original TianSuan AI site.",
+        url: "https://ai.shensist.top",
+        onHome: false // 不要在首页占位置了，只在 apps.html 显示
     }
 ];
