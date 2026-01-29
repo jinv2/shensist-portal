@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="TianSuan AI - Natural Algorithm R&D Lab. Defining the future of reality.">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg-color: #050505;
@@ -16,6 +21,7 @@
             --new-accent: #00ff88;
             --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-code: 'Courier New', Courier, monospace;
+            --font-tech: 'Orbitron', sans-serif; /* 这里的科技字体 */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,310 +36,182 @@
             transition: background-color 0.5s ease;
         }
 
-        /* === 禅模式 (Zen Mode) 当灵珠激活时 === */
-        body.zen-active {
-            overflow: hidden; /* 禁止滚动 */
-        }
-        body.zen-active .hero, 
+        /* === 禅模式 (Zen Mode) === */
+        body.zen-active { overflow: hidden; }
+        body.zen-active .hero h1, 
+        body.zen-active .tagline,
+        body.zen-active .stats-bar,
         body.zen-active .matrix-container,
         body.zen-active nav,
         body.zen-active footer {
-            filter: blur(10px);
-            opacity: 0.1;
+            filter: blur(15px);
+            opacity: 0;
             pointer-events: none;
             transition: all 0.8s ease;
         }
-        body.zen-active #canvas-bg {
-            opacity: 0.2;
+        /* 灵珠激活时不模糊灵珠自己 */
+        body.zen-active .lingzhu-trigger-container {
+            z-index: 10001; /* 确保它浮在最上层 */
+            opacity: 0; /* 或者让它也消失，只留控制台？通常让它消失比较好，这里设为消失 */
+            pointer-events: none;
+            transform: scale(1.5);
+            filter: blur(10px);
+            transition: all 0.5s ease;
         }
 
         #canvas-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%);
             transition: opacity 0.8s ease;
         }
 
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            height: 70px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; height: 70px; position: fixed; width: 100%; top: 0; z-index: 100;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.5s ease;
         }
 
-        .brand { display: flex; align-items: center; height: 100%; }
-        .brand img {
-            height: 40px; 
-            width: auto;
-            display: block;
-            border-radius: 4px;
-            filter: brightness(1.2); 
-            transition: transform 0.3s ease;
-        }
-        .brand img:hover { transform: scale(1.05); }
+        .brand img { height: 40px; width: auto; border-radius: 4px; filter: brightness(1.2); }
 
         .hero {
-            min-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 8rem 20px 2rem;
-            position: relative;
-            transition: all 0.5s ease;
+            min-height: 90vh; /* 拉高一点，给下面留空间 */
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 8rem 20px 4rem; position: relative;
         }
 
         h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem);
-            font-weight: 800;
-            letter-spacing: -2px;
-            color: #fff;
-            margin-bottom: 1rem;
-            position: relative;
-            animation: textShadow 1.6s infinite;
-            line-height: 1.1;
+            font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800; letter-spacing: -2px; color: #fff;
+            margin-bottom: 1rem; position: relative; animation: textShadow 1.6s infinite; line-height: 1.1;
         }
-
         @keyframes textShadow {
-            0% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
-            5% { text-shadow: 2.7928974010788217px 0 1px rgba(0,30,255,0.5), -2.7928974010788217px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
-            100% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
+            0% { text-shadow: 0.4px 0 1px rgba(0,30,255,0.5), -0.4px 0 1px rgba(255,0,80,0.3); }
+            5% { text-shadow: 2.8px 0 1px rgba(0,30,255,0.5), -2.8px 0 1px rgba(255,0,80,0.3); }
+            100% { text-shadow: 0.4px 0 1px rgba(0,30,255,0.5), -0.4px 0 1px rgba(255,0,80,0.3); }
         }
 
-        .tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 3.2rem; padding: 0 10px; }
+        .tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin-bottom: 3rem; min-height: 3.2rem; }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* === 灵珠核心 (The LingZhu Core) === */
-        .lingzhu-trigger-container {
-            margin: 2rem 0 4rem 0;
-            z-index: 200;
-            position: relative;
+        /* 原有数据行 */
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+            margin-bottom: 4rem; /* 增加底部间距，给灵珠留位置 */
+            width: 100%; max-width: 900px;
+            opacity: 0; animation: fadeUp 1s ease-out 0.5s forwards;
         }
-
-        .lingzhu-box {
-            display: inline-block;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(0,0,0,0.6);
-            padding: 18px 36px;
-            font-family: var(--font-code);
-            font-size: 1.2rem;
-            color: var(--text-main);
-            letter-spacing: 4px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lingzhu-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 2px; height: 100%;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .lingzhu-box::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; width: 2px; height: 100%;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .lingzhu-box:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow);
-            transform: scale(1.05);
-            letter-spacing: 6px;
-            background: #000;
-        }
-        
-        .lingzhu-box:hover::before, .lingzhu-box:hover::after { opacity: 1; }
-
-        /* === 灵珠控制台界面 (Hidden by default) === */
-        #lingzhu-console {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            display: none; /* JS控制显示 */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: var(--font-code);
-        }
-        
-        /* 控制台显现动画 */
-        #lingzhu-console.active { display: flex; animation: fadeInConsole 0.5s forwards; }
-
-        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-
-        .console-header {
-            margin-bottom: 2rem;
-            text-align: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 1rem;
-            width: 80%;
-            max-width: 800px;
-        }
-
-        .console-title { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-main); }
-        .console-subtitle { font-size: 0.8rem; color: #666; margin-top: 5px; text-transform: uppercase; }
-
-        .console-stream {
-            width: 80%;
-            max-width: 800px;
-            height: 50vh;
-            border-left: 1px solid #333;
-            padding: 20px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #ccc;
-            background: rgba(0,0,0,0.2);
-        }
-
-        .log-entry { margin-bottom: 12px; line-height: 1.6; }
-        .log-sys { color: var(--accent); }
-        .log-user { color: #888; }
-        .log-mod { color: var(--new-accent); }
-
-        .console-input-area {
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-        }
-
-        #console-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #333;
-            color: #fff;
-            font-family: var(--font-code);
-            font-size: 1.2rem;
-            padding: 10px 0;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        #console-input:focus { border-bottom-color: var(--accent); }
-
-        .close-console {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            color: #666;
-            cursor: pointer;
-            font-size: 2rem;
-            transition: color 0.3s;
-        }
-        .close-console:hover { color: #fff; }
-
-
-        /* === 原有的统计和卡片样式 === */
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 4rem; opacity: 0; animation: fadeUp 1s ease-out 1s forwards; width: 100%; max-width: 900px; }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
+        /* === 【核心修改】灵珠巨型横幅 (LingZhu Mega Bar) === */
+        .lingzhu-trigger-container {
+            width: 100%;
+            max-width: 1000px; /* 和内容区同宽，甚至更宽 */
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 1s forwards; /* 最后浮现 */
+            z-index: 10;
+        }
 
-        .section-header {
+        .lingzhu-box {
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            margin-top: 4rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
-
-        .section-title {
-            font-size: 0.8rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding-left: 5px;
-            border-left: 3px solid var(--accent);
-            margin-left: 5px;
-        }
-        
-        .section-title.lab { color: var(--new-accent); border-left-color: var(--new-accent); }
-
-        .view-all-btn {
-            font-size: 0.75rem;
-            color: #666;
-            text-decoration: none;
-            border: 1px solid #333;
-            padding: 4px 12px;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-        .view-all-btn:hover { color: #fff; border-color: #fff; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 2rem;
-            text-decoration: none;
-            color: white;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            padding: 24px 0;
+            
+            /* 视觉风格：AI科技硬核风 */
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-left: 4px solid var(--accent); /* 左侧加重 */
+            border-right: 4px solid var(--accent); /* 右侧加重 */
+            
+            /* 字体设置 */
+            font-family: var(--font-tech); /* Orbitron */
+            font-weight: 900; /* 最粗 */
+            font-size: clamp(1.2rem, 3vw, 2rem); /* 响应式大字体 */
+            letter-spacing: 8px; /* 极宽间距 */
+            color: #fff;
+            
+            cursor: pointer;
             position: relative;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        .card:hover, .card:active {
-            transform: translateY(-4px);
-            background: rgba(30, 30, 30, 0.8);
+        /* 扫描线动画效果 */
+        .lingzhu-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+
+        .lingzhu-box:hover {
+            background: rgba(0, 240, 255, 0.05);
             border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
+            letter-spacing: 12px; /* 悬停时字距拉得更开 */
+            text-shadow: 0 0 8px var(--accent);
         }
-
-        .card.lab-card:hover { border-color: var(--new-accent); box-shadow: 0 0 30px rgba(0, 255, 136, 0.2); }
-
-        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-        .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #222; }
         
-        .card-icon {
-            width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 10px;
+        .lingzhu-box:hover::after {
+            left: 150%;
+            transition: 0.7s ease-in-out;
         }
 
-        .card h3 { font-size: 1.25rem; font-weight: 600; }
-        .card p { font-size: 0.95rem; color: #999; line-height: 1.6; flex-grow: 1; }
-        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; position: absolute; top: 20px; right: 20px; box-shadow: 0 0 10px #00ff88; }
+        .lingzhu-sub {
+            position: absolute;
+            bottom: 4px;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            font-family: var(--font-main);
+            opacity: 0.7;
+        }
+
+        /* === 灵珠控制台 (保持不变) === */
+        #lingzhu-console {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            font-family: var(--font-code);
+        }
+        #lingzhu-console.active { display: flex; animation: fadeInConsole 0.5s forwards; }
+        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .console-header { margin-bottom: 2rem; text-align: center; border-bottom: 1px solid #333; padding-bottom: 1rem; width: 80%; max-width: 800px; }
+        .console-title { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-main); font-family: var(--font-tech); }
+        .console-stream { width: 80%; max-width: 800px; height: 50vh; border-left: 1px solid #333; padding: 20px; overflow-y: auto; margin-bottom: 20px; font-size: 14px; color: #ccc; background: rgba(0,0,0,0.2); }
+        .log-entry { margin-bottom: 12px; line-height: 1.6; } .log-sys { color: var(--accent); } .log-user { color: #888; } .log-mod { color: var(--new-accent); }
+        .console-input-area { width: 80%; max-width: 800px; }
+        #console-input { width: 100%; background: transparent; border: none; border-bottom: 2px solid #333; color: #fff; font-family: var(--font-code); font-size: 1.2rem; padding: 10px 0; outline: none; }
+        #console-input:focus { border-bottom-color: var(--accent); }
+        .close-console { position: absolute; top: 40px; right: 40px; color: #666; cursor: pointer; font-size: 2rem; } .close-console:hover { color: #fff; }
+
+        /* 其他布局 */
+        .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; margin-top: 4rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .section-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; padding-left: 5px; border-left: 3px solid var(--accent); margin-left: 5px; }
+        .section-title.lab { color: var(--new-accent); border-left-color: var(--new-accent); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; text-decoration: none; color: white; transition: all 0.4s; position: relative; display: flex; flex-direction: column; height: 100%; }
+        .card:hover { transform: translateY(-4px); background: rgba(30, 30, 30, 0.8); border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .card.lab-card:hover { border-color: var(--new-accent); box-shadow: 0 0 30px rgba(0, 255, 136, 0.2); }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; } .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #222; }
+        .card-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .card h3 { font-size: 1.25rem; font-weight: 600; } .card p { font-size: 0.95rem; color: #999; line-height: 1.6; flex-grow: 1; }
         .card-footer { margin-top: 2rem; font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 5px; opacity: 0.8; }
         footer { text-align: center; padding: 4rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; color: #444; font-size: 0.85rem; }
-        .founder { margin-bottom: 1rem; color: #666; }
+        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; position: absolute; top: 20px; right: 20px; box-shadow: 0 0 10px #00ff88; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) { .hero { padding-top: 6rem; min-height: auto; } .tagline { font-size: 1rem; margin-bottom: 2rem; } .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; margin-bottom: 3rem; } .stat-num { font-size: 1.5rem; } .matrix-container { padding: 1rem 5%; } .card { padding: 1.5rem; } .section-title { font-size: 0.8rem; margin-bottom: 1.5rem; } }
+        @media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; } .lingzhu-box { font-size: 1.2rem; letter-spacing: 4px; } }
     </style>
 </head>
 <body>
@@ -350,22 +228,23 @@
         <h1 class="glitch-text">Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
 
-        <div class="lingzhu-trigger-container">
-            <div id="lingzhu-box" class="lingzhu-box" onclick="activateLingZhu()">
-                [ ◎ 灵 珠 ]
-            </div>
-            <div style="font-size: 10px; color: #444; margin-top: 8px; letter-spacing: 2px;">SI-OS CORE</div>
-        </div>
         <div class="stats-bar">
             <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
             <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
             <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Agents</span></div>
             <div class="stat-item"><span class="stat-num">7000m</span><span class="stat-label">AI Symphony</span></div>
         </div>
+
+        <div class="lingzhu-trigger-container">
+            <div class="lingzhu-box" onclick="activateLingZhu()">
+                [ ◎ 灵 珠 ]
+                <div class="lingzhu-sub">CLICK TO ACTIVATE SI-OS</div>
+            </div>
+        </div>
+
     </header>
 
     <main class="matrix-container">
-        
         <div class="section-header" style="margin-top:0;">
             <div class="section-title">/// SYSTEM MATRIX</div>
         </div>
@@ -415,12 +294,12 @@
             <div class="console-subtitle">端侧超级个体认知中枢</div>
         </div>
         <div class="console-stream" id="console-output">
-            <div class="log-entry log-sys">> 系统自检完成...</div>
-            <div class="log-entry log-sys">> 神经突触网络就绪...</div>
-            <div class="log-entry log-sys">> 等待指令。请定义您的创造 (文学/影视/音乐)...</div>
+            <div class="log-entry log-sys">> 系统核心已挂载...</div>
+            <div class="log-entry log-sys">> 准备接入端侧算力 (Local GPU)...</div>
+            <div class="log-entry log-sys">> 等待唤醒指令...</div>
         </div>
         <div class="console-input-area">
-            <input type="text" id="console-input" placeholder="输入创造指令..." autocomplete="off">
+            <input type="text" id="console-input" placeholder="输入创造意图..." autocomplete="off">
         </div>
     </div>
 
@@ -435,24 +314,10 @@
                 card.href = app.url;
                 card.className = 'card lab-card'; 
                 card.target = "_blank"; 
-
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="card-icon">${app.icon}</div>
-                        <div>
-                            <h3>${app.name}</h3>
-                            <div style="font-size:0.8rem; color:#666;">Extension</div>
-                        </div>
-                    </div>
-                    <p>${app.desc}</p>
-                    <div class="card-footer" style="color:var(--new-accent);">Launch App →</div>
-                `;
+                card.innerHTML = `<div class="card-header"><div class="card-icon">${app.icon}</div><div><h3>${app.name}</h3><div style="font-size:0.8rem; color:#666;">Extension</div></div></div><p>${app.desc}</p><div class="card-footer" style="color:var(--new-accent);">Launch App →</div>`;
                 dynamicContainer.appendChild(card);
             });
-            
-            if(homeApps.length === 0) {
-                document.querySelector('.section-header:last-of-type').style.display = 'none';
-            }
+            if(homeApps.length === 0) document.querySelector('.section-header:last-of-type').style.display = 'none';
         }
     </script>
 
@@ -473,49 +338,32 @@
 
     <script>
         function activateLingZhu() {
-            // 1. 进入禅模式 (背景模糊)
             document.body.classList.add('zen-active');
-            
-            // 2. 显示控制台
             const consoleDiv = document.getElementById('lingzhu-console');
             consoleDiv.classList.add('active');
-            
-            // 3. 聚焦输入框
-            setTimeout(() => {
-                document.getElementById('console-input').focus();
-            }, 500);
+            setTimeout(() => { document.getElementById('console-input').focus(); }, 500);
         }
-
         function deactivateLingZhu() {
             document.body.classList.remove('zen-active');
             document.getElementById('lingzhu-console').classList.remove('active');
         }
-
-        // 简单的控制台回显逻辑 (地基)
         const inputField = document.getElementById('console-input');
         const outputStream = document.getElementById('console-output');
-
         inputField.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 const text = e.target.value;
                 if (!text.trim()) return;
-
-                // 用户日志
                 appendLog(`> ${text}`, 'user');
                 e.target.value = '';
-
-                // 模拟系统回复 (未来连接 arm_literature.js)
                 setTimeout(() => {
                     let response = "指令已接收。正在调用逻辑路由...";
                     if (text.includes("小说") || text.includes("故事")) response = "[文学臂] 正在挂载... 准备构建世界观。";
                     else if (text.includes("音乐")) response = "[声波臂] 正在解析情绪频率...";
                     else if (text.includes("画面")) response = "[视觉臂] 正在计算光影参数...";
-                    
                     appendLog(response, 'mod');
                 }, 600);
             }
         });
-
         function appendLog(text, type) {
             const div = document.createElement('div');
             div.className = `log-entry log-${type}`;
@@ -524,8 +372,6 @@
             outputStream.scrollTop = outputStream.scrollHeight;
         }
     </script>
-
     <script src="https://ai-master-dashboard.netlify.app/inject-telemetry.js"></script>
-
 </body>
 </html>
