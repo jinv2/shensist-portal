@@ -8,7 +8,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -21,7 +21,7 @@
             --new-accent: #00ff88;
             --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-code: 'Courier New', Courier, monospace;
-            --font-tech: 'Orbitron', sans-serif; /* 这里的科技字体 */
+            --font-tech: 'Orbitron', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,17 +44,17 @@
         body.zen-active .matrix-container,
         body.zen-active nav,
         body.zen-active footer {
-            filter: blur(20px); /* 加重模糊 */
+            filter: blur(20px);
             opacity: 0;
             pointer-events: none;
             transition: all 0.8s ease;
         }
-        /* 灵珠激活时，按钮本身的状态 */
+        
         body.zen-active .lingzhu-trigger-container {
             z-index: 10001; 
             opacity: 0; 
             pointer-events: none;
-            transform: scale(1.1); /* 稍微放大后消失 */
+            transform: scale(1.1);
             filter: blur(10px);
             transition: all 0.6s ease;
         }
@@ -75,7 +75,7 @@
         .brand img { height: 40px; width: auto; border-radius: 4px; filter: brightness(1.2); }
 
         .hero {
-            min-height: 95vh; /* 进一步拉高，占据首屏 */
+            min-height: 95vh;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; padding: 8rem 20px 4rem; position: relative;
         }
@@ -94,7 +94,6 @@
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* 原有数据行 */
         .stats-bar {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
             margin-bottom: 3rem;
@@ -105,106 +104,135 @@
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === 【核心修改】灵珠巨型拟物化控制台 (Skeuomorphic Neumorphism) === */
+        /* === 灵珠巨型拟物化触发器 (首页大方框) === */
         .lingzhu-trigger-container {
-            width: 100%;
-            max-width: 1200px; /* 更宽 */
-            margin-top: 2rem;
-            /* 移除淡入动画，让它像实体一样存在 */
-            z-index: 10;
-            padding: 20px; /* 给阴影留空间 */
+            width: 100%; max-width: 1200px; margin-top: 2rem; z-index: 10; padding: 20px;
         }
 
         .lingzhu-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            width: 100%;
-            /* 【关键】高度最大化，形成巨大体块感 */
-            min-height: 300px; 
-            
-            /* 【关键】深色新拟态风格 (Dark Neumorphism) */
-            /* 背景：模拟深色金属/塑料材质，带有微弱光照渐变 */
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            width: 100%; min-height: 300px; 
+            /* 凸起效果 */
             background: linear-gradient(145deg, #0c0c0c, #050505);
-            /* 圆角：柔和的物理倒角 */
             border-radius: 40px;
-            /* 阴影：创造凸起感 (Extrusion)。左上亮影，右下暗影 */
-            box-shadow:  25px 25px 50px #020202,
-                         -25px -25px 50px #121212;
-            
-            /* 边框：不再需要明显的霓虹边框，用微妙的内发光模拟边缘反光 */
+            box-shadow:  25px 25px 50px #020202, -25px -25px 50px #121212;
             border: none;
             
-            /* 字体设置 */
-            font-family: var(--font-tech); /* Orbitron */
-            font-weight: 900;
-            font-size: clamp(2.5rem, 6vw, 5rem); /* 巨大字体 */
-            letter-spacing: 12px;
-            color: #e0e0e0; /* 稍微降低纯白度，更有质感 */
-            /* 文字内部微发光，像是嵌在实体里的灯光 */
+            font-family: var(--font-tech); font-weight: 900; font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: 12px; color: #e0e0e0;
             text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-            
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            /* 缓慢平滑的物理过渡 */
+            cursor: pointer; position: relative; overflow: hidden;
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* 移除旧的扫描线，拟物化不需要它 */
-        .lingzhu-box::after { display: none; }
-
-        .lingzhu-sub {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 4px;
-            font-family: var(--font-main);
-            text-transform: uppercase;
-        }
-
-        /* Hover 悬停状态：轻微浮起，能量增强 */
         .lingzhu-box:hover {
-            transform: translateY(-8px); /* 物理上浮 */
+            transform: translateY(-8px);
             color: #fff;
-            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent); /* 灯光变亮 */
-            /* 阴影扩散，感觉离背景更远 */
-            box-shadow:  30px 30px 60px #020202,
-                         -30px -30px 60px #151515;
+            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+            box-shadow:  30px 30px 60px #020202, -30px -30px 60px #151515;
         }
 
-        /* Active 点击状态：【拟物核心】真实的按压凹陷感 */
         .lingzhu-box:active {
-            /* 物理下沉 */
             transform: translateY(4px) scale(0.99); 
-            
-            /* 【关键】阴影反转：变为内阴影 (Inset)，模拟凹陷 */
-            background: linear-gradient(145deg, #050505, #0c0c0c); /* 渐变反向 */
-            box-shadow: inset 15px 15px 40px #020202,
-                        inset -15px -15px 40px #121212;
-            
-            /* 按下时文字反馈 */
-            color: var(--accent);
-            text-shadow: 0 0 5px var(--accent);
+            background: linear-gradient(145deg, #050505, #0c0c0c);
+            box-shadow: inset 15px 15px 40px #020202, inset -15px -15px 40px #121212;
+            color: var(--accent); text-shadow: 0 0 5px var(--accent);
         }
+        
+        .lingzhu-sub { margin-top: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.5); letter-spacing: 4px; font-family: var(--font-main); text-transform: uppercase; }
 
-        /* === 灵珠控制台 (保持不变) === */
+
+        /* === 【核心重构】灵珠控制台 (The Physical Console) === */
         #lingzhu-console {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-            font-family: var(--font-code); background: rgba(5,5,5,0.9); /* 加深背景 */
+            display: none; 
+            flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.85); /* 背景稍微透明一点，突出中间的实体感 */
+            backdrop-filter: blur(5px);
+            cursor: pointer; /* 提示可点击背景关闭 */
         }
         #lingzhu-console.active { display: flex; animation: fadeInConsole 0.5s forwards; }
-        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        .console-header { margin-bottom: 2rem; text-align: center; border-bottom: 1px solid #333; padding-bottom: 1rem; width: 80%; max-width: 800px; }
-        .console-title { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-main); font-family: var(--font-tech); }
-        .console-stream { width: 80%; max-width: 800px; height: 50vh; border-left: 1px solid #333; padding: 20px; overflow-y: auto; margin-bottom: 20px; font-size: 14px; color: #ccc; background: rgba(0,0,0,0.3); }
-        .log-entry { margin-bottom: 12px; line-height: 1.6; } .log-sys { color: var(--accent); } .log-user { color: #888; } .log-mod { color: var(--new-accent); }
-        .console-input-area { width: 80%; max-width: 800px; }
-        #console-input { width: 100%; background: transparent; border: none; border-bottom: 2px solid #333; color: #fff; font-family: var(--font-code); font-size: 1.2rem; padding: 10px 0; outline: none; }
-        #console-input:focus { border-bottom-color: var(--accent); }
-        .close-console { position: absolute; top: 40px; right: 40px; color: #666; cursor: pointer; font-size: 2rem; } .close-console:hover { color: #fff; }
+        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        /* 内部实体面板：彻底拟物化，像一个设备 */
+        .console-container-inner {
+            width: 90%; max-width: 900px;
+            /* 材质：深色金属凸起 */
+            background: linear-gradient(145deg, #101010, #050505);
+            box-shadow:  30px 30px 60px #020202, -30px -30px 60px #1a1a1a;
+            border-radius: 40px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            
+            display: flex; flex-direction: column; align-items: center;
+            cursor: default; /* 恢复鼠标 */
+            position: relative;
+        }
+
+        .console-header { 
+            margin-bottom: 2rem; text-align: center; 
+            border-bottom: 2px solid rgba(0,0,0,0.5); /* 刻痕效果 */
+            padding-bottom: 1rem; width: 100%; 
+            box-shadow: 0 2px 0 rgba(255,255,255,0.05); /* 刻痕高光 */
+        }
+        
+        /* 字体统一为 Orbitron */
+        .console-title { 
+            font-size: 1.8rem; letter-spacing: 6px; color: var(--accent); 
+            font-family: var(--font-tech); font-weight: 700;
+            text-shadow: 0 0 10px rgba(0,240,255,0.3);
+        }
+        .console-subtitle { 
+            font-size: 0.8rem; color: #666; margin-top: 8px; text-transform: uppercase; 
+            font-family: var(--font-tech); letter-spacing: 2px;
+        }
+
+        /* 屏幕区域：凹陷效果 (Inset) */
+        .console-stream { 
+            width: 100%; height: 50vh; 
+            /* 凹陷材质 */
+            background: #030303;
+            box-shadow: inset 10px 10px 20px #010101, inset -10px -10px 20px #111;
+            border-radius: 20px;
+            padding: 25px; 
+            overflow-y: auto; margin-bottom: 25px; 
+            
+            /* 屏幕内字体 */
+            font-family: var(--font-tech); /* 按照要求，内部也用 Orbitron */
+            font-size: 14px; color: #ccc; line-height: 1.8;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+        
+        .log-entry { margin-bottom: 12px; } 
+        .log-sys { color: var(--accent); text-shadow: 0 0 5px rgba(0,240,255,0.5); } 
+        .log-user { color: #888; font-style: italic; } 
+        .log-mod { color: var(--new-accent); text-shadow: 0 0 5px rgba(0,255,136,0.5); }
+
+        /* 输入区域：凹陷槽 */
+        .console-input-area { width: 100%; position: relative; }
+        
+        #console-input { 
+            width: 100%; 
+            /* 凹陷槽材质 */
+            background: #050505;
+            box-shadow: inset 5px 5px 10px #020202, inset -5px -5px 10px #111;
+            border-radius: 15px;
+            
+            border: none; 
+            color: #fff; 
+            font-family: var(--font-tech); 
+            font-size: 1.2rem; 
+            padding: 20px; 
+            outline: none; 
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+        
+        #console-input:focus { 
+            box-shadow: inset 5px 5px 10px #020202, inset -5px -5px 10px #111, 0 0 5px var(--accent);
+            color: var(--accent);
+        }
+
 
         /* 其他布局 */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
@@ -298,20 +326,25 @@
         <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p>
     </footer>
 
-    <div id="lingzhu-console">
-        <div class="close-console" onclick="deactivateLingZhu()">×</div>
-        <div class="console-header">
-            <div class="console-title">[ 灵 珠 · SI-OS ]</div>
-            <div class="console-subtitle">端侧超级个体认知中枢</div>
+    <div id="lingzhu-console" onclick="handleConsoleClick(event)">
+        
+        <div class="console-container-inner" onclick="event.stopPropagation()">
+            <div class="console-header">
+                <div class="console-title">[ 灵 珠 · SI-OS ]</div>
+                <div class="console-subtitle">端侧超级个体认知中枢</div>
+            </div>
+            
+            <div class="console-stream" id="console-output">
+                <div class="log-entry log-sys">> SI-OS KERNEL LOADED...</div>
+                <div class="log-entry log-sys">> NEURAL LINK ESTABLISHED.</div>
+                <div class="log-entry log-sys">> READY FOR INPUT.</div>
+            </div>
+            
+            <div class="console-input-area">
+                <input type="text" id="console-input" placeholder="ENTER COMMAND..." autocomplete="off">
+            </div>
         </div>
-        <div class="console-stream" id="console-output">
-            <div class="log-entry log-sys">> 系统核心已挂载...</div>
-            <div class="log-entry log-sys">> 准备接入端侧算力 (Local GPU)...</div>
-            <div class="log-entry log-sys">> 等待唤醒指令...</div>
-        </div>
-        <div class="console-input-area">
-            <input type="text" id="console-input" placeholder="输入创造意图..." autocomplete="off">
-        </div>
+
     </div>
 
     <script src="db.js"></script>
@@ -354,10 +387,16 @@
             consoleDiv.classList.add('active');
             setTimeout(() => { document.getElementById('console-input').focus(); }, 500);
         }
+
         function deactivateLingZhu() {
             document.body.classList.remove('zen-active');
             document.getElementById('lingzhu-console').classList.remove('active');
         }
+        
+        function handleConsoleClick(event) {
+            deactivateLingZhu();
+        }
+
         const inputField = document.getElementById('console-input');
         const outputStream = document.getElementById('console-output');
         inputField.addEventListener('keypress', function (e) {
@@ -367,10 +406,10 @@
                 appendLog(`> ${text}`, 'user');
                 e.target.value = '';
                 setTimeout(() => {
-                    let response = "指令已接收。正在调用逻辑路由...";
-                    if (text.includes("小说") || text.includes("故事")) response = "[文学臂] 正在挂载... 准备构建世界观。";
-                    else if (text.includes("音乐")) response = "[声波臂] 正在解析情绪频率...";
-                    else if (text.includes("画面")) response = "[视觉臂] 正在计算光影参数...";
+                    let response = "COMMAND RECEIVED. ROUTING...";
+                    if (text.includes("小说") || text.includes("故事")) response = "[NARRATIVE ARM] MOUNTING...";
+                    else if (text.includes("音乐")) response = "[SONIC ARM] ANALYZING FREQUENCY...";
+                    else if (text.includes("画面")) response = "[VISUAL ARM] RENDERING LIGHT PATHS...";
                     appendLog(response, 'mod');
                 }, 600);
             }
