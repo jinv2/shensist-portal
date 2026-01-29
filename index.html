@@ -22,7 +22,7 @@
             
             --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-code: 'Courier New', Courier, monospace;
-            --font-tech: 'Orbitron', sans-serif; /* 核心科技字体 */
+            --font-tech: 'Orbitron', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -47,8 +47,9 @@
         body.zen-active footer {
             filter: blur(20px); opacity: 0; pointer-events: none; transition: all 0.6s ease;
         }
+        /* 激活时，灵珠按钮本身也进行模糊和缩小，让位给控制台 */
         body.zen-active .lingzhu-trigger-container {
-            z-index: 10001; opacity: 0; pointer-events: none; transform: scale(1.1); filter: blur(20px); transition: all 0.5s ease;
+            z-index: 10001; opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(20px); transition: all 0.5s ease;
         }
 
         #canvas-bg {
@@ -89,84 +90,99 @@
         .stat-num { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === 【核心修改】灵珠巨型拟物化触发器 (辐射呼吸感) === */
+        /* === 【核心修改】巨型拟物化金属按钮 (Skeuomorphic Metal Button) === */
         .lingzhu-trigger-container {
             width: 100%; max-width: 1200px; margin-top: 1rem; z-index: 10; padding: 10px;
-            /* 整体容器增加一个极其微弱的浮动，不是跳动，是悬浮 */
+            /* 整体缓慢浮动 */
             animation: float 6s ease-in-out infinite;
         }
-
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-4px); } 100% { transform: translateY(0px); } }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
 
         .lingzhu-box {
             display: flex; justify-content: center; align-items: center; flex-direction: column;
             width: 100%; min-height: 25vh; 
             
-            /* 材质：深色金属 */
-            background: linear-gradient(145deg, #0e0e0e, #050505);
-            border-radius: 30px;
-            /* 初始阴影：稳重 */
-            box-shadow:  15px 15px 30px #020202, -15px -15px 30px #161616;
-            border: 1px solid rgba(255,255,255,0.02);
+            /* 【材质】深色金属复合材料渐变 */
+            background: linear-gradient(145deg, #1a1a1a, #080808);
+            
+            /* 【凸起感核心】深色新拟态阴影 */
+            /* 左上角亮光，右下角深影，营造巨大厚度 */
+            box-shadow: 
+                25px 25px 50px #030303, 
+                -25px -25px 50px #222222;
+            
+            border-radius: 40px; /* 更圆润的物理倒角 */
+            border: none; /* 移除边框，靠阴影塑造形体 */
             
             font-family: var(--font-tech); font-weight: 900; 
             font-size: clamp(1.8rem, 6vw, 5rem);
             letter-spacing: clamp(4px, 1vw, 12px); 
-            color: #e0e0e0;
-            cursor: pointer; position: relative; overflow: hidden;
+            color: #d0d0d0; /* 类似未激活金属的颜色 */
             
-            /* 【关键】应用辐射呼吸动画 */
-            animation: core-breath 4s infinite ease-in-out;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            /* 文字内嵌发光感 */
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+            
+            cursor: pointer; position: relative; overflow: hidden;
+            /* 呼吸动画更新为匹配新阴影 */
+            animation: metal-breath 5s infinite ease-in-out;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 呼吸动画：光晕和阴影从中心向外扩散，然后收回 */
-        @keyframes core-breath {
-            0% {
-                text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-                box-shadow: 15px 15px 30px #020202, -15px -15px 30px #161616;
+        /* 金属呼吸：阴影和光晕的缓慢张缩 */
+        @keyframes metal-breath {
+            0%, 100% {
+                box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222;
+                text-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
             }
             50% {
-                text-shadow: 0 0 25px rgba(0, 240, 255, 0.5); /* 文字光晕增强 */
-                box-shadow: 20px 20px 40px #010101, -20px -20px 40px #1a1a1a; /* 外部阴影扩散 */
-            }
-            100% {
-                text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-                box-shadow: 15px 15px 30px #020202, -15px -15px 30px #161616;
+                box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a;
+                text-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+                color: #e0e0e0;
             }
         }
 
-        /* Hover: 能量满溢，准备触发 */
+        /* Hover: 能量积蓄，准备触发 */
         .lingzhu-box:hover {
-            transform: scale(1.02); /* 只有轻微的放大，不位移 */
-            border-color: rgba(0,240,255,0.2);
-            animation: none; /* 悬停时停止呼吸，变为持续高亮 */
+            transform: scale(1.01) translateY(-2px); /* 轻微上浮 */
+            animation: none; /* 停止呼吸，维持高能状态 */
+            color: #fff;
             text-shadow: 0 0 30px var(--accent);
-            box-shadow: 0 0 60px rgba(0, 240, 255, 0.1), 25px 25px 50px #010101, -25px -25px 50px #1a1a1a;
+            /* 阴影扩散，增加能量场光晕 */
+            box-shadow: 
+                30px 30px 60px #020202, 
+                -30px -30px 60px #2a2a2a,
+                0 0 40px rgba(0, 240, 255, 0.1); 
         }
 
-        /* Active: 核心塌缩，物理按下 */
+        /* Active: 【关键】真实的物理凹陷感 */
         .lingzhu-box:active {
-            transform: scale(0.98); 
-            background: linear-gradient(145deg, #050505, #0e0e0e);
-            /* 内阴影：凹陷 */
-            box-shadow: inset 10px 10px 30px #020202, inset -10px -10px 30px #121212;
-            color: var(--accent); 
+            /* 物理下压位移 */
+            transform: scale(0.98) translateY(4px); 
+            
+            /* 材质反转：模拟陷入底座的阴影 */
+            background: linear-gradient(145deg, #080808, #1a1a1a);
+            
+            /* 【核心】外阴影变为内阴影 (Inset Shadow) */
+            /* 左上角变深，右下角变亮，形成凹坑 */
+            box-shadow: 
+                inset 20px 20px 40px #030303, 
+                inset -20px -20px 40px #222222;
+            
+            color: var(--accent); /* 激活时的能量色 */
             text-shadow: 0 0 5px var(--accent);
-            border-color: rgba(0,240,255,0.1);
         }
         
         .lingzhu-sub { 
             margin-top: 15px; 
             font-size: 0.7rem; 
-            color: rgba(255,255,255,0.4); 
+            color: rgba(255,255,255,0.3); 
             letter-spacing: 3px; 
-            font-family: var(--font-tech); /* 副标题也改成科技字体 */
+            font-family: var(--font-tech);
             text-transform: uppercase; 
         }
 
 
-        /* === 【核心修改】灵珠控制台 (全 Orbitron 字体适配) === */
+        /* === 灵珠控制台 (保持之前的 Orbitron 统一风格) === */
         #lingzhu-console {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
             display: none; 
@@ -178,7 +194,7 @@
         
         .console-container-inner {
             width: 92%; max-width: 900px;
-            /* 拟物外壳 */
+            /* 控制台本身也采用拟物化风格 */
             background: linear-gradient(145deg, #121212, #080808);
             box-shadow:  20px 20px 40px #010101, -20px -20px 40px #1a1a1a;
             border-radius: 30px;
@@ -186,7 +202,7 @@
             border: 1px solid rgba(255,255,255,0.05);
             display: flex; flex-direction: column; align-items: center;
             position: relative;
-            max-height: 90vh; /* 防止手机横屏溢出 */
+            max-height: 90vh; 
         }
 
         .console-header { 
@@ -197,9 +213,9 @@
         }
         
         .console-title { 
-            font-size: clamp(1.4rem, 6vw, 2.2rem); /* 增大标题 */
+            font-size: clamp(1.4rem, 6vw, 2.2rem); 
             letter-spacing: 4px; color: var(--accent); 
-            font-family: var(--font-tech); font-weight: 900; /* 加粗 */
+            font-family: var(--font-tech); font-weight: 900;
             text-shadow: 0 0 15px rgba(0,240,255,0.4);
         }
         .console-subtitle { 
@@ -208,18 +224,15 @@
         }
 
         .console-stream { 
-            width: 100%; 
-            height: 45vh; /* 增加显示高度 */
+            width: 100%; height: 45vh; 
+            /* 屏幕采用凹陷风格 */
             background: #030303;
             box-shadow: inset 8px 8px 16px #010101, inset -8px -8px 16px #111;
             border-radius: 15px;
             padding: 20px; 
             overflow-y: auto; margin-bottom: 20px; 
-            
-            /* 强制内部使用科技字体 */
-            font-family: var(--font-tech); 
-            font-weight: 500;
-            font-size: clamp(12px, 3.5vw, 15px); /* 手机端字号自适应 */
+            font-family: var(--font-tech); font-weight: 500;
+            font-size: clamp(12px, 3.5vw, 15px);
             color: #ccc; line-height: 1.8;
             border: 1px solid rgba(255,255,255,0.02);
             -webkit-overflow-scrolling: touch; 
@@ -231,12 +244,11 @@
         
         #console-input { 
             width: 100%; 
+            /* 输入框采用凹陷槽风格 */
             background: #050505;
             box-shadow: inset 4px 4px 8px #020202, inset -4px -4px 8px #111;
             border-radius: 12px;
             border: none; color: #fff; 
-            
-            /* 输入框也是科技字体 */
             font-family: var(--font-tech); font-weight: 700;
             font-size: 1.1rem; padding: 18px; outline: none; letter-spacing: 2px;
         }
@@ -264,7 +276,7 @@
         @media (max-width: 768px) {
             .hero { padding: 6rem 15px 1rem; min-height: auto; }
             .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
-            .lingzhu-box { min-height: 220px; border-radius: 25px; } 
+            .lingzhu-box { min-height: 220px; border-radius: 30px; } 
             .grid { grid-template-columns: 1fr; gap: 1rem; }
             .console-container-inner { width: 95%; padding: 20px; }
             .console-stream { height: 35vh; }
