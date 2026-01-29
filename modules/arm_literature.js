@@ -1,46 +1,38 @@
 /**
- * SI-OS Module: Narrative Arm (文学臂)
- * 职责：接收自然语言，输出结构化的世界观设定
+ * SI-OS Module: Narrative Arm (V1.2)
+ * 职责：构建世界观，并写入共享记忆池
  */
-
 window.ArmLiterature = {
-    // 模块元数据
-    meta: {
-        name: "Narrative Architect",
-        version: "1.0"
-    },
-
-    // 标准接口：所有模块必须包含 process 函数
     process: function(userInput, core) {
-        // 1. 反馈收到指令
-        core.ui.log(`[文学臂] 正在解析叙事逻辑: "${userInput}"`, "mod");
-
-        // 2. 模拟端侧算力思考 (Simulate Local Calculation)
-        core.ui.log(`[文学臂] 正在构建世界观... (Local Compute)`, "mod");
+        core.ui.log(`[文学臂] 分析指令: "${userInput}"`, "mod");
+        core.ui.log(`[文学臂] 正在写入共享记忆池 (Shared Memory)...`, "mod");
 
         setTimeout(() => {
-            // 3. 生成结果 (这里暂时是硬编码，未来连接 Local LLM)
-            const result = this.generateTemplate(userInput);
+            // 1. 生成设定
+            const setting = this.generateSetting(userInput);
             
-            // 4. 输出结果到屏幕
-            core.ui.log(">> 生成完毕。世界观架构如下：", "sys");
-            core.ui.log(result, "mod");
+            // 2. 【关键】写入共享记忆
+            core.state.sharedContext = {
+                theme: "Cyberpunk / Glitch Art",
+                visualTags: ["Neon", "Ruins", "Rain", "Chrome", "Hologram"],
+                mood: "Melancholic but High-Energy",
+                summary: userInput // 记住用户最初的话
+            };
 
-        }, 1500);
+            // 3. 输出卡片
+            core.ui.renderCodeCard("NARRATIVE_BLUEPRINT.TXT", setting);
+            
+            // 4. 提示下一步
+            core.ui.log(">> 记忆已同步。视觉臂与声波臂可直接调用。", "sys");
+
+        }, 1000);
     },
 
-    // 内部逻辑：生成器
-    generateTemplate: function(input) {
-        return `
-=== 世界观设定档 (SI-OS Generated) ===
-[核心冲突]: 基于"${input}"的矛盾螺旋
-[时间锚点]: 2049年 · 熵增纪元
-[视觉基调]: 赛博格故障风 (Glitch Art)
-[关键实体]:
-  - 主角: 游离于系统的超级个体
-  - 反派: 试图标准化的巨型算法
------------------------------------
-(该蓝图已准备好传输至 [视觉臂] 或 [声波臂])
-        `;
+    generateSetting: function(input) {
+        return `[TITLE]: ${input || "Untitled Project"}
+[CORE]: Human consciousness uploaded to cloud, struggling for autonomy.
+[CONFLICT]: The Grand Algorithm vs. The Glitch Rebels.
+[SETTING]: 2049 Shanghai, underwater districts.
+[KEYWORDS]: Neon, Rust, Data-Moshing, Bio-Digital.`;
     }
 };
