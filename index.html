@@ -19,7 +19,6 @@
             --accent: #00f0ff;
             --accent-glow: rgba(0, 240, 255, 0.4);
             --new-accent: #00ff88;
-            
             --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-code: 'Courier New', Courier, monospace;
             --font-tech: 'Orbitron', sans-serif;
@@ -28,214 +27,135 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            overflow-x: hidden;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            transition: background-color 0.5s ease;
+            background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main);
+            overflow-x: hidden; line-height: 1.5; -webkit-font-smoothing: antialiased; transition: background-color 0.5s ease;
         }
 
         /* === 禅模式 (Zen Mode) === */
         body.zen-active { overflow: hidden; }
-        body.zen-active .hero h1, 
-        body.zen-active .tagline,
-        body.zen-active .stats-bar,
-        body.zen-active .matrix-container,
-        body.zen-active nav,
-        body.zen-active footer {
+        body.zen-active .hero h1, body.zen-active .tagline, body.zen-active .stats-bar,
+        body.zen-active .matrix-container, body.zen-active nav, body.zen-active footer {
             filter: blur(20px); opacity: 0; pointer-events: none; transition: all 0.6s ease;
         }
         body.zen-active .lingzhu-trigger-container {
             z-index: 10001; opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(20px); transition: all 0.5s ease;
         }
 
-        #canvas-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%);
-        }
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%); }
 
         nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100;
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 5%; height: 60px;
+            position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-
         .brand img { height: 32px; width: auto; border-radius: 4px; filter: brightness(1.2); }
 
-        .hero {
-            min-height: 90vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 6rem 20px 2rem; position: relative;
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff;
-            margin-bottom: 1rem; line-height: 1.1; text-shadow: 0 0 10px rgba(0,240,255,0.2);
-        }
-
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; position: relative; }
+        h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 1rem; line-height: 1.1; text-shadow: 0 0 10px rgba(0,240,255,0.2); }
         .tagline { font-size: clamp(0.9rem, 4vw, 1.2rem); color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 3.2rem; }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        .stats-bar {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
-            margin-bottom: 3rem; width: 100%; max-width: 900px;
-            opacity: 0; animation: fadeUp 1s ease-out 0.5s forwards;
-        }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem; width: 100%; max-width: 900px; opacity: 0; animation: fadeUp 1s ease-out 0.5s forwards; }
         .stat-item { text-align: center; }
         .stat-num { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         /* === 巨型拟物化金属按钮 === */
-        .lingzhu-trigger-container {
-            width: 100%; max-width: 1200px; margin-top: 1rem; z-index: 10; padding: 10px;
-            animation: float 6s ease-in-out infinite;
-        }
+        .lingzhu-trigger-container { width: 100%; max-width: 1200px; margin-top: 1rem; z-index: 10; padding: 10px; animation: float 6s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
 
         .lingzhu-box {
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
-            width: 100%; min-height: 25vh; 
-            background: linear-gradient(145deg, #1a1a1a, #080808);
-            
-            /* 凸起感核心 */
-            box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222;
-            
-            border-radius: 40px; border: none;
-            font-family: var(--font-tech); font-weight: 900; 
-            font-size: clamp(1.8rem, 6vw, 5rem);
-            letter-spacing: clamp(4px, 1vw, 12px); 
-            color: #d0d0d0;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
-            
-            cursor: pointer; position: relative; overflow: hidden;
-            animation: metal-breath 5s infinite ease-in-out;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; min-height: 25vh; 
+            background: linear-gradient(145deg, #1a1a1a, #080808); box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222;
+            border-radius: 40px; border: none; font-family: var(--font-tech); font-weight: 900; 
+            font-size: clamp(1.8rem, 6vw, 5rem); letter-spacing: clamp(4px, 1vw, 12px); color: #d0d0d0;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.1); cursor: pointer; position: relative; overflow: hidden;
+            animation: metal-breath 5s infinite ease-in-out; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
-
         @keyframes metal-breath {
             0%, 100% { box-shadow: 25px 25px 50px #030303, -25px -25px 50px #222222; text-shadow: 0 0 15px rgba(0, 240, 255, 0.1); }
             50% { box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a; text-shadow: 0 0 25px rgba(0, 240, 255, 0.3); color: #e0e0e0; }
         }
-
-        .lingzhu-box:hover {
-            transform: scale(1.01) translateY(-2px);
-            animation: none;
-            color: #fff; text-shadow: 0 0 30px var(--accent);
-            box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a, 0 0 40px rgba(0, 240, 255, 0.1); 
-        }
-
-        .lingzhu-box:active {
-            transform: scale(0.98) translateY(4px); 
-            background: linear-gradient(145deg, #080808, #1a1a1a);
-            /* 凹陷感核心 */
-            box-shadow: inset 20px 20px 40px #030303, inset -20px -20px 40px #222222;
-            color: var(--accent); text-shadow: 0 0 5px var(--accent);
-        }
-        
+        .lingzhu-box:hover { transform: scale(1.01) translateY(-2px); animation: none; color: #fff; text-shadow: 0 0 30px var(--accent); box-shadow: 30px 30px 60px #020202, -30px -30px 60px #2a2a2a, 0 0 40px rgba(0, 240, 255, 0.1); }
+        .lingzhu-box:active { transform: scale(0.98) translateY(4px); background: linear-gradient(145deg, #080808, #1a1a1a); box-shadow: inset 20px 20px 40px #030303, inset -20px -20px 40px #222222; color: var(--accent); text-shadow: 0 0 5px var(--accent); }
         .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; font-family: var(--font-tech); text-transform: uppercase; }
 
-        /* === 【核心升级】全屏战情室控制台 (Full Screen Command Center) === */
+        /* === 全屏战情室控制台 (UI 升级) === */
         #lingzhu-console {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
-            display: none; 
-            flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); /* 背景更深，模糊更重 */
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.98); /* 背景极深，阻挡视线 */
+            backdrop-filter: blur(20px);
+            /* 注意：移除了这里的 cursor: pointer，不再提示可点击关闭 */
         }
         #lingzhu-console.active { display: flex; animation: fadeInConsole 0.3s forwards; }
         @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
         .console-container-inner {
-            /* 【改动1】尺寸拉满：变成全屏巨幕 */
-            width: 96vw;  
-            height: 94vh; 
-            max-width: 1920px;
-            max-height: none;  
-            
-            /* 拟物外壳 */
+            width: 96vw; height: 94vh; max-width: 1920px; max-height: none;
             background: linear-gradient(145deg, #121212, #050505);
-            box-shadow: 
-                0 0 100px rgba(0,0,0,0.8), /* 巨大的投影，强调悬浮感 */
-                inset 1px 1px 0 rgba(255,255,255,0.1); 
-            border-radius: 20px; 
-            padding: 20px; 
-            border: 1px solid rgba(255,255,255,0.05);
-            
-            display: flex; flex-direction: column; align-items: center;
-            position: relative; 
+            box-shadow: 0 0 100px rgba(0,0,0,0.8), inset 1px 1px 0 rgba(255,255,255,0.1); 
+            border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; flex-direction: column; align-items: center; position: relative; 
         }
 
-        .console-header { 
-            margin-bottom: 1rem; text-align: center; flex-shrink: 0; 
-            border-bottom: 2px solid rgba(0,0,0,0.5); 
-            padding-bottom: 0.5rem; width: 100%; 
-            box-shadow: 0 2px 0 rgba(255,255,255,0.05);
+        /* 新增：右上角关闭按钮 */
+        .console-close-btn {
+            position: absolute; top: 25px; right: 30px;
+            font-family: var(--font-tech); font-size: 0.9rem; color: #666;
+            cursor: pointer; letter-spacing: 2px; transition: all 0.3s;
+            border: 1px solid transparent; padding: 5px 15px; border-radius: 4px;
+            z-index: 100;
         }
-        
-        .console-title { 
-            font-size: 1.5rem; 
-            letter-spacing: 8px; color: var(--accent); 
-            font-family: var(--font-tech); font-weight: 900;
-            text-shadow: 0 0 15px rgba(0,240,255,0.4);
-        }
+        .console-close-btn:hover { color: #ff3366; border-color: #ff3366; box-shadow: 0 0 15px rgba(255, 51, 102, 0.2); text-shadow: 0 0 5px #ff3366; }
+
+        .console-header { margin-bottom: 1rem; text-align: center; flex-shrink: 0; border-bottom: 2px solid rgba(0,0,0,0.5); padding-bottom: 0.5rem; width: 100%; box-shadow: 0 2px 0 rgba(255,255,255,0.05); }
+        .console-title { font-size: 1.5rem; letter-spacing: 8px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; text-shadow: 0 0 15px rgba(0,240,255,0.4); }
         .console-subtitle { font-size: 0.7rem; color: #666; margin-top: 4px; text-transform: uppercase; font-family: var(--font-tech); letter-spacing: 2px; }
 
         .console-stream { 
-            width: 100%; 
-            /* 【改动2】高度自适应：占满所有剩余空间 */
-            flex-grow: 1; 
-            height: auto; 
-            
-            /* 屏幕材质 */
-            background: #030303;
-            box-shadow: inset 10px 10px 30px #000;
-            border-radius: 12px;
-            padding: 30px; 
-            
+            width: 100%; flex-grow: 1; height: auto; 
+            background: #030303; box-shadow: inset 10px 10px 30px #000; border-radius: 12px; padding: 30px; 
             overflow-y: auto; margin-bottom: 15px; 
-            
-            font-family: var(--font-tech); font-weight: 500;
-            font-size: 14px; color: #ccc; line-height: 1.6;
-            border: 1px solid rgba(255,255,255,0.02);
-            -webkit-overflow-scrolling: touch; 
+            font-family: var(--font-tech); font-weight: 500; font-size: 14px; color: #ccc; line-height: 1.6; border: 1px solid rgba(255,255,255,0.02); -webkit-overflow-scrolling: touch; 
         }
-        
-        /* 隐藏滚动条但保留功能 (Chrome/Safari) */
-        .console-stream::-webkit-scrollbar { width: 8px; }
-        .console-stream::-webkit-scrollbar-track { background: #000; }
-        .console-stream::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        .console-stream::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        .console-stream::-webkit-scrollbar { width: 8px; } .console-stream::-webkit-scrollbar-track { background: #000; }
+        .console-stream::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } .console-stream::-webkit-scrollbar-thumb:hover { background: var(--accent); }
         
         .log-entry { margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 4px; }
-        .log-sys { color: var(--accent); } 
-        .log-user { color: #888; font-style: italic; border-left: 2px solid #666; padding-left: 10px; } 
-        .log-mod { color: var(--new-accent); }
+        .log-sys { color: var(--accent); } .log-user { color: #888; font-style: italic; border-left: 2px solid #666; padding-left: 10px; } .log-mod { color: var(--new-accent); }
 
-        .console-input-area { 
-            width: 100%; position: relative; flex-shrink: 0; 
-        }
+        /* 新增：输入区域包含按钮 */
+        .console-input-area { width: 100%; position: relative; flex-shrink: 0; display: flex; gap: 10px; align-items: center; }
         
         #console-input { 
-            width: 100%; background: #050505; 
-            box-shadow: inset 4px 4px 10px #000;
+            flex-grow: 1; background: #050505; box-shadow: inset 4px 4px 10px #000;
             border-radius: 8px; border: none; color: #fff; 
             font-family: var(--font-tech); font-weight: 700; font-size: 1.2rem; 
             padding: 15px 20px; outline: none; letter-spacing: 2px;
         }
-        #console-input::placeholder { color: #444; font-weight: 400; }
         #console-input:focus { color: var(--accent); box-shadow: inset 4px 4px 10px #000, 0 0 5px rgba(0,240,255,0.3); }
 
-        /* 手机端适配 */
+        /* 新增：发送按钮 */
+        #console-send-btn {
+            height: 100%; padding: 0 30px;
+            background: linear-gradient(145deg, #1a1a1a, #080808);
+            border: 1px solid rgba(0,240,255,0.3); border-radius: 8px;
+            color: var(--accent); font-family: var(--font-tech); font-weight: 900; letter-spacing: 2px;
+            cursor: pointer; box-shadow: 5px 5px 10px #020202; transition: all 0.2s;
+        }
+        #console-send-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
+        #console-send-btn:active { transform: scale(0.95); }
+
         @media (max-width: 768px) {
             .console-container-inner { width: 100%; height: 100%; border-radius: 0; padding: 15px; }
-            .console-title { font-size: 1.2rem; }
-            .console-stream { padding: 15px; font-size: 12px; }
+            .console-title { font-size: 1.2rem; } .console-stream { padding: 15px; font-size: 12px; }
+            .console-close-btn { top: 15px; right: 15px; padding: 5px 10px; font-size: 0.7rem; }
+            .console-input-area { flex-direction: column; } /* 手机上按钮换行或保持一行看情况，这里保持一行更好 */
+            #console-input { width: 100%; } 
+            #console-send-btn { width: 100%; padding: 15px; margin-top: 5px; }
         }
 
-        /* 其他布局 */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; padding-left: 5px; border-left: 3px solid var(--accent); margin-left: 5px; }
@@ -249,15 +169,8 @@
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); display: flex; align-items: center; gap: 5px; opacity: 0.9; }
         footer { text-align: center; padding: 3rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 3rem; color: #555; font-size: 0.8rem; }
         .status-dot { width: 6px; height: 6px; background: #00ff88; border-radius: 50%; position: absolute; top: 15px; right: 15px; box-shadow: 0 0 8px #00ff88; }
-        
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 768px) {
-            .hero { padding: 6rem 15px 1rem; min-height: auto; }
-            .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
-            .lingzhu-box { min-height: 220px; border-radius: 30px; } 
-            .grid { grid-template-columns: 1fr; gap: 1rem; }
-        }
+        @media (max-width: 768px) { .hero { padding: 6rem 15px 1rem; min-height: auto; } .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; } .lingzhu-box { min-height: 220px; border-radius: 30px; } .grid { grid-template-columns: 1fr; gap: 1rem; } }
     </style>
 </head>
 <body>
@@ -265,36 +178,28 @@
     <canvas id="canvas-bg"></canvas>
 
     <nav>
-        <div class="brand">
-            <img src="logo_ts.png" alt="ShenSiST" />
-        </div>
+        <div class="brand"> <img src="logo_ts.png" alt="ShenSiST" /> </div>
     </nav>
 
     <header class="hero">
         <h1 class="glitch-text">Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
-
         <div class="stats-bar">
             <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
             <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
             <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Agents</span></div>
             <div class="stat-item"><span class="stat-num">7KM</span><span class="stat-label">AI Symphony</span></div>
         </div>
-
         <div class="lingzhu-trigger-container">
             <div class="lingzhu-box" onclick="activateLingZhu()">
                 [ ◎ 灵 珠 ]
                 <div class="lingzhu-sub">ACTIVATE SI-OS CORE</div>
             </div>
         </div>
-
     </header>
 
     <main class="matrix-container">
-        <div class="section-header" style="margin-top:0;">
-            <div class="section-title">/// SYSTEM MATRIX</div>
-        </div>
-        
+        <div class="section-header" style="margin-top:0;"> <div class="section-title">/// SYSTEM MATRIX</div> </div>
         <div class="grid">
             <a href="https://ai.shensist.top" class="card">
                 <div class="status-dot"></div>
@@ -318,14 +223,8 @@
                 <div class="card-footer">View Code →</div>
             </a>
         </div>
-
-        <div class="section-header">
-            <div class="section-title lab">/// EXTENSIONS</div>
-            <a href="apps.html" class="view-all-btn">View All Apps →</a>
-        </div>
-        
+        <div class="section-header"> <div class="section-title lab">/// EXTENSIONS</div> <a href="apps.html" class="view-all-btn">View All Apps →</a> </div>
         <div class="grid" id="dynamic-grid"></div>
-
     </main>
 
     <footer>
@@ -333,8 +232,10 @@
         <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p>
     </footer>
 
-    <div id="lingzhu-console" onclick="handleConsoleClick(event)">
-        <div class="console-container-inner" onclick="event.stopPropagation()">
+    <div id="lingzhu-console">
+        <div class="console-container-inner">
+            <div class="console-close-btn" onclick="deactivateLingZhu()">[ ✕ TERMINATE ]</div>
+
             <div class="console-header">
                 <div class="console-title">[ 灵 珠 · SI-OS ]</div>
                 <div class="console-subtitle">端侧超级个体认知中枢</div>
@@ -346,6 +247,7 @@
             
             <div class="console-input-area">
                 <input type="text" id="console-input" placeholder="ENTER COMMAND..." autocomplete="off">
+                <button id="console-send-btn">SEND →</button>
             </div>
         </div>
     </div>
@@ -365,9 +267,7 @@
             });
             if(homeApps.length === 0) document.querySelector('.section-header:last-of-type').style.display = 'none';
         }
-    </script>
 
-    <script>
         const canvas = document.getElementById('canvas-bg'); const ctx = canvas.getContext('2d'); let width, height; let particles = [];
         function init() { resize(); createParticles(); animate(); }
         function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
@@ -382,7 +282,7 @@
         function typeWriter() { if (i < textToType.length) { typeWriterElement.innerHTML += textToType.charAt(i); i++; setTimeout(typeWriter, 40); } }
         setTimeout(typeWriter, 500);
 
-        // === 只有纯 UI 开关逻辑，大脑逻辑交给 core.js ===
+        // UI 逻辑
         function activateLingZhu() {
             document.body.classList.add('zen-active');
             const consoleDiv = document.getElementById('lingzhu-console');
@@ -394,14 +294,10 @@
             document.body.classList.remove('zen-active');
             document.getElementById('lingzhu-console').classList.remove('active');
         }
-        
-        function handleConsoleClick(event) {
-            deactivateLingZhu();
-        }
+        // 注意：handleConsoleClick 已移除，背景点击不再生效
     </script>
 
     <script src="js/core.js"></script>
-
     <script src="https://ai-master-dashboard.netlify.app/inject-telemetry.js"></script>
 </body>
 </html>
