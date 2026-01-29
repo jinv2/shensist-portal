@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="TianSuan AI - Natural Algorithm R&D Lab. Defining the future of reality.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="TianSuan AI - Natural Algorithm R&D Lab.">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,19 +12,22 @@
 
     <style>
         :root {
+            /* === 移动端色彩优化 === */
             --bg-color: #050505;
             --card-bg: rgba(20, 20, 20, 0.6);
-            --text-main: #ffffff;
-            --text-muted: #888888;
+            --text-main: #f0f0f0; /* 稍微提亮，户外看更清 */
+            --text-muted: #999999;
             --accent: #00f0ff;
-            --accent-glow: rgba(0, 240, 255, 0.3);
+            --accent-glow: rgba(0, 240, 255, 0.4);
             --new-accent: #00ff88;
-            --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            
+            /* 字体栈 */
+            --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-code: 'Courier New', Courier, monospace;
             --font-tech: 'Orbitron', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg-color);
@@ -47,210 +50,203 @@
             filter: blur(20px);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.8s ease;
+            transition: all 0.6s ease;
         }
         
         body.zen-active .lingzhu-trigger-container {
             z-index: 10001; 
             opacity: 0; 
             pointer-events: none;
-            transform: scale(1.1);
-            filter: blur(10px);
-            transition: all 0.6s ease;
+            transform: scale(1.05);
+            filter: blur(15px);
+            transition: all 0.5s ease;
         }
 
         #canvas-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%);
-            transition: opacity 0.8s ease;
         }
 
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; height: 70px; position: fixed; width: 100%; top: 0; z-index: 100;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .brand img { height: 40px; width: auto; border-radius: 4px; filter: brightness(1.2); }
+        .brand img { height: 32px; width: auto; border-radius: 4px; filter: brightness(1.2); }
 
         .hero {
-            min-height: 95vh;
+            min-height: 90vh;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 8rem 20px 4rem; position: relative;
+            text-align: center; padding: 6rem 20px 2rem; position: relative;
         }
 
+        /* 手机端大标题适配 */
         h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem); font-weight: 800; letter-spacing: -2px; color: #fff;
-            margin-bottom: 1rem; position: relative; animation: textShadow 1.6s infinite; line-height: 1.1;
-        }
-        @keyframes textShadow {
-            0% { text-shadow: 0.4px 0 1px rgba(0,30,255,0.5), -0.4px 0 1px rgba(255,0,80,0.3); }
-            5% { text-shadow: 2.8px 0 1px rgba(0,30,255,0.5), -2.8px 0 1px rgba(255,0,80,0.3); }
-            100% { text-shadow: 0.4px 0 1px rgba(0,30,255,0.5), -0.4px 0 1px rgba(255,0,80,0.3); }
+            font-size: clamp(2.5rem, 10vw, 6rem); 
+            font-weight: 800; letter-spacing: -1px; color: #fff;
+            margin-bottom: 1rem; line-height: 1.1;
+            text-shadow: 0 0 10px rgba(0,240,255,0.2);
         }
 
-        .tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin-bottom: 3rem; min-height: 3.2rem; }
+        .tagline { 
+            font-size: clamp(0.9rem, 4vw, 1.2rem); 
+            color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 3.2rem; 
+        }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* 数据行：手机端改为2列 */
         .stats-bar {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-            margin-bottom: 3rem;
-            width: 100%; max-width: 900px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+            margin-bottom: 3rem; width: 100%; max-width: 900px;
             opacity: 0; animation: fadeUp 1s ease-out 0.5s forwards;
         }
         .stat-item { text-align: center; }
-        .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
-        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-num { font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 700; color: var(--accent); display: block; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === 灵珠巨型拟物化触发器 (首页大方框) === */
+        /* === 灵珠巨型拟物化触发器 === */
         .lingzhu-trigger-container {
-            width: 100%; max-width: 1200px; margin-top: 2rem; z-index: 10; padding: 20px;
+            width: 100%; max-width: 1200px; margin-top: 1rem; z-index: 10; padding: 10px;
         }
 
         .lingzhu-box {
             display: flex; justify-content: center; align-items: center; flex-direction: column;
-            width: 100%; min-height: 300px; 
-            /* 凸起效果 */
-            background: linear-gradient(145deg, #0c0c0c, #050505);
-            border-radius: 40px;
-            box-shadow:  25px 25px 50px #020202, -25px -25px 50px #121212;
-            border: none;
+            width: 100%; 
+            /* 手机端高度自适应，不要太高以免遮挡 */
+            min-height: 25vh; 
             
-            font-family: var(--font-tech); font-weight: 900; font-size: clamp(2.5rem, 6vw, 5rem);
-            letter-spacing: 12px; color: #e0e0e0;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            /* 深色拟态材质 */
+            background: linear-gradient(145deg, #0e0e0e, #050505);
+            border-radius: 30px;
+            /* 手机端阴影稍微收敛，防止看起来脏 */
+            box-shadow:  15px 15px 30px #020202, -15px -15px 30px #161616;
+            border: 1px solid rgba(255,255,255,0.02);
+            
+            font-family: var(--font-tech); font-weight: 900; 
+            /* 字体大小 Clamp */
+            font-size: clamp(1.8rem, 6vw, 5rem);
+            letter-spacing: clamp(4px, 1vw, 12px); 
+            color: #e0e0e0;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
             cursor: pointer; position: relative; overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .lingzhu-box:hover {
-            transform: translateY(-8px);
-            color: #fff;
-            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
-            box-shadow:  30px 30px 60px #020202, -30px -30px 60px #151515;
+            transition: all 0.2s ease-out; /* 手机端响应要快 */
         }
 
         .lingzhu-box:active {
-            transform: translateY(4px) scale(0.99); 
-            background: linear-gradient(145deg, #050505, #0c0c0c);
-            box-shadow: inset 15px 15px 40px #020202, inset -15px -15px 40px #121212;
-            color: var(--accent); text-shadow: 0 0 5px var(--accent);
+            transform: scale(0.97); 
+            background: linear-gradient(145deg, #050505, #0e0e0e);
+            box-shadow: inset 10px 10px 20px #020202, inset -10px -10px 20px #121212;
+            color: var(--accent); text-shadow: 0 0 8px var(--accent);
+            border-color: rgba(0,240,255,0.1);
         }
         
-        .lingzhu-sub { margin-top: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.5); letter-spacing: 4px; font-family: var(--font-main); text-transform: uppercase; }
+        .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: rgba(255,255,255,0.4); letter-spacing: 3px; font-family: var(--font-main); text-transform: uppercase; }
 
 
-        /* === 【核心重构】灵珠控制台 (The Physical Console) === */
+        /* === 灵珠控制台 (手机全屏适配) === */
         #lingzhu-console {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
             display: none; 
             flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.85); /* 背景稍微透明一点，突出中间的实体感 */
-            backdrop-filter: blur(5px);
-            cursor: pointer; /* 提示可点击背景关闭 */
+            background: rgba(0,0,0,0.92); /* 手机端背景更深，遮挡更严实 */
+            backdrop-filter: blur(8px);
         }
-        #lingzhu-console.active { display: flex; animation: fadeInConsole 0.5s forwards; }
-        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        #lingzhu-console.active { display: flex; animation: fadeInConsole 0.4s forwards; }
+        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
-        /* 内部实体面板：彻底拟物化，像一个设备 */
         .console-container-inner {
-            width: 90%; max-width: 900px;
-            /* 材质：深色金属凸起 */
-            background: linear-gradient(145deg, #101010, #050505);
-            box-shadow:  30px 30px 60px #020202, -30px -30px 60px #1a1a1a;
-            border-radius: 40px;
-            padding: 40px;
+            width: 92%; /* 手机端宽度占比更大 */
+            max-width: 900px;
+            /* 拟物外壳 */
+            background: linear-gradient(145deg, #121212, #080808);
+            box-shadow:  20px 20px 40px #010101, -20px -20px 40px #1a1a1a;
+            border-radius: 30px;
+            padding: 25px; /* 手机端内边距减小 */
             border: 1px solid rgba(255,255,255,0.05);
             
             display: flex; flex-direction: column; align-items: center;
-            cursor: default; /* 恢复鼠标 */
             position: relative;
+            /* 防止键盘顶起时溢出 */
+            max-height: 85vh; 
         }
 
         .console-header { 
-            margin-bottom: 2rem; text-align: center; 
-            border-bottom: 2px solid rgba(0,0,0,0.5); /* 刻痕效果 */
+            margin-bottom: 1.5rem; text-align: center; 
+            border-bottom: 2px solid rgba(0,0,0,0.5); 
             padding-bottom: 1rem; width: 100%; 
-            box-shadow: 0 2px 0 rgba(255,255,255,0.05); /* 刻痕高光 */
+            box-shadow: 0 2px 0 rgba(255,255,255,0.05);
         }
         
-        /* 字体统一为 Orbitron */
         .console-title { 
-            font-size: 1.8rem; letter-spacing: 6px; color: var(--accent); 
+            font-size: clamp(1.2rem, 5vw, 1.8rem); /* 手机端字体适配 */
+            letter-spacing: 3px; color: var(--accent); 
             font-family: var(--font-tech); font-weight: 700;
             text-shadow: 0 0 10px rgba(0,240,255,0.3);
         }
         .console-subtitle { 
-            font-size: 0.8rem; color: #666; margin-top: 8px; text-transform: uppercase; 
-            font-family: var(--font-tech); letter-spacing: 2px;
+            font-size: 0.7rem; color: #666; margin-top: 5px; text-transform: uppercase; 
+            font-family: var(--font-tech); letter-spacing: 1px;
         }
 
-        /* 屏幕区域：凹陷效果 (Inset) */
         .console-stream { 
-            width: 100%; height: 50vh; 
-            /* 凹陷材质 */
+            width: 100%; 
+            height: 40vh; /* 手机端给显示屏留足空间 */
             background: #030303;
-            box-shadow: inset 10px 10px 20px #010101, inset -10px -10px 20px #111;
-            border-radius: 20px;
-            padding: 25px; 
-            overflow-y: auto; margin-bottom: 25px; 
-            
-            /* 屏幕内字体 */
-            font-family: var(--font-tech); /* 按照要求，内部也用 Orbitron */
-            font-size: 14px; color: #ccc; line-height: 1.8;
+            box-shadow: inset 8px 8px 16px #010101, inset -8px -8px 16px #111;
+            border-radius: 15px;
+            padding: 15px; 
+            overflow-y: auto; margin-bottom: 20px; 
+            font-family: var(--font-tech); 
+            font-size: 13px; color: #ccc; line-height: 1.6;
             border: 1px solid rgba(255,255,255,0.02);
+            -webkit-overflow-scrolling: touch; /* iOS 滚动流畅 */
         }
         
-        .log-entry { margin-bottom: 12px; } 
-        .log-sys { color: var(--accent); text-shadow: 0 0 5px rgba(0,240,255,0.5); } 
-        .log-user { color: #888; font-style: italic; } 
-        .log-mod { color: var(--new-accent); text-shadow: 0 0 5px rgba(0,255,136,0.5); }
-
-        /* 输入区域：凹陷槽 */
         .console-input-area { width: 100%; position: relative; }
         
         #console-input { 
             width: 100%; 
-            /* 凹陷槽材质 */
             background: #050505;
-            box-shadow: inset 5px 5px 10px #020202, inset -5px -5px 10px #111;
-            border-radius: 15px;
-            
-            border: none; 
-            color: #fff; 
-            font-family: var(--font-tech); 
-            font-size: 1.2rem; 
-            padding: 20px; 
-            outline: none; 
-            letter-spacing: 2px;
-            transition: all 0.3s;
+            box-shadow: inset 4px 4px 8px #020202, inset -4px -4px 8px #111;
+            border-radius: 12px;
+            border: none; color: #fff; font-family: var(--font-tech); 
+            font-size: 1rem; padding: 15px; outline: none; letter-spacing: 1px;
         }
-        
-        #console-input:focus { 
-            box-shadow: inset 5px 5px 10px #020202, inset -5px -5px 10px #111, 0 0 5px var(--accent);
-            color: var(--accent);
-        }
+        #console-input:focus { color: var(--accent); box-shadow: inset 4px 4px 8px #020202, inset -4px -4px 8px #111, 0 0 5px rgba(0,240,255,0.3); }
 
 
-        /* 其他布局 */
+        /* 布局部分 */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
-        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; margin-top: 4rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; padding-left: 5px; border-left: 3px solid var(--accent); margin-left: 5px; }
         .section-title.lab { color: var(--new-accent); border-left-color: var(--new-accent); }
+        
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; text-decoration: none; color: white; transition: all 0.4s; position: relative; display: flex; flex-direction: column; height: 100%; }
-        .card:hover { transform: translateY(-4px); background: rgba(30, 30, 30, 0.8); border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
-        .card.lab-card:hover { border-color: var(--new-accent); box-shadow: 0 0 30px rgba(0, 255, 136, 0.2); }
-        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; } .card-img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #222; }
-        .card-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .card h3 { font-size: 1.25rem; font-weight: 600; } .card p { font-size: 0.95rem; color: #999; line-height: 1.6; flex-grow: 1; }
-        .card-footer { margin-top: 2rem; font-size: 0.85rem; color: var(--accent); display: flex; align-items: center; gap: 5px; opacity: 0.8; }
-        footer { text-align: center; padding: 4rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; color: #444; font-size: 0.85rem; }
-        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; position: absolute; top: 20px; right: 20px; box-shadow: 0 0 10px #00ff88; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) { .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; } .lingzhu-box { font-size: 2rem; letter-spacing: 6px; min-height: 200px; } }
+        
+        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: all 0.3s; position: relative; display: flex; flex-direction: column; height: 100%; }
+        .card:active { transform: scale(0.98); background: rgba(30, 30, 30, 0.9); } /* 手机触摸反馈 */
+        
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; } .card-img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: #222; }
+        .card-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: rgba(255,255,255,0.1); border-radius: 8px; }
+        .card h3 { font-size: 1.1rem; font-weight: 600; } .card p { font-size: 0.9rem; color: #999; line-height: 1.5; flex-grow: 1; }
+        .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); display: flex; align-items: center; gap: 5px; opacity: 0.9; }
+        footer { text-align: center; padding: 3rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 3rem; color: #555; font-size: 0.8rem; }
+        .status-dot { width: 6px; height: 6px; background: #00ff88; border-radius: 50%; position: absolute; top: 15px; right: 15px; box-shadow: 0 0 8px #00ff88; }
+        
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* === 媒体查询：针对手机竖屏深度优化 === */
+        @media (max-width: 768px) {
+            .hero { padding: 6rem 15px 1rem; min-height: auto; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+            .lingzhu-box { min-height: 220px; border-radius: 25px; } /* 手机上按钮矮一点 */
+            .grid { grid-template-columns: 1fr; gap: 1rem; } /* 单列显示 */
+            .console-container-inner { width: 95%; padding: 20px; }
+            .console-stream { height: 35vh; }
+        }
     </style>
 </head>
 <body>
@@ -271,7 +267,7 @@
             <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
             <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
             <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Agents</span></div>
-            <div class="stat-item"><span class="stat-num">7000m</span><span class="stat-label">AI Symphony</span></div>
+            <div class="stat-item"><span class="stat-num">7KM</span><span class="stat-label">AI Symphony</span></div>
         </div>
 
         <div class="lingzhu-trigger-container">
@@ -327,45 +323,40 @@
     </footer>
 
     <div id="lingzhu-console" onclick="handleConsoleClick(event)">
-        
         <div class="console-container-inner" onclick="event.stopPropagation()">
             <div class="console-header">
                 <div class="console-title">[ 灵 珠 · SI-OS ]</div>
                 <div class="console-subtitle">端侧超级个体认知中枢</div>
             </div>
-            
             <div class="console-stream" id="console-output">
                 <div class="log-entry log-sys">> SI-OS KERNEL LOADED...</div>
                 <div class="log-entry log-sys">> NEURAL LINK ESTABLISHED.</div>
                 <div class="log-entry log-sys">> READY FOR INPUT.</div>
             </div>
-            
             <div class="console-input-area">
                 <input type="text" id="console-input" placeholder="ENTER COMMAND..." autocomplete="off">
             </div>
         </div>
-
     </div>
 
     <script src="db.js"></script>
     
     <script>
+        /* 动态卡片加载 */
         const dynamicContainer = document.getElementById('dynamic-grid');
         if (typeof appDatabase !== 'undefined' && Array.isArray(appDatabase)) {
             const homeApps = appDatabase.filter(app => app.onHome === true);
             homeApps.forEach(app => {
                 const card = document.createElement('a');
                 card.href = app.url;
-                card.className = 'card lab-card'; 
-                card.target = "_blank"; 
+                card.className = 'card lab-card'; card.target = "_blank"; 
                 card.innerHTML = `<div class="card-header"><div class="card-icon">${app.icon}</div><div><h3>${app.name}</h3><div style="font-size:0.8rem; color:#666;">Extension</div></div></div><p>${app.desc}</p><div class="card-footer" style="color:var(--new-accent);">Launch App →</div>`;
                 dynamicContainer.appendChild(card);
             });
             if(homeApps.length === 0) document.querySelector('.section-header:last-of-type').style.display = 'none';
         }
-    </script>
 
-    <script>
+        /* 粒子背景动画 */
         const canvas = document.getElementById('canvas-bg'); const ctx = canvas.getContext('2d'); let width, height; let particles = [];
         function init() { resize(); createParticles(); animate(); }
         function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
@@ -373,19 +364,20 @@
         function animate() { ctx.clearRect(0, 0, width, height); particles.forEach((p, index) => { p.x += p.vx; p.y += p.vy; if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1; ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); for(let j = index + 1; j < particles.length; j++) { const p2 = particles[j]; const dx = p.x - p2.x; const dy = p.y - p2.y; const dist = Math.sqrt(dx*dx + dy*dy); if(dist < 150) { ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * (1 - dist/150)})`; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } } }); requestAnimationFrame(animate); }
         window.addEventListener('resize', () => { resize(); createParticles(); });
         init();
+
+        /* 打字机效果 */
         const textToType = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typeWriterElement = document.getElementById('typewriter');
         let i = 0;
         function typeWriter() { if (i < textToType.length) { typeWriterElement.innerHTML += textToType.charAt(i); i++; setTimeout(typeWriter, 40); } }
         setTimeout(typeWriter, 500);
-    </script>
 
-    <script>
+        /* 灵珠交互逻辑 */
         function activateLingZhu() {
             document.body.classList.add('zen-active');
             const consoleDiv = document.getElementById('lingzhu-console');
             consoleDiv.classList.add('active');
-            setTimeout(() => { document.getElementById('console-input').focus(); }, 500);
+            setTimeout(() => { document.getElementById('console-input').focus(); }, 400);
         }
 
         function deactivateLingZhu() {
