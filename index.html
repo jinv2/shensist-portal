@@ -14,6 +14,8 @@
             --accent: #00f0ff;
             --accent-glow: rgba(0, 240, 255, 0.3);
             --new-accent: #00ff88;
+            --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-code: 'Courier New', Courier, monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,10 +23,28 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: var(--font-main);
             overflow-x: hidden;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.5s ease;
+        }
+
+        /* === 禅模式 (Zen Mode) 当灵珠激活时 === */
+        body.zen-active {
+            overflow: hidden; /* 禁止滚动 */
+        }
+        body.zen-active .hero, 
+        body.zen-active .matrix-container,
+        body.zen-active nav,
+        body.zen-active footer {
+            filter: blur(10px);
+            opacity: 0.1;
+            pointer-events: none;
+            transition: all 0.8s ease;
+        }
+        body.zen-active #canvas-bg {
+            opacity: 0.2;
         }
 
         #canvas-bg {
@@ -35,6 +55,7 @@
             height: 100%;
             z-index: -1;
             background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%);
+            transition: opacity 0.8s ease;
         }
 
         nav {
@@ -50,6 +71,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.5s ease;
         }
 
         .brand { display: flex; align-items: center; height: 100%; }
@@ -72,6 +94,7 @@
             text-align: center;
             padding: 8rem 20px 2rem;
             position: relative;
+            transition: all 0.5s ease;
         }
 
         h1 {
@@ -91,16 +114,150 @@
             100% { text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px; }
         }
 
-        .tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin-bottom: 3rem; min-height: 3.2rem; padding: 0 10px; }
+        .tagline { font-size: 1.2rem; color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 3.2rem; padding: 0 10px; }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* === 灵珠核心 (The LingZhu Core) === */
+        .lingzhu-trigger-container {
+            margin: 2rem 0 4rem 0;
+            z-index: 200;
+            position: relative;
+        }
+
+        .lingzhu-box {
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.6);
+            padding: 18px 36px;
+            font-family: var(--font-code);
+            font-size: 1.2rem;
+            color: var(--text-main);
+            letter-spacing: 4px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lingzhu-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 2px; height: 100%;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .lingzhu-box::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 2px; height: 100%;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .lingzhu-box:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px var(--accent-glow);
+            transform: scale(1.05);
+            letter-spacing: 6px;
+            background: #000;
+        }
+        
+        .lingzhu-box:hover::before, .lingzhu-box:hover::after { opacity: 1; }
+
+        /* === 灵珠控制台界面 (Hidden by default) === */
+        #lingzhu-console {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: none; /* JS控制显示 */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: var(--font-code);
+        }
+        
+        /* 控制台显现动画 */
+        #lingzhu-console.active { display: flex; animation: fadeInConsole 0.5s forwards; }
+
+        @keyframes fadeInConsole { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        .console-header {
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1rem;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .console-title { font-size: 1.5rem; letter-spacing: 5px; color: var(--text-main); }
+        .console-subtitle { font-size: 0.8rem; color: #666; margin-top: 5px; text-transform: uppercase; }
+
+        .console-stream {
+            width: 80%;
+            max-width: 800px;
+            height: 50vh;
+            border-left: 1px solid #333;
+            padding: 20px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #ccc;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .log-entry { margin-bottom: 12px; line-height: 1.6; }
+        .log-sys { color: var(--accent); }
+        .log-user { color: #888; }
+        .log-mod { color: var(--new-accent); }
+
+        .console-input-area {
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        #console-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            color: #fff;
+            font-family: var(--font-code);
+            font-size: 1.2rem;
+            padding: 10px 0;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #console-input:focus { border-bottom-color: var(--accent); }
+
+        .close-console {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            color: #666;
+            cursor: pointer;
+            font-size: 2rem;
+            transition: color 0.3s;
+        }
+        .close-console:hover { color: #fff; }
+
+
+        /* === 原有的统计和卡片样式 === */
         .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 4rem; opacity: 0; animation: fadeUp 1s ease-out 1s forwards; width: 100%; max-width: 900px; }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-        .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
+        .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; transition: all 0.5s ease; }
 
         .section-header {
             display: flex;
@@ -122,7 +279,6 @@
             margin-left: 5px;
         }
         
-        /* 扩展区标题颜色 */
         .section-title.lab { color: var(--new-accent); border-left-color: var(--new-accent); }
 
         .view-all-btn {
@@ -160,7 +316,6 @@
             box-shadow: 0 0 30px var(--accent-glow);
         }
 
-        /* 动态生成的卡片特效 */
         .card.lab-card:hover { border-color: var(--new-accent); box-shadow: 0 0 30px rgba(0, 255, 136, 0.2); }
 
         .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
@@ -194,6 +349,13 @@
     <header class="hero">
         <h1 class="glitch-text">Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
+
+        <div class="lingzhu-trigger-container">
+            <div id="lingzhu-box" class="lingzhu-box" onclick="activateLingZhu()">
+                [ ◎ 灵 珠 ]
+            </div>
+            <div style="font-size: 10px; color: #444; margin-top: 8px; letter-spacing: 2px;">SI-OS CORE</div>
+        </div>
         <div class="stats-bar">
             <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
             <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
@@ -246,20 +408,32 @@
         <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p>
     </footer>
 
+    <div id="lingzhu-console">
+        <div class="close-console" onclick="deactivateLingZhu()">×</div>
+        <div class="console-header">
+            <div class="console-title">[ 灵 珠 · SI-OS ]</div>
+            <div class="console-subtitle">端侧超级个体认知中枢</div>
+        </div>
+        <div class="console-stream" id="console-output">
+            <div class="log-entry log-sys">> 系统自检完成...</div>
+            <div class="log-entry log-sys">> 神经突触网络就绪...</div>
+            <div class="log-entry log-sys">> 等待指令。请定义您的创造 (文学/影视/音乐)...</div>
+        </div>
+        <div class="console-input-area">
+            <input type="text" id="console-input" placeholder="输入创造指令..." autocomplete="off">
+        </div>
+    </div>
+
     <script src="db.js"></script>
     
     <script>
         const dynamicContainer = document.getElementById('dynamic-grid');
-        
-        // 确保 db.js 加载成功
         if (typeof appDatabase !== 'undefined' && Array.isArray(appDatabase)) {
-            // 过滤：只找 onHome = true 的
             const homeApps = appDatabase.filter(app => app.onHome === true);
-
             homeApps.forEach(app => {
                 const card = document.createElement('a');
                 card.href = app.url;
-                card.className = 'card lab-card'; // 加上 lab-card 样式
+                card.className = 'card lab-card'; 
                 card.target = "_blank"; 
 
                 card.innerHTML = `
@@ -276,7 +450,6 @@
                 dynamicContainer.appendChild(card);
             });
             
-            // 如果没有首页应用，隐藏标题栏（可选）
             if(homeApps.length === 0) {
                 document.querySelector('.section-header:last-of-type').style.display = 'none';
             }
@@ -297,6 +470,61 @@
         function typeWriter() { if (i < textToType.length) { typeWriterElement.innerHTML += textToType.charAt(i); i++; setTimeout(typeWriter, 40); } }
         setTimeout(typeWriter, 500);
     </script>
+
+    <script>
+        function activateLingZhu() {
+            // 1. 进入禅模式 (背景模糊)
+            document.body.classList.add('zen-active');
+            
+            // 2. 显示控制台
+            const consoleDiv = document.getElementById('lingzhu-console');
+            consoleDiv.classList.add('active');
+            
+            // 3. 聚焦输入框
+            setTimeout(() => {
+                document.getElementById('console-input').focus();
+            }, 500);
+        }
+
+        function deactivateLingZhu() {
+            document.body.classList.remove('zen-active');
+            document.getElementById('lingzhu-console').classList.remove('active');
+        }
+
+        // 简单的控制台回显逻辑 (地基)
+        const inputField = document.getElementById('console-input');
+        const outputStream = document.getElementById('console-output');
+
+        inputField.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const text = e.target.value;
+                if (!text.trim()) return;
+
+                // 用户日志
+                appendLog(`> ${text}`, 'user');
+                e.target.value = '';
+
+                // 模拟系统回复 (未来连接 arm_literature.js)
+                setTimeout(() => {
+                    let response = "指令已接收。正在调用逻辑路由...";
+                    if (text.includes("小说") || text.includes("故事")) response = "[文学臂] 正在挂载... 准备构建世界观。";
+                    else if (text.includes("音乐")) response = "[声波臂] 正在解析情绪频率...";
+                    else if (text.includes("画面")) response = "[视觉臂] 正在计算光影参数...";
+                    
+                    appendLog(response, 'mod');
+                }, 600);
+            }
+        });
+
+        function appendLog(text, type) {
+            const div = document.createElement('div');
+            div.className = `log-entry log-${type}`;
+            div.innerText = text;
+            outputStream.appendChild(div);
+            outputStream.scrollTop = outputStream.scrollHeight;
+        }
+    </script>
+
     <script src="https://ai-master-dashboard.netlify.app/inject-telemetry.js"></script>
 
 </body>
