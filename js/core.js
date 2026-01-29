@@ -1,118 +1,207 @@
 /**
- * SI-OS Module: Head of Visual (巨灵·最终完整版 v4.0)
- * 职责：输出视觉系的3项核心资产 (Moodboard -> Shot List -> Art Bible)
+ * SI-OS Kernel v1.9 (修正版)
+ * 解决 3-HEAD 9-OUTPUT 链条断裂问题
+ * 版权：天算AI科技实验室 (Natural Algorithm)
  */
 
-window.HeadVisual = {
-    meta: {
-        name: "Visual Director: Cinema Mode",
-        version: "4.0 Full Matrix"
+const SIOS = {
+    state: {
+        isReady: false,
+        activeModules: new Set(),
+        sharedContext: { theme: "", visualTags: [], mood: "", summary: "", masterStyle: "Default Cinematic" }
     },
 
-    process: function(userInput, core) {
-        // 读取由文曲头写入的记忆
-        const mem = core.state.sharedContext || {};
-        const style = mem.masterStyle || "Cinematic Realism";
-        const mood = mem.mood || "Dynamic";
-        const context = mem.summary || userInput;
-
-        core.ui.log(`[巨灵核心] 启动... 读取风格记忆: ${style}`, "mod");
-
-        // === 输出 4: [HEAD] 视觉情绪板 (Head) ===
-        const moodboard = this.generateMoodboard(style, mood);
-        core.ui.renderCodeCard("4_VISUAL_MOODBOARD.TXT", moodboard);
-
-        // 模拟思考延迟
-        setTimeout(() => {
-            // === 输出 5: [ARM 3] 摄影分镜 (Cinematography) ===
-            core.ui.log(`[视觉臂·叁] 拆解分镜脚本...`, "mod");
-            const shotList = this.generateCinematicPrompts(mem, style);
-            core.ui.renderCodeCard("5_CINEMATOGRAPHY_MJ.CMD", shotList);
-
-            setTimeout(() => {
-                // === 输出 6: [ARM 4] 美术设定 (Art Direction) ===
-                core.ui.log(`[视觉臂·肆] 定义美术规范...`, "mod");
-                const artBible = this.generateArtBible(style, context);
-                core.ui.renderCodeCard("6_ART_DIRECTION_BIBLE.TXT", artBible);
-                
-                core.ui.log(">> [巨灵] 任务完成。视觉资产 (3/3) 已交付。", "sys");
-            }, 800); // 间隔 0.8秒
-
-        }, 800); // 间隔 0.8秒
+    registry: {
+        "literature": { path: "modules/head_literature.js", keywords: ["小说", "故事", "剧本", "大纲"], name: "HEAD OF LITERATURE" },
+        "visual":     { path: "modules/head_visual.js",     keywords: ["visual", "画面", "分镜"],   name: "HEAD OF VISUAL" },
+        "music":      { path: "modules/head_music.js",      keywords: ["music", "音乐", "配乐"],   name: "HEAD OF AUDIO" }
     },
 
-    // --- [4] 生成视觉情绪板 ---
-    generateMoodboard: function(style, mood) {
-        return `
-=== PROJECT MOODBOARD ===
-[MASTER STYLE]: ${style}
-[EMOTIONAL CORE]: ${mood}
+    init: function() {
+        if (this.state.isReady) return;
+        const stream = document.getElementById('console-output');
+        if (!stream) return;
+        
+        stream.innerHTML = ""; 
+        this.ui.log("SI-OS KERNEL V4.1 ONLINE.", "sys");
+        this.ui.log("9-ASSET MATRIX READY.", "sys"); 
+        this.state.isReady = true;
+        
+        const input = document.getElementById('console-input');
+        const sendBtn = document.getElementById('console-send-btn');
+        const resetBtn = document.getElementById('console-reset-btn');
 
-[COLOR PALETTE]:
-- Primary: Void Black (#000000) & Neon Cyan (#00F0FF)
-- Secondary: Rust Orange (#CC4400) for contrast
-- Highlight: Anamorphic Flare White
+        // 绑定风格按钮逻辑
+        document.querySelectorAll('.style-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.state.sharedContext.masterStyle = btn.getAttribute('data-value');
+                this.ui.log(`[STYLE LOCKED]: ${this.state.sharedContext.masterStyle}`, "sys");
+            };
+        });
 
-[TEXTURES & MATERIALS]:
-- Wet Asphalt (Rain-slicked streets)
-- Brushed Chrome (Cybernetics)
-- Holographic Noise (Glitch effects)
-- Organic Decay (Rotting flesh/plants)
-
-[LIGHTING REFERENCES]:
-- Roger Deakins (Blade Runner 2049) - Silhouette & Volume
-- Wong Kar-wai (Fallen Angels) - Step-printing blur
-`;
+        if (input) {
+            input.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    this.handleInput(input.value);
+                    input.value = ''; 
+                }
+            };
+            if (sendBtn) {
+                sendBtn.onclick = () => {
+                    this.handleInput(input.value);
+                    input.value = ''; 
+                };
+            }
+            if (resetBtn) {
+                resetBtn.onclick = () => { this.reset(); };
+            }
+        }
     },
 
-    // --- [5] 生成摄影分镜 (Midjourney/Sora Prompts) ---
-    generateCinematicPrompts: function(mem, style) {
-        const visualTags = mem.visualTags ? mem.visualTags.join(", ") : "Cinematic, Detailed";
-        const context = mem.summary || "A scene from the story";
-
-        return `
-/imagine prompt: 
-[SHOT 01 - ESTABLISHING]: 
-[SUBJECT]: Wide angle drone shot of ${context}.
-[STYLE]: ${style}, massive scale, isolationist composition.
-[LIGHTING]: Bioluminescent fog meeting harsh industrial floodlights.
-[TECH]: IMAX 70mm, f/8, deep depth of field.
---ar 2.39:1 --stylize 750 --v 6.0
-
-/imagine prompt:
-[SHOT 02 - MEDIUM]:
-[SUBJECT]: Over-the-shoulder view of protagonist interacting with a retro-tech interface.
-[DETAILS]: Dirty lens, chromatic aberration, ${visualTags}.
-[COLOR]: Teal and Orange grading, high contrast.
---ar 16:9 --style raw --v 6.0
-
-/imagine prompt:
-[SHOT 03 - CLOSE UP]:
-[SUBJECT]: Extreme macro shot of an eye reflecting a burning neon sign.
-[EMOTION]: The realization of the "Truth" mentioned in the script.
-[TECH]: 100mm Macro lens, bokeh background, wet skin texture.
---ar 2.39:1 --ji 6
-        `;
+    reset: function() {
+        this.state.isReady = false;
+        this.state.activeModules.clear();
+        this.state.sharedContext = { theme: "", visualTags: [], mood: "", summary: "", masterStyle: "Default Cinematic" };
+        document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+        this.init();
     },
 
-    // --- [6] 生成美术设定书 (Art Bible) ---
-    generateArtBible: function(style, context) {
-        return `
-### ART DIRECTION BIBLE
-## STYLE GUIDE: ${style}
+    handleInput: function(text) {
+        if (!text.trim()) return;
+        this.ui.log(`> ${text}`, "user");
 
-**1. SET DESIGN (置景):**
-- **Architecture**: Brutalist concrete mixed with exposed wiring.
-- **Key Location**: The "Liminal Space" where the protagonist wakes up.
-- **Atmosphere**: Claustrophobic, high humidity, smell of ozone.
+        // 一键生成宏指令 (核心修正：改为 async 确保顺序)
+        if (text.includes("一键") || text.includes("全部") || text.includes("generate all")) {
+            this.runMacro(text); 
+            return;
+        }
 
-**2. PROPS (道具):**
-- **Hero Prop**: A data-drive that looks like a religious artifact.
-- **Tech Level**: Retro-futurism (CRT screens, heavy switches, tactile keyboards). No sleek touchscreens.
+        // 单模块触发
+        for (let [key, config] of Object.entries(this.registry)) {
+            if (config.keywords.some(k => text.includes(k))) {
+                this.loadModuleSync(key, text);
+                return;
+            }
+        }
+        this.loadModuleSync("literature", text);
+    },
 
-**3. COSTUME (服装):**
-- **Protagonist**: Tactical streetwear, worn-out, layers of synthetic fabric.
-- **Antagonist**: Pristine, seamless white suit (symbolizing the "System").
-`;
+    // 核心修正：严格顺序执行 3个 Head，产出 9个输出
+    runMacro: async function(userInput) {
+        this.ui.log(">>> INITIATING 3-HEAD WORKFLOW <<<", "sys");
+        
+        try {
+            // 1. 文曲星 (产出 1, 2, 3)
+            this.ui.log("STEP 1: GENERATING LITERARY ASSETS...", "sys");
+            await this.loadModuleSync("literature", userInput);
+            
+            // 等待文曲星执行完毕的延迟
+            await new Promise(r => setTimeout(r, 3000)); 
+
+            // 2. 巨灵神 (产出 4, 5, 6)
+            this.ui.log("STEP 2: GENERATING VISUAL ASSETS...", "sys");
+            await this.loadModuleSync("visual", "AUTO_MODE");
+
+            await new Promise(r => setTimeout(r, 3000));
+
+            // 3. 夔牛 (产出 7, 8, 9)
+            this.ui.log("STEP 3: GENERATING SONIC ASSETS...", "sys");
+            await this.loadModuleSync("music", "AUTO_MODE");
+
+            this.ui.log(">>> ALL 9 CORE ASSETS DELIVERED. <<<", "sys");
+        } catch (e) {
+            console.error(e);
+            this.ui.log("SYSTEM HALTED: MACRO EXECUTION ERROR.", "sys");
+        }
+    },
+
+    loadModuleSync: function(moduleKey, payload) {
+        return new Promise((resolve) => {
+            const config = this.registry[moduleKey];
+            
+            // 如果模块已经加载，直接运行
+            if (this.state.activeModules.has(moduleKey)) {
+                this.dispatchToModule(moduleKey, payload);
+                resolve();
+                return;
+            }
+
+            // 动态加载脚本
+            const script = document.createElement('script');
+            script.src = config.path;
+            script.onload = () => {
+                this.state.activeModules.add(moduleKey);
+                this.ui.log(`[${config.name}] ENGINE ACTIVATED.`, "sys");
+                this.dispatchToModule(moduleKey, payload);
+                resolve();
+            };
+            document.body.appendChild(script);
+        });
+    },
+
+    dispatchToModule: function(moduleKey, payload) {
+        const moduleObjectName = "Head" + moduleKey.charAt(0).toUpperCase() + moduleKey.slice(1);
+        if (window[moduleObjectName]) {
+            window[moduleObjectName].process(payload, this);
+        }
+    },
+
+    ui: {
+        log: function(text, type) {
+            const stream = document.getElementById('console-output');
+            if (!stream) return;
+            const div = document.createElement('div');
+            div.className = `log-entry log-${type}`;
+            div.innerText = text;
+            stream.appendChild(div);
+            stream.scrollTop = stream.scrollHeight;
+        },
+        renderCodeCard: function(title, codeContent) {
+            const stream = document.getElementById('console-output');
+            const card = document.createElement('div');
+            card.style.cssText = `
+                background: rgba(15, 15, 15, 0.95); 
+                border: 2px solid var(--accent);
+                box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+                border-radius: 12px; margin: 20px 0; padding: 0; overflow: hidden;
+            `;
+            const header = document.createElement('div');
+            header.style.cssText = `background: rgba(0, 240, 255, 0.15); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent);`;
+            
+            const titleSpan = document.createElement('span');
+            titleSpan.innerText = title;
+            titleSpan.style.cssText = "font-size: 12px; color: #fff; font-weight:900; font-family: 'Orbitron'; letter-spacing: 2px;";
+            
+            const copyBtn = document.createElement('button');
+            copyBtn.innerText = "COPY ASSET";
+            copyBtn.style.cssText = `background: var(--accent); color: #000; border: none; border-radius: 4px; padding: 5px 12px; font-size: 10px; font-weight: bold; cursor: pointer; font-family: 'Orbitron';`;
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(codeContent);
+                copyBtn.innerText = "DONE!";
+                setTimeout(() => copyBtn.innerText = "COPY ASSET", 2000);
+            };
+
+            const codeBlock = document.createElement('div');
+            codeBlock.innerText = codeContent;
+            codeBlock.style.cssText = `padding: 20px; font-family: 'Courier New', monospace; font-size: 14px; color: #fff; white-space: pre-wrap; line-height: 1.6;`;
+
+            header.appendChild(titleSpan);
+            header.appendChild(copyBtn);
+            card.appendChild(header);
+            card.appendChild(codeBlock);
+            stream.appendChild(card);
+            stream.scrollTop = stream.scrollHeight;
+        }
     }
 };
+
+(function autoStart() {
+    const timer = setInterval(() => {
+        if (document.getElementById('console-output')) {
+            clearInterval(timer);
+            SIOS.init();
+        }
+    }, 100);
+})();
