@@ -34,12 +34,10 @@
         .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; position: relative; }
         h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 1rem; line-height: 1.1; font-family: var(--font-tech); }
         
-        /* 打字机样式找回 */
         .tagline { font-size: clamp(0.9rem, 4vw, 1.1rem); color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 1.5em; letter-spacing: 1px; }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* === 核心修复：指标数字恢复亮蓝色 === */
         .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3rem; width: 100%; max-width: 900px; }
         .stat-item { text-align: center; } 
         .stat-num { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: var(--accent); display: block; font-family: var(--font-tech); line-height: 1; text-shadow: 0 0 10px var(--accent-glow); } 
@@ -59,7 +57,6 @@
         .lingzhu-box:hover { color: #fff; text-shadow: 0 0 20px var(--accent); border-color: var(--accent); }
         .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: #222; letter-spacing: 3px; font-family: var(--font-tech); }
 
-        /* === 核心修复：大方框自适应布局 === */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid #111; padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
@@ -80,9 +77,20 @@
         .console-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
         .neumorphic-btn { font-family: var(--font-tech); font-size: 10px; cursor: pointer; border-radius: 8px; padding: 8px 16px; border: 1px solid #222; background: #000; color: #666; }
         .console-stream { flex-grow: 1; overflow-y: auto; padding: 40px; }
-        .style-deck { display: flex; gap: 10px; overflow-x: auto; padding: 15px 0; margin-bottom: 10px; scrollbar-width: none; }
-        .style-btn { background: #0a0a0a; border: 1px solid #222; color: #555; padding: 8px 20px; border-radius: 30px; font-size: 10px; font-family: var(--font-tech); cursor: pointer; }
-        .style-btn.active { border-color: var(--accent); color: var(--accent); }
+        
+        /* === 核心修复：找回全部9个风格按钮 + 丝滑滚动 === */
+        .style-deck { 
+            display: flex; gap: 12px; overflow-x: auto; padding: 15px 5px; margin-bottom: 10px; 
+            scrollbar-width: none; -ms-overflow-style: none; /* 隐藏滚动条 */
+        }
+        .style-deck::-webkit-scrollbar { display: none; }
+        .style-btn { 
+            background: #0a0a0a; border: 1px solid #222; color: #555; padding: 10px 22px; 
+            border-radius: 30px; font-size: 11px; font-family: var(--font-tech); 
+            cursor: pointer; flex-shrink: 0; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .style-btn.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); background: rgba(0, 240, 255, 0.05); }
 
         .console-input-area { display: flex; gap: 15px; background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
         #console-input { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 1.1rem; user-select: text !important; -webkit-user-select: text !important; }
@@ -91,10 +99,11 @@
         @media (max-width: 768px) { 
             .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } 
             .hero { padding: 6rem 15px 2rem; }
-            .grid { grid-template-columns: 1fr; } /* 手机端方框单列 */
+            .grid { grid-template-columns: 1fr; }
             .console-input-area { flex-direction: column; }
             #console-send-btn { width: 100%; height: 50px; }
             .console-container-inner { padding: 10px; }
+            .style-deck { padding: 15px 10px; }
         }
     </style>
 </head>
@@ -145,12 +154,19 @@
                 <div class="neumorphic-btn" onclick="deactivateLingZhu()" style="color:var(--alert)">[ ✕ CLOSE ]</div>
             </div>
             <div class="console-stream" id="console-output"></div>
+            
             <div class="style-deck">
                 <button class="style-btn" data-value="Cinematic" onclick="setMasterStyle(this, 'Cinematic')">Cinematic</button>
                 <button class="style-btn" data-value="Anime" onclick="setMasterStyle(this, 'Anime')">Anime</button>
                 <button class="style-btn" data-value="Cyberpunk" onclick="setMasterStyle(this, 'Cyberpunk')">Cyberpunk</button>
                 <button class="style-btn" data-value="Sitcom" onclick="setMasterStyle(this, 'Sitcom')">Sitcom</button>
+                <button class="style-btn" data-value="Handheld" onclick="setMasterStyle(this, 'Handheld')">Handheld</button>
+                <button class="style-btn" data-value="Fancam" onclick="setMasterStyle(this, 'Fancam')">Fancam</button>
+                <button class="style-btn" data-value="Ghibli" onclick="setMasterStyle(this, 'Ghibli')">Ghibli</button>
+                <button class="style-btn" data-value="Noir" onclick="setMasterStyle(this, 'Noir')">Noir</button>
+                <button class="style-btn" data-value="Golden" onclick="setMasterStyle(this, 'Golden')">Golden</button>
             </div>
+
             <div class="console-input-area">
                 <input type="text" id="console-input" placeholder="输入你的主题..." autocomplete="off">
                 <button id="console-send-btn" onclick="SIOS.handleInput(document.getElementById('console-input').value)">[ ✦ MATERIALIZE ]</button>
@@ -160,20 +176,14 @@
 
     <script src="db.js"></script>
     <script>
-        // 打字机逻辑找回
         const text = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typewriter = document.getElementById('typewriter');
         let i = 0;
         function type() {
-            if (i < text.length) {
-                typewriter.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(type, 50)
-            }
+            if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); }
         }
         setTimeout(type, 1000);
 
-        // 渲染首页卡片
         const container = document.getElementById('dynamic-grid');
         if (typeof appDatabase !== 'undefined') {
             appDatabase.filter(app => app.onHome).forEach(app => {
@@ -184,19 +194,13 @@
             });
         }
 
-        function activateLingZhu() { 
-            document.body.classList.add('zen-active');
-            document.getElementById('lingzhu-console').classList.add('active'); 
-            SIOS.init(); 
-        }
-        function deactivateLingZhu() { 
-            document.body.classList.remove('zen-active');
-            document.getElementById('lingzhu-console').classList.remove('active'); 
-        }
+        function activateLingZhu() { document.body.classList.add('zen-active'); document.getElementById('lingzhu-console').classList.add('active'); SIOS.init(); }
+        function deactivateLingZhu() { document.body.classList.remove('zen-active'); document.getElementById('lingzhu-console').classList.remove('active'); }
         function setMasterStyle(btn, style) {
             document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             SIOS.state.sharedContext.masterStyle = style;
+            SIOS.ui.log(`[STYLE LOCKED]: ${style}`, "sys");
         }
     </script>
     <script src="js/core.js"></script>
