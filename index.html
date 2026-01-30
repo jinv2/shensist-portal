@@ -19,7 +19,13 @@
             --neu-dark: #0a0a0a; --neu-light: #1a1a1a;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* === 核心：全站禁止选择复制 === */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            user-select: none !important; -webkit-user-select: none !important; 
+        }
+
         body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; line-height: 1.5; transition: background-color 0.5s ease; }
 
         body.zen-active { overflow: hidden; }
@@ -36,15 +42,14 @@
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* === 复原版：指标数字栏 (不可选中) === */
+        /* === 找回并修复：指标数字栏 (无色小字风格) === */
         .stats-bar { 
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; 
             margin-bottom: 3rem; width: 100%; max-width: 900px; 
-            user-select: none; -webkit-user-select: none;
         }
         .stat-item { text-align: center; } 
-        .stat-num { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: var(--accent); display: block; font-family: var(--font-tech); line-height: 1; } 
-        .stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; font-weight: 500; }
+        .stat-num { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: #fff; display: block; font-family: var(--font-tech); line-height: 1; } 
+        .stat-label { font-size: 0.65rem; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; font-weight: 500; }
 
         .lingzhu-trigger-container { width: 100%; max-width: 1200px; margin-top: 1rem; z-index: 10; padding: 10px; animation: float 6s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
@@ -77,23 +82,21 @@
         .style-btn.active { background: #080808; box-shadow: inset 4px 4px 8px #040404, inset -4px -4px 8px #1a1a1a; color: var(--accent); }
 
         .console-input-area { width: 100%; display: flex; gap: 20px; align-items: center; padding: 10px; }
-        #console-input { flex-grow: 1; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; color: #fff; padding: 20px 25px; outline: none; font-size: 1.1rem; }
+        #console-input { 
+            flex-grow: 1; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; color: #fff; padding: 20px 25px; outline: none; font-size: 1.1rem; 
+            user-select: text !important; -webkit-user-select: text !important; /* 输入框必须能输入 */
+        }
         #console-send-btn { height: 60px; padding: 0 40px; background: linear-gradient(145deg, #161616, #0d0d0d); box-shadow: 8px 8px 16px #060606, -8px -8px 16px #1e1e1e; border: none; border-radius: 15px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; cursor: pointer; }
-        #console-send-btn:active { box-shadow: inset 8px 8px 16px #060606, inset -8px -8px 16px #1e1e1e; color: var(--new-accent); transform: translateY(2px); }
 
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
-        
-        /* 找回全部按钮样式 */
         .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #666; text-decoration: none; border: 1px solid #333; padding: 4px 12px; border-radius: 20px; transition: 0.3s; }
-        .all-apps-btn:hover { color: var(--accent); border-color: var(--accent); }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
         .card:hover { border-color: var(--accent); background: rgba(30,30,30,0.8); transform: translateY(-5px); }
         .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-        .card-img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
         .card-icon { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: rgba(255,255,255,0.1); border-radius: 8px; }
         .card h3 { font-size: 1.1rem; } .card p { font-size: 0.9rem; color: #999; flex-grow: 1; }
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); }
@@ -101,13 +104,11 @@
         footer { text-align: center; padding: 4rem 1rem; color: #555; font-size: 0.8rem; }
 
         @media (max-width: 768px) { 
-            .hero { padding: 6rem 15px 1rem; } 
             .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } 
             .lingzhu-box { min-height: 200px; border-radius: 30px; font-size: 1.8rem; } 
             .grid { grid-template-columns: 1fr; }
             .console-container-inner { width: 100%; height: 100%; border-radius: 0; }
             .style-deck { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; }
-            .style-deck::-webkit-scrollbar { display: none; }
             .console-input-area { flex-direction: column; }
             #console-input, #console-send-btn { width: 100%; }
         }
@@ -119,14 +120,12 @@
     <header class="hero">
         <h1 class="glitch-text">Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
-        
         <div class="stats-bar">
             <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
             <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
             <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Agents</span></div>
             <div class="stat-item"><span class="stat-num">7KM</span><span class="stat-label">AI Symphony</span></div>
         </div>
-
         <div class="lingzhu-trigger-container">
             <div class="lingzhu-box" onclick="activateLingZhu()">
                 [ ◎ 灵 珠 ]
@@ -138,60 +137,33 @@
     <main class="matrix-container">
         <div class="section-header" style="margin-top:0;"> <div class="section-title">/// SYSTEM MATRIX</div> </div>
         <div class="grid">
-            <a href="https://ai.shensist.top" class="card">
-                <div class="status-dot"></div>
-                <div class="card-header"><img src="logo_ai.jpg" alt="TianSuan" class="card-img"><div><h3>TianSuan AI</h3><div style="font-size:0.8rem; color:#666;">Digital Hub</div></div></div>
-                <p>Digital Assets Hub & PWA Matrix. Access the Music Engine, Tourism Agents, and Office Tools.</p>
-                <div class="card-footer">Enter Hub →</div>
-            </a>
-            <a href="https://blog.shensist.top" class="card">
-                <div class="card-header"><div class="card-icon">📘</div><div><h3>Insights</h3><div style="font-size:0.8rem; color:#666;">Research Blog</div></div></div>
-                <p>Deep dives into Natural Algorithms, PRISM Agent logic, and development logs.</p>
-                <div class="card-footer">Read Logs →</div>
-            </a>
-            <a href="https://blog.shensist.top/video-gallery" class="card">
-                <div class="card-header"><div class="card-icon">🎬</div><div><h3>Sora Vision</h3><div style="font-size:0.8rem; color:#666;">Visual Gallery</div></div></div>
-                <p>20,000+ Original AI narratives. Cyberpunk ShanHaiJing, Zero Riot, and surreal experiments.</p>
-                <div class="card-footer">Watch Now →</div>
-            </a>
-            <a href="https://dev.shensist.top" class="card">
-                <div class="card-header"><img src="logo_dev.jpg" alt="GitHub" class="card-img"><div><h3>Open Source</h3><div style="font-size:0.8rem; color:#666;">Codebase</div></div></div>
-                <p>Explore the architecture behind TianSuan. 16 Independent AI Tech Products open-sourced.</p>
-                <div class="card-footer">View Code →</div>
-            </a>
+            <a href="https://ai.shensist.top" class="card"><div class="status-dot"></div><div class="card-header"><div class="card-icon">🧠</div><div><h3>TianSuan AI</h3><div style="font-size:0.8rem; color:#666;">Digital Hub</div></div></div><p>Digital Assets Hub & PWA Matrix. Access the Music Engine.</p><div class="card-footer">Enter Hub →</div></a>
+            <a href="https://blog.shensist.top" class="card"><div class="card-header"><div class="card-icon">📘</div><div><h3>Insights</h3><div style="font-size:0.8rem; color:#666;">Research Blog</div></div></div><p>Deep dives into Natural Algorithms, PRISM Agent logic.</p><div class="card-footer">Read Logs →</div></a>
+            <a href="https://blog.shensist.top/video-gallery" class="card"><div class="card-header"><div class="card-icon">🎬</div><div><h3>Sora Vision</h3><div style="font-size:0.8rem; color:#666;">Visual Gallery</div></div></div><p>20,000+ Original AI narratives. Cyberpunk experiments.</p><div class="card-footer">Watch Now →</div></a>
+            <a href="https://dev.shensist.top" class="card"><div class="card-header"><div class="card-icon">💻</div><div><h3>Open Source</h3><div style="font-size:0.8rem; color:#666;">Codebase</div></div></div><p>Explore the architecture behind TianSuan.</p><div class="card-footer">View Code →</div></a>
         </div>
-        
-        <div class="section-header"> 
-            <div class="section-title lab" style="color:var(--new-accent); border-left-color:var(--new-accent);">/// EXTENSIONS</div> 
-            <a href="apps.html" class="all-apps-btn">VIEW ALL ➲</a>
-        </div>
+        <div class="section-header"> <div class="section-title lab" style="color:var(--new-accent); border-left-color:var(--new-accent);">/// EXTENSIONS</div> <a href="apps.html" class="all-apps-btn">VIEW ALL ➲</a></div>
         <div class="grid" id="dynamic-grid"></div> 
     </main>
     
-    <footer> <p class="founder">Founded by JIN V (金威) | Architect of Natural Algorithm Lab</p> <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p> </footer>
+    <footer> <p>© 2026 ShenSiST (神思庭). All Systems Operational.</p> </footer>
 
     <div id="lingzhu-console">
         <div class="console-container-inner">
             <div class="console-controls">
                 <div class="neumorphic-btn" onclick="SIOS.ui.showHelp()" style="color:var(--accent)">[ ? GUIDE ]</div>
-                <div class="neumorphic-btn" id="console-reset-btn" style="color:var(--new-accent)">[ ↻ REBOOT ]</div>
+                <div class="neumorphic-btn" onclick="SIOS.reset()" style="color:var(--new-accent)">[ ↻ REBOOT ]</div>
                 <div class="neumorphic-btn" onclick="deactivateLingZhu()" style="color:var(--alert)">[ ✕ TERMINATE ]</div>
             </div>
             <div class="console-header">
                 <div class="console-title">[ 灵 珠 · SI-OS ]</div>
                 <div class="console-subtitle">端侧超级个体认知中枢</div>
             </div>
-            <div class="console-stream" id="console-output"> <div class="log-entry log-sys">> SI-OS KERNEL LOADING...</div> </div>
+            <div class="console-stream" id="console-output"></div>
             <div class="style-deck">
-                <button class="style-btn" data-value="Fancam (K-pop style zoom)">Fancam</button>
-                <button class="style-btn" data-value="Cartoon / 2D Animation">Cartoon</button>
-                <button class="style-btn" data-value="TV News Broadcast">News</button>
-                <button class="style-btn" data-value="Selfie / Vlog Style">Selfie</button>
-                <button class="style-btn" data-value="Handheld / Shaky Cam">Handheld</button>
-                <button class="style-btn" data-value="3D Animated / Pixar Style">Animated</button>
-                <button class="style-btn" data-value="90s Sitcom / Multi-camera">Sitcom</button>
-                <button class="style-btn" data-value="Anime / Studio Ghibli">Anime</button>
-                <button class="style-btn" data-value="Golden Hour / Cinematic">Golden</button>
+                <button class="style-btn" data-value="Cinematic">Cinematic</button>
+                <button class="style-btn" data-value="Anime">Anime</button>
+                <button class="style-btn" data-value="Cyberpunk">Cyberpunk</button>
             </div>
             <div class="console-input-area">
                 <input type="text" id="console-input" placeholder="输入你的主题..." autocomplete="off">
@@ -200,35 +172,16 @@
         </div>
     </div>
 
-    <script src="db.js"></script>
     <script>
-        const dynamicContainer = document.getElementById('dynamic-grid');
-        if (typeof appDatabase !== 'undefined' && Array.isArray(appDatabase)) {
-            // 只在主页展示带有 onHome: true 属性的应用，通常包含 Todo
-            const homeApps = appDatabase.filter(app => app.onHome === true);
-            homeApps.forEach(app => {
-                const card = document.createElement('a'); 
-                card.href = app.url; 
-                card.className = 'card'; 
-                card.target = "_blank"; 
-                card.innerHTML = `<div class="card-header"><div class="card-icon">${app.icon}</div><div><h3>${app.name}</h3><div style="font-size:0.8rem; color:#666;">Extension</div></div></div><p>${app.desc}</p><div class="card-footer" style="color:var(--new-accent);">Launch App →</div>`;
-                dynamicContainer.appendChild(card);
+        const container = document.getElementById('dynamic-grid');
+        if (typeof appDatabase !== 'undefined') {
+            appDatabase.filter(app => app.onHome).forEach(app => {
+                const card = document.createElement('a'); card.href = app.url; card.className = 'card'; card.target = "_blank";
+                card.innerHTML = `<div class="card-header"><div class="card-icon">${app.icon}</div><div><h3>${app.name}</h3></div></div><p>${app.desc}</p><div class="card-footer">Launch App →</div>`;
+                container.appendChild(card);
             });
         }
-        
-        // --- 粒子背景背景逻辑 (保持不变) ---
-        const canvas = document.getElementById('canvas-bg'); const ctx = canvas.getContext('2d'); let width, height; let particles = [];
-        function init() { resize(); createParticles(); animate(); }
-        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
-        function createParticles() { particles = []; const count = window.innerWidth < 768 ? 40 : 100; for(let i=0; i<count; i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 2 + 1, alpha: Math.random() * 0.5 + 0.1 }); } }
-        function animate() { ctx.clearRect(0, 0, width, height); particles.forEach((p, index) => { p.x += p.vx; p.y += p.vy; if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1; ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); for(let j = index + 1; j < particles.length; j++) { const p2 = particles[j]; const dx = p.x - p2.x; const dy = p.y - p2.y; const dist = Math.sqrt(dx*dx + dy*dy); if(dist < 150) { ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * (1 - dist/150)})`; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } } }); requestAnimationFrame(animate); }
-        window.addEventListener('resize', () => { resize(); createParticles(); }); init();
-        
-        const textToType = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
-        const typeWriterElement = document.getElementById('typewriter'); let i = 0;
-        function typeWriter() { if (i < textToType.length) { typeWriterElement.innerHTML += textToType.charAt(i); i++; setTimeout(typeWriter, 40); } } setTimeout(typeWriter, 500);
-
-        function activateLingZhu() { document.body.classList.add('zen-active'); document.getElementById('lingzhu-console').classList.add('active'); setTimeout(() => { document.getElementById('console-input').focus(); }, 400); }
+        function activateLingZhu() { document.body.classList.add('zen-active'); document.getElementById('lingzhu-console').classList.add('active'); SIOS.init(); }
         function deactivateLingZhu() { document.body.classList.remove('zen-active'); document.getElementById('lingzhu-console').classList.remove('active'); }
     </script>
     <script src="js/core.js"></script>
