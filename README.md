@@ -41,5 +41,15 @@ Engine: Ollama (Must be running)
 Python: 3.10+
 
 Dependencies: pip install requests
+---
 
+## ⚖️ Legal & License / 法律声明
+
+本仓库所有内容（包含但不限于核心 V4.0 安装包、源代码、UI 设计）均属于 **ShenSiST 专有财产**。
+
+- **禁止商用**：未经授权，禁止将本项目用于任何盈利性活动。
+- **禁止二次分发**：禁止将 `.tar.gz` 安装包上传至其他非官方平台。
+- **保留权利**：神思庭实验室保留对任何侵权行为追究法律责任的权利。
+
+© 2026 ShenSiST Lab. All Rights Reserved.
 © 2026 Natural Algorithm R&D Lab. Defining the future of reality.
