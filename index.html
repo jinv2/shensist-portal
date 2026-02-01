@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --bg-color: #050505; --card-bg: rgba(20, 20, 20, 0.6); --text-main: #f0f0f0; --text-muted: #666666;
@@ -13,79 +12,52 @@
             --font-main: 'SF Pro Display', -apple-system, sans-serif;
             --font-tech: 'Orbitron', sans-serif;
         }
-
-        /* 全站禁止选择复制 */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none !important; -webkit-user-select: none !important; }
-
         body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; line-height: 1.5; scroll-behavior: smooth; }
-
         body.zen-active { overflow: hidden; }
         body.zen-active .hero h1, body.zen-active .tagline, body.zen-active .stats-bar, body.zen-active .matrix-container, body.zen-active nav, body.zen-active footer { filter: blur(20px); opacity: 0; pointer-events: none; transition: all 0.6s ease; }
         body.zen-active .lingzhu-trigger-container { z-index: 10001; opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(20px); transition: all 0.5s ease; }
-
         #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%); }
-        
         nav { display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .brand img { height: 32px; filter: brightness(1.2); }
-        
-        .nav-download { 
-            font-family: var(--font-tech); font-size: 10px; color: var(--accent); text-decoration: none; 
-            border: 1px solid var(--accent); padding: 5px 12px; border-radius: 4px; transition: 0.3s; 
-            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
-        }
+        .nav-download { font-family: var(--font-tech); font-size: 10px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 4px; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
         .nav-download:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
-        
         .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; position: relative; }
         h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 1rem; line-height: 1.1; font-family: var(--font-tech); }
         .tagline { font-size: clamp(0.9rem, 4vw, 1.1rem); color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 1.5em; letter-spacing: 1px; }
         .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
-
         .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3rem; width: 100%; max-width: 900px; }
         .stat-item { text-align: center; } 
         .stat-num { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: var(--accent); display: block; font-family: var(--font-tech); line-height: 1; text-shadow: 0 0 10px var(--accent-glow); } 
         .stat-label { font-size: 0.65rem; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; font-weight: 500; }
-
         .lingzhu-trigger-container { width: 100%; max-width: 1200px; z-index: 10; padding: 10px; animation: float 6s ease-in-out infinite; cursor: pointer; }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        
-        .lingzhu-box {
-            display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; min-height: 25vh;
-            background: linear-gradient(145deg, #141414, #0a0a0a);
-            box-shadow: 20px 20px 60px #050505, -10px -10px 40px #1a1a1a;
-            border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
-            font-family: var(--font-tech); font-weight: 900; font-size: clamp(1.8rem, 6vw, 4rem); 
-            letter-spacing: 12px; color: #333; transition: 0.3s;
-        }
+        .lingzhu-box { display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; min-height: 25vh; background: linear-gradient(145deg, #141414, #0a0a0a); box-shadow: 20px 20px 60px #050505, -10px -10px 40px #1a1a1a; border-radius: 40px; border: 1px solid rgba(255,255,255,0.05); font-family: var(--font-tech); font-weight: 900; font-size: clamp(1.8rem, 6vw, 4rem); letter-spacing: 12px; color: #333; transition: 0.3s; }
         .lingzhu-box:hover { color: #fff; text-shadow: 0 0 20px var(--accent); border-color: var(--accent); }
         .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: #222; letter-spacing: 3px; font-family: var(--font-tech); }
-
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid #111; padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
-        .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
-
-        /* 新增：安装引导样式 */
-        .guide-box { background: rgba(0, 240, 255, 0.03); border: 1px dashed rgba(0, 240, 255, 0.2); border-radius: 20px; padding: 2rem; margin: 2rem 0; }
+        .guide-box { background: rgba(0, 240, 255, 0.03); border: 1px dashed rgba(0, 240, 255, 0.2); border-radius: 20px; padding: 2rem; margin: 1rem 0 3rem 0; }
         .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
         .step-num { font-family: var(--font-tech); color: var(--new-accent); font-size: 1.2rem; margin-bottom: 10px; display: block; }
         .guide-step h4 { font-family: var(--font-tech); font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); }
-        .guide-step p { font-size: 0.8rem; color: var(--text-muted); }
+        .guide-step p { font-size: 0.8rem; color: #888; }
         code { background: #000; color: var(--new-accent); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
         .card:hover { border-color: var(--accent); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
         .card h3 { font-size: 1.1rem; margin-bottom: 0.8rem; font-family: var(--font-tech); } 
         .card p { font-size: 0.85rem; color: #888; flex-grow: 1; line-height: 1.6; }
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
-
+        .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
+        /* 战情室控制台保持不变 */
         #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; }
         #lingzhu-console.active { display: flex; }
         .console-container-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px; position: relative; }
         .console-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100; }
         .neumorphic-btn { font-family: var(--font-tech); font-size: 10px; cursor: pointer; border-radius: 8px; padding: 6px 12px; border: 1px solid #222; background: #000; color: #666; transition: 0.2s; }
-        .neumorphic-btn:active { border-color: var(--accent); color: var(--accent); }
         .console-header { margin-bottom: 1rem; text-align: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; flex-shrink: 0; }
         .console-title { font-size: 1.8rem; letter-spacing: 10px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; text-shadow: 0 0 15px var(--accent-glow); }
         .console-subtitle { font-size: 0.7rem; color: #444; margin-top: 5px; text-transform: uppercase; font-family: var(--font-tech); letter-spacing: 3px; }
@@ -96,14 +68,7 @@
         .console-input-area { display: flex; gap: 15px; background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
         #console-input { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 1.1rem; }
         #console-send-btn { background: var(--accent); color: #000; border: none; padding: 0 30px; border-radius: 12px; font-weight: 900; font-family: var(--font-tech); cursor: pointer; }
-
-        @media (max-width: 768px) { 
-            .grid { grid-template-columns: 1fr; }
-            .console-header { padding-top: 60px; } 
-            .console-title { font-size: 1.1rem; letter-spacing: 4px; }
-            .console-controls { width: 100%; right: 0; left: 0; justify-content: center; top: 15px; }
-            .console-stream { padding: 10px; }
-        }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .console-header { padding-top: 60px; } .console-title { font-size: 1.1rem; letter-spacing: 4px; } .console-controls { width: 100%; right: 0; left: 0; justify-content: center; top: 15px; } .console-stream { padding: 10px; } }
     </style>
 </head>
 <body>
@@ -112,7 +77,6 @@
         <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> 
         <a href="Shensist_Core_V4_Final.tar.gz" class="nav-download" onclick="handleDownload(event)">Download Desktop v4.0</a>
     </nav>
-    
     <header class="hero">
         <h1>Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
@@ -128,15 +92,7 @@
     </header>
 
     <main class="matrix-container">
-        <div class="section-header"><div class="section-title">SYSTEM MATRIX</div></div>
-        <div class="grid">
-            <a href="https://ai.shensist.top" class="card"><h3>TianSuan AI</h3><p>Digital Assets Hub & PWA Matrix. Access the Music Engine.</p><div class="card-footer">Enter Hub →</div></a>
-            <a href="https://blog.shensist.top" class="card"><h3>Insights</h3><p>Deep dives into Natural Algorithms, PRISM Agent logic.</p><div class="card-footer">Read Logs →</div></a>
-            <a href="https://blog.shensist.top/video-gallery" class="card"><h3>Sora Vision</h3><p>20,000+ Original AI narratives. Cyberpunk experiments.</p><div class="card-footer">Watch Now →</div></a>
-            <a href="https://dev.shensist.top" class="card"><h3>Open Source</h3><p>Explore the architecture behind TianSuan.</p><div class="card-footer">View Code →</div></a>
-        </div>
-
-        <div class="section-header" style="margin-top:5rem;" id="install-guide">
+        <div class="section-header" id="install-guide">
             <div class="section-title" style="color:var(--new-accent); border-color:var(--new-accent)">V4.0 DEPLOYMENT PROTOCOL (安装说明)</div>
         </div>
         <div class="guide-box">
@@ -157,6 +113,14 @@
                     <p>在桌面上找到“神思庭”图标，右键点击并选择 <b>"Allow Launching"</b> 即可双击启动。</p>
                 </div>
             </div>
+        </div>
+
+        <div class="section-header"><div class="section-title">SYSTEM MATRIX</div></div>
+        <div class="grid">
+            <a href="https://ai.shensist.top" class="card"><h3>TianSuan AI</h3><p>Digital Assets Hub & PWA Matrix. Access the Music Engine.</p><div class="card-footer">Enter Hub →</div></a>
+            <a href="https://blog.shensist.top" class="card"><h3>Insights</h3><p>Deep dives into Natural Algorithms, PRISM Agent logic.</p><div class="card-footer">Read Logs →</div></a>
+            <a href="https://blog.shensist.top/video-gallery" class="card"><h3>Sora Vision</h3><p>20,000+ Original AI narratives. Cyberpunk experiments.</p><div class="card-footer">Watch Now →</div></a>
+            <a href="https://dev.shensist.top" class="card"><h3>Open Source</h3><p>Explore the architecture behind TianSuan.</p><div class="card-footer">View Code →</div></a>
         </div>
 
         <div class="section-header" style="margin-top:4rem;">
@@ -204,11 +168,10 @@
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
-        // 处理下载点击逻辑：滚动并弹窗
         function handleDownload(e) {
             document.getElementById('install-guide').scrollIntoView({ behavior: 'smooth' });
             setTimeout(() => {
-                alert("🚀 正在开始下载...\n\n重要：请查看页面下方的 [V4.0 DEPLOYMENT PROTOCOL] 安装说明，确保正确配置运行环境。");
+                alert("🚀 正在开始下载...\n\n重要：请查看页面上方的 [V4.0 DEPLOYMENT PROTOCOL] 安装说明。");
             }, 500);
         }
 
@@ -221,7 +184,6 @@
                 container.appendChild(card);
             });
         }
-
         function activateLingZhu() { document.body.classList.add('zen-active'); document.getElementById('lingzhu-console').classList.add('active'); SIOS.init(); }
         function deactivateLingZhu() { document.body.classList.remove('zen-active'); document.getElementById('lingzhu-console').classList.remove('active'); }
         function setMasterStyle(btn, style) {
