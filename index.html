@@ -39,26 +39,31 @@
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid #111; padding-bottom: 10px; }
         .section-title { font-size: 0.75rem; color: var(--accent); font-family: var(--font-tech); letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
 
-        /* 双窗口布局控制 */
-        .install-windows-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; margin-bottom: 4rem; }
-        .window-box { background: rgba(0, 240, 255, 0.03); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 20px; padding: 1.5rem; position: relative; }
-        .window-title { font-family: var(--font-tech); font-size: 0.7rem; color: var(--accent); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(0, 240, 255, 0.1); padding-bottom: 8px; }
+        /* 弹窗专用样式 */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-window { background: #0a0a0a; border: 1px solid var(--accent); border-radius: 24px; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; padding: 30px; position: relative; box-shadow: 0 0 50px rgba(0, 240, 255, 0.1); }
+        .modal-close { position: absolute; top: 20px; right: 20px; color: var(--accent); cursor: pointer; font-family: var(--font-tech); font-size: 12px; }
+
+        /* 按钮样式 */
+        .guide-trigger-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 4rem; }
+        .trigger-btn { background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; text-align: left; }
+        .trigger-btn:hover { border-color: var(--accent); background: rgba(0, 240, 255, 0.05); }
+        .trigger-btn h4 { font-family: var(--font-tech); color: var(--accent); font-size: 0.8rem; margin-bottom: 5px; }
+        .trigger-btn p { color: #666; font-size: 0.7rem; }
+
+        /* 安装内容样式保留 */
+        .guide-grid-mini { display: flex; flex-direction: column; gap: 1.5rem; }
+        .step-item { display: flex; gap: 15px; }
+        .step-mini-num { font-family: var(--font-tech); color: var(--new-accent); font-size: 1rem; }
+        .step-content h4 { color: #fff; font-size: 0.9rem; margin-bottom: 5px; }
+        .step-content p { color: #bbb; font-size: 0.8rem; }
         
-        /* 窗口1样式 */
-        .guide-grid-mini { display: flex; flex-direction: column; gap: 1.2rem; }
-        .step-item { display: flex; gap: 12px; }
-        .step-mini-num { font-family: var(--font-tech); color: var(--new-accent); font-size: 0.9rem; }
-        .step-content h4 { font-size: 0.85rem; color: #fff; margin-bottom: 4px; }
-        .step-content p { font-size: 0.75rem; color: #888; line-height: 1.5; }
-        
-        /* 窗口2样式：详细全平台 */
-        .platform-list { display: flex; flex-direction: column; gap: 15px; }
-        .platform-item { font-size: 0.75rem; line-height: 1.6; color: #bbb; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 10px; }
-        .platform-item strong { color: var(--new-accent); font-family: var(--font-tech); font-size: 0.75rem; display: block; margin-bottom: 5px; border-bottom: 1px solid #222; }
-        .platform-item ul { list-style: none; margin-top: 5px; }
-        .platform-item li { position: relative; padding-left: 12px; margin-bottom: 2px; }
-        .platform-item li::before { content: "›"; position: absolute; left: 0; color: var(--accent); }
-        code { background: #000; color: var(--new-accent); padding: 1px 4px; border-radius: 4px; font-family: monospace; font-size: 0.95em; }
+        .platform-list { display: flex; flex-direction: column; gap: 20px; }
+        .platform-item strong { color: var(--new-accent); font-family: var(--font-tech); display: block; margin-bottom: 8px; font-size: 0.8rem; }
+        .platform-item ul { list-style: none; padding-left: 10px; color: #888; font-size: 0.8rem; }
+        .platform-item li { margin-bottom: 4px; }
+        code { background: #1a1a1a; color: var(--new-accent); padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; display: flex; flex-direction: column; }
@@ -67,14 +72,12 @@
         .card p { font-size: 0.85rem; color: #888; flex-grow: 1; }
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
 
-        body.zen-active { overflow: hidden; }
-        body.zen-active .hero, body.zen-active .matrix-container, body.zen-active nav { filter: blur(20px); opacity: 0; pointer-events: none; transition: 0.6s; }
         #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; }
         #lingzhu-console.active { display: flex; }
         .console-container-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px; position: relative; }
 
-        @media (max-width: 900px) {
-            .install-windows-wrapper { grid-template-columns: 1fr; }
+        @media (max-width: 768px) {
+            .guide-trigger-box { grid-template-columns: 1fr; }
             .stats-bar { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
@@ -102,66 +105,17 @@
 
     <main class="matrix-container">
         <div class="section-header" id="install-guide">
-            <div class="section-title" style="color:var(--new-accent); border-color:var(--new-accent)">DEPLOYMENT PROTOCOL V4.0</div>
+            <div class="section-title" style="color:var(--new-accent); border-color:var(--new-accent)">DEPLOYMENT INTERFACE</div>
         </div>
 
-        <div class="install-windows-wrapper">
-            <div class="window-box">
-                <div class="window-title"><span>●</span> QUICK SETUP (01-03)</div>
-                <div class="guide-grid-mini">
-                    <div class="step-item">
-                        <span class="step-mini-num">01</span>
-                        <div class="step-content">
-                            <h4>环境准备 / ENV</h4>
-                            <p>确保 <code>Ollama</code> 引擎已安装。Linux 建议配置 NVIDIA 1050Ti+ 以获得最佳加速体验。</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <span class="step-mini-num">02</span>
-                        <div class="step-content">
-                            <h4>解压安装 / SETUP</h4>
-                            <p>下载后解压，Linux 执行 <code>bash install_launcher.sh</code>；Win/Mac 用户见右侧详细指南。</p>
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <span class="step-mini-num">03</span>
-                        <div class="step-content">
-                            <h4>授权运行 / LAUNCH</h4>
-                            <p>找到“神思庭”图标，右键选择 <b>"Allow Launching"</b> 或通过终端脚本直接双击启动。</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="guide-trigger-box">
+            <div class="trigger-btn" onclick="toggleModal('quick-modal')">
+                <h4>● QUICK START GUIDE</h4>
+                <p>3步快速部署环境与内核授权</p>
             </div>
-
-            <div class="window-box" style="background: rgba(100, 100, 100, 0.05);">
-                <div class="window-title"><span>●</span> CROSS-PLATFORM GUIDE (ALL OS)</div>
-                <div class="platform-list">
-                    <div class="platform-item">
-                        <strong>🐧 Linux (原生推荐)</strong>
-                        <ul>
-                            <li>环境检查：安装 Ollama 并确保后台进程已启动。</li>
-                            <li>解压：使用命令 <code>tar -xvf Shensist_Core_V4.tar.gz</code>。</li>
-                            <li>授权：执行 <code>chmod +x install_launcher.sh</code>。</li>
-                            <li>运行：执行 <code>./install_launcher.sh</code> 自动创建快捷方式。</li>
-                        </ul>
-                    </div>
-                    <div class="platform-item">
-                        <strong>🪟 Windows (WSL / 环境方案)</strong>
-                        <ul>
-                            <li>方案 A (推荐)：安装 WSL2 (Ubuntu)，按 Linux 步骤运行。</li>
-                            <li>方案 B (原生)：安装 Python 3.10+，启动 Win 版 Ollama。</li>
-                            <li>启动：在解压文件夹路径输入 <code>cmd</code>，执行 <code>python bin/shensist_gui.py</code>。</li>
-                        </ul>
-                    </div>
-                    <div class="platform-item">
-                        <strong>🍎 macOS (M1/M2 加速)</strong>
-                        <ul>
-                            <li>环境：安装 macOS 版 Ollama。</li>
-                            <li>运行：进入文件夹执行 <code>python3 bin/shensist_gui.py</code>。</li>
-                            <li>注意：若提示权限不足，请在“隐私与安全性”中允许该应用。</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="trigger-btn" onclick="toggleModal('platform-modal')">
+                <h4>● ALL-PLATFORM PROTOCOL</h4>
+                <p>Linux / Windows / macOS 详细教程</p>
             </div>
         </div>
 
@@ -180,6 +134,69 @@
         <div class="grid" id="dynamic-grid"></div>
     </main>
 
+    <div class="modal-overlay" id="quick-modal" onclick="closeModals(event)">
+        <div class="modal-window">
+            <div class="modal-close" onclick="toggleModal('quick-modal')">[ CLOSE ]</div>
+            <h2 style="font-family: var(--font-tech); color: var(--accent); margin-bottom: 25px; font-size: 1rem;">QUICK SETUP GUIDE</h2>
+            <div class="guide-grid-mini">
+                <div class="step-item">
+                    <span class="step-mini-num">01</span>
+                    <div class="step-content">
+                        <h4>环境准备 / ENV</h4>
+                        <p>安装 <code>Ollama</code> 引擎并确保后台启动。推荐显存 6GB+ 体验最佳。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-mini-num">02</span>
+                    <div class="step-content">
+                        <h4>解压安装 / SETUP</h4>
+                        <p>执行 <code>bash install_launcher.sh</code>。脚本将自动检测依赖并下载核心权重。</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <span class="step-mini-num">03</span>
+                    <div class="step-content">
+                        <h4>授权运行 / LAUNCH</h4>
+                        <p>在 Linux 桌面右键图标选择 "Allow Launching"，或在终端直接调用 GUI 模块。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="platform-modal" onclick="closeModals(event)">
+        <div class="modal-window">
+            <div class="modal-close" onclick="toggleModal('platform-modal')">[ CLOSE ]</div>
+            <h2 style="font-family: var(--font-tech); color: var(--accent); margin-bottom: 25px; font-size: 1rem;">ALL-PLATFORM DEPLOYMENT</h2>
+            <div class="platform-list">
+                <div class="platform-item">
+                    <strong>🐧 Linux (原生推荐)</strong>
+                    <ul>
+                        <li>解压：<code>tar -xvf Shensist_Core_V4.tar.gz</code></li>
+                        <li>权限：<code>chmod +x install_launcher.sh</code></li>
+                        <li>运行：<code>./install_launcher.sh</code> 脚本会自动创建桌面入口。</li>
+                    </ul>
+                </div>
+                <div class="platform-item">
+                    <strong>🪟 Windows (WSL / 环境方案)</strong>
+                    <ul>
+                        <li>方案 A：安装 WSL2 (Ubuntu)，按照 Linux 步骤执行。</li>
+                        <li>方案 B：安装 Python 3.10+，启动 Windows 版 Ollama。</li>
+                        <li>启动：在解压目录执行 <code>python bin/shensist_gui.py</code>。</li>
+                    </ul>
+                </div>
+                <div class="platform-item">
+                    <strong>🍎 macOS (M1/M2 加速)</strong>
+                    <ul>
+                        <li>环境：安装 macOS 版 Ollama。</li>
+                        <li>运行：在终端进入目录执行 <code>python3 bin/shensist_gui.py</code>。</li>
+                        <li>注意：若遇权限拦截，请在“系统设置 -> 隐私与安全性”手动通过。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="lingzhu-console">
         <div class="console-container-inner">
             <div class="console-controls" style="position: absolute; top:20px; right:20px; display:flex; gap:10px;">
@@ -197,17 +214,32 @@
 
     <script src="db.js"></script>
     <script>
+        // 打字机
         const textStr = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typewriter = document.getElementById('typewriter');
         let idx = 0;
         function type() { if (idx < textStr.length) { typewriter.innerHTML += textStr.charAt(idx); idx++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
-        function handleDownload(e) {
-            document.getElementById('install-guide').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => { alert("🚀 正在下载...\n请查阅 Deployment Protocol 中的全平台指南。"); }, 500);
+        // 弹窗逻辑
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.toggle('active');
+            document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : 'auto';
+        }
+        function closeModals(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
         }
 
+        function handleDownload(e) {
+            toggleModal('platform-modal');
+            setTimeout(() => { alert("🚀 正在下载核心包...\n请根据弹出的全平台指南进行配置。"); }, 500);
+        }
+
+        // 加载数据库卡片
         const container = document.getElementById('dynamic-grid');
         if (typeof appDatabase !== 'undefined') {
             appDatabase.filter(app => app.onHome).forEach(app => {
