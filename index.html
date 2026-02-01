@@ -16,6 +16,7 @@
         body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; line-height: 1.5; scroll-behavior: smooth; }
         body.zen-active { overflow: hidden; }
         body.zen-active .hero h1, body.zen-active .tagline, body.zen-active .stats-bar, body.zen-active .matrix-container, body.zen-active nav, body.zen-active footer { filter: blur(20px); opacity: 0; pointer-events: none; transition: all 0.6s ease; }
+        body.zen-active .lingzhu-trigger-container { z-index: 10001; opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(20px); transition: all 0.5s ease; }
         
         #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%); }
         
@@ -41,33 +42,15 @@
         .lingzhu-box:hover { color: #fff; text-shadow: 0 0 20px var(--accent); border-color: var(--accent); }
         .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: #222; letter-spacing: 3px; font-family: var(--font-tech); }
         
-        /* 弹窗专用样式 */
-        #custom-alert-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            z-index: 20000; display: none; align-items: center; justify-content: center;
-        }
-        #custom-alert {
-            width: 90%; max-width: 500px; background: #0a0a0a;
-            border: 1px solid var(--accent); box-shadow: 0 0 40px var(--accent-glow);
-            border-radius: 20px; padding: 40px 30px; position: relative;
-            transform: translateY(20px); transition: 0.3s;
-        }
-        #custom-alert-overlay.active { display: flex; }
-        #custom-alert h2 { font-family: var(--font-tech); color: var(--accent); margin-bottom: 25px; text-align: center; letter-spacing: 2px; }
-        .alert-content { color: #ccc; font-size: 0.9rem; line-height: 1.8; }
-        .alert-step { margin-bottom: 15px; border-left: 2px solid var(--new-accent); padding-left: 15px; }
-        .alert-step b { color: var(--new-accent); font-family: var(--font-tech); display: block; font-size: 0.7rem; margin-bottom: 4px; }
-        .alert-btn-close { 
-            display: block; width: 100%; margin-top: 30px; background: transparent; 
-            border: 1px solid #333; color: #666; padding: 12px; border-radius: 10px;
-            font-family: var(--font-tech); cursor: pointer; transition: 0.3s;
-        }
-        .alert-btn-close:hover { border-color: var(--accent); color: var(--accent); }
-
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid #111; padding-bottom: 10px; }
         .section-title { font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
+        
+        .guide-box { background: rgba(0, 240, 255, 0.03); border: 1px dashed rgba(0, 240, 255, 0.2); border-radius: 20px; padding: 2rem; margin: 1rem 0 3rem 0; }
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .step-num { font-family: var(--font-tech); color: var(--new-accent); font-size: 1.2rem; margin-bottom: 10px; display: block; }
+        .guide-step h4 { font-family: var(--font-tech); font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); }
+        .guide-step p { font-size: 0.8rem; color: #888; }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
@@ -76,22 +59,57 @@
         .card p { font-size: 0.85rem; color: #888; flex-grow: 1; line-height: 1.6; }
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
         .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
+
+        /* 新增：自定义弹出窗口样式 */
+        #custom-popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            z-index: 20000; display: none; align-items: center; justify-content: center;
+        }
+        #custom-popup-overlay.active { display: flex; }
+        .popup-window {
+            width: 90%; max-width: 500px; background: #0a0a0a;
+            border: 1px solid var(--accent); box-shadow: 0 0 40px var(--accent-glow);
+            border-radius: 20px; padding: 35px; position: relative;
+        }
+        .popup-title { font-family: var(--font-tech); color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .popup-body { color: #ccc; font-size: 0.85rem; line-height: 1.8; }
+        .popup-step { margin-bottom: 15px; }
+        .popup-step b { color: var(--new-accent); display: block; font-family: var(--font-tech); font-size: 0.7rem; }
+        .popup-close-btn { 
+            width: 100%; margin-top: 20px; background: var(--accent); color: #000; 
+            border: none; padding: 12px; border-radius: 8px; font-family: var(--font-tech);
+            font-weight: 900; cursor: pointer; text-transform: uppercase;
+        }
         
         #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; flex-direction: column; }
         #lingzhu-console.active { display: flex; }
         .console-container-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px; position: relative; }
+        
         .console-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100; }
         .neumorphic-btn { font-family: var(--font-tech); font-size: 10px; cursor: pointer; border-radius: 8px; padding: 6px 12px; border: 1px solid #222; background: #000; color: #666; transition: 0.2s; white-space: nowrap; }
+        
         .console-header { margin-bottom: 1rem; text-align: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 40px 0 1rem 0; flex-shrink: 0; }
         .console-title { font-size: clamp(1.2rem, 5vw, 1.8rem); letter-spacing: 10px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; text-shadow: 0 0 15px var(--accent-glow); }
+        .console-subtitle { font-size: 0.6rem; color: #444; margin-top: 5px; text-transform: uppercase; font-family: var(--font-tech); letter-spacing: 3px; }
+        
         .console-stream { flex-grow: 1; overflow-y: auto; padding: 10px 5%; margin-bottom: 10px; }
+        
+        .style-deck { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5px; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; flex-shrink: 0; }
+        .style-deck::-webkit-scrollbar { display: none; }
+        .style-btn { background: #0a0a0a; border: 1px solid #222; color: #555; padding: 8px 18px; border-radius: 30px; font-size: 9px; font-family: var(--font-tech); cursor: pointer; flex-shrink: 0; transition: 0.3s; text-transform: uppercase; }
+        .style-btn.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        
         .console-input-area { display: flex; gap: 10px; background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; margin-bottom: env(safe-area-inset-bottom); }
         #console-input { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 1rem; width: 50%; }
         #console-send-btn { background: var(--accent); color: #000; border: none; padding: 0 20px; border-radius: 10px; font-weight: 900; font-family: var(--font-tech); cursor: pointer; font-size: 0.7rem; white-space: nowrap; }
 
         @media (max-width: 768px) {
             .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .lingzhu-box { letter-spacing: 6px; min-height: 20vh; border-radius: 30px; }
             .console-controls { width: 100%; right: 0; left: 0; justify-content: center; top: 15px; padding: 0 10px; }
+            .neumorphic-btn { font-size: 8px; padding: 5px 8px; }
+            .console-stream { padding: 10px; }
             .matrix-container { padding: 1rem 5%; }
         }
     </style>
@@ -99,11 +117,11 @@
 <body>
     <canvas id="canvas-bg"></canvas>
 
-    <div id="custom-alert-overlay" onclick="closeAlert()">
-        <div id="custom-alert" onclick="event.stopPropagation()">
-            <h2 id="alert-title">PROTOCOL</h2>
-            <div class="alert-content" id="alert-msg"></div>
-            <button class="alert-btn-close" onclick="closeAlert()">TERMINATE OVERLAY</button>
+    <div id="custom-popup-overlay">
+        <div class="popup-window">
+            <div class="popup-title" id="pop-title">PROTOCOL</div>
+            <div class="popup-body" id="pop-body"></div>
+            <button class="popup-close-btn" onclick="closePopup()">Confirm & Close</button>
         </div>
     </div>
 
@@ -111,7 +129,6 @@
         <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> 
         <a href="Shensist_Core_V4_Final.tar.gz" class="nav-download" onclick="handleDownload(event)">Download Desktop v4.0</a>
     </nav>
-
     <header class="hero">
         <h1>Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
@@ -127,6 +144,29 @@
     </header>
 
     <main class="matrix-container">
+        <div class="section-header" id="install-guide">
+            <div class="section-title" style="color:var(--new-accent); border-color:var(--new-accent)">V4.0 DEPLOYMENT PROTOCOL</div>
+        </div>
+        <div class="guide-box">
+            <div class="guide-grid">
+                <div class="guide-step">
+                    <span class="step-num">01</span>
+                    <h4>环境准备 / ENV</h4>
+                    <p>确保系统为 Ubuntu/Linux，安装 <code>Ollama</code> 引擎。推荐 NVIDIA 1050Ti+。</p>
+                </div>
+                <div class="guide-step">
+                    <span class="step-num">02</span>
+                    <h4>解压与安装 / SETUP</h4>
+                    <p>解压并执行脚本：<br><code>bash install_launcher.sh</code></p>
+                </div>
+                <div class="guide-step">
+                    <span class="step-num">03</span>
+                    <h4>授权运行 / LAUNCH</h4>
+                    <p>右键图标选择 <b>"Allow Launching"</b> 即可双击启动。</p>
+                </div>
+            </div>
+        </div>
+
         <div class="section-header"><div class="section-title">SYSTEM MATRIX</div></div>
         <div class="grid">
             <a href="https://ai.shensist.top" class="card"><h3>TianSuan AI</h3><p>Digital Assets Hub & PWA Matrix. Access the Music Engine.</p><div class="card-footer">Enter Hub →</div></a>
@@ -145,21 +185,30 @@
     <div id="lingzhu-console">
         <div class="console-container-inner">
             <div class="console-controls">
-                <div class="neumorphic-btn" onclick="showGuide()">[ ? GUIDE ]</div>
+                <div class="neumorphic-btn" onclick="openInstallPopup('SYSTEM GUIDE')">[ ? GUIDE ]</div>
                 <div class="neumorphic-btn" onclick="SIOS.reset()">[ ↻ REBOOT ]</div>
                 <div class="neumorphic-btn" onclick="deactivateLingZhu()">[ ✕ CLOSE ]</div>
             </div>
             <div class="console-header">
                 <div class="console-title">[ 灵 珠 · SI-OS ]</div>
+                <div class="console-subtitle">端侧超级个体认知中枢</div>
             </div>
             <div class="console-stream" id="console-output"></div>
+            
             <div class="style-deck">
                 <button class="style-btn" onclick="setMasterStyle(this, 'Cinematic')">Cinematic</button>
+                <button class="style-btn" onclick="setMasterStyle(this, 'Anime')">Anime</button>
                 <button class="style-btn" onclick="setMasterStyle(this, 'Cyberpunk')">Cyberpunk</button>
+                <button class="style-btn" onclick="setMasterStyle(this, 'Sitcom')">Sitcom</button>
+                <button class="style-btn" onclick="setMasterStyle(this, 'Handheld')">Handheld</button>
+                <button class="style-btn" onclick="setMasterStyle(this, 'Fancam')">Fancam</button>
+                <button class="style-btn" onclick="setMasterStyle(this, 'Ghibli')">Ghibli</button>
                 <button class="style-btn" onclick="setMasterStyle(this, 'Noir')">Noir</button>
+                <button class="style-btn" onclick="setMasterStyle(this, 'Golden')">Golden</button>
             </div>
+            
             <div class="console-input-area">
-                <input type="text" id="console-input" placeholder="输入主题..." autocomplete="off">
+                <input type="text" id="console-input" placeholder="输入你的主题..." autocomplete="off">
                 <button id="console-send-btn" onclick="SIOS.handleInput(document.getElementById('console-input').value)">[ ✦ MATERIALIZE ]</button>
             </div>
         </div>
@@ -167,45 +216,37 @@
 
     <script src="db.js"></script>
     <script>
-        // 打字机逻辑
         const text = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typewriter = document.getElementById('typewriter');
         let i = 0;
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
-        // 弹窗逻辑中心化
-        function showAlert(title, steps) {
-            document.getElementById('alert-title').innerText = title;
-            let html = '';
-            steps.forEach(step => {
-                html += `<div class="alert-step"><b>${step.label}</b>${step.desc}</div>`;
-            });
-            document.getElementById('alert-msg').innerHTML = html;
-            document.getElementById('custom-alert-overlay').classList.add('active');
-        }
-        function closeAlert() {
-            document.getElementById('custom-alert-overlay').classList.remove('active');
+        // 新增：弹出窗口逻辑
+        function openInstallPopup(title) {
+            const content = `
+                <div class="popup-step"><b>01. ENV / 环境</b>确保 Ubuntu/Linux 系统已安装 Ollama 引擎。</div>
+                <div class="popup-step"><b>02. SETUP / 安装</b>解压包后执行 bash install_launcher.sh 脚本。</div>
+                <div class="popup-step"><b>03. LAUNCH / 启动</b>右键图标选择 "Allow Launching" 即可运行。</div>
+                <p style="color:var(--accent); font-size:10px; margin-top:10px;">* 详细步骤已同步定位至页面下方说明区。</p>
+            `;
+            document.getElementById('pop-title').innerText = title;
+            document.getElementById('pop-body').innerHTML = content;
+            document.getElementById('custom-popup-overlay').classList.add('active');
         }
 
-        const DEPLOY_STEPS = [
-            { label: "STEP 01: ENVIRONMENT", desc: "确保系统为 Ubuntu/Linux，安装 Ollama 引擎。推荐 NVIDIA 1050Ti+。" },
-            { label: "STEP 02: SETUP", desc: "解压下载包，在终端执行命令：<code>bash install_launcher.sh</code>" },
-            { label: "STEP 03: AUTHORIZE", desc: "在桌面右键图标选择 <b>'Allow Launching'</b> 即可完成授权启动。" }
-        ];
+        function closePopup() {
+            document.getElementById('custom-popup-overlay').classList.remove('active');
+        }
 
-        // 1. 下载按钮触发：弹出说明
+        // 修改：点击下载时，先滚动，再弹出美化窗口
         function handleDownload(e) {
-            showAlert("DEPLOYMENT PROTOCOL V4.0", DEPLOY_STEPS);
-            // 这里可以继续执行下载，或者让用户看完说明再下载
+            document.getElementById('install-guide').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                openInstallPopup('DOWNLOAD INITIATED');
+            }, 600);
         }
 
-        // 2. 控制台帮助按钮触发：弹出相同说明
-        function showGuide() {
-            showAlert("SI-OS OPERATING GUIDE", DEPLOY_STEPS);
-        }
-
-        // 动态网格加载
         const container = document.getElementById('dynamic-grid');
         if (typeof appDatabase !== 'undefined') {
             appDatabase.filter(app => app.onHome).forEach(app => {
@@ -221,9 +262,19 @@
             document.getElementById('lingzhu-console').classList.add('active'); 
             if(window.SIOS) SIOS.init(); 
         }
+        
         function deactivateLingZhu() { 
             document.body.classList.remove('zen-active'); 
             document.getElementById('lingzhu-console').classList.remove('active'); 
+        }
+
+        function setMasterStyle(btn, style) {
+            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if(window.SIOS) {
+                SIOS.state.sharedContext.masterStyle = style;
+                SIOS.ui.log(`[STYLE LOCKED]: ${style}`, "sys");
+            }
         }
     </script>
     <script src="js/core.js"></script>
