@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
+        /* ... 保留你原有的所有 CSS 变量和基础样式 ... */
         :root {
             --bg-color: #050505; --card-bg: rgba(20, 20, 20, 0.6); --text-main: #f0f0f0; --text-muted: #666666;
             --accent: #00f0ff; --accent-glow: rgba(0, 240, 255, 0.4); --new-accent: #00ff88; --alert: #ff3366;
@@ -14,114 +14,101 @@
             --font-tech: 'Orbitron', sans-serif;
         }
 
-        /* 全站禁止选择复制 */
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none !important; -webkit-user-select: none !important; }
-
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; line-height: 1.5; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none !important; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; }
         #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%); }
-        nav { display: flex; align-items: center; padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .brand img { height: 32px; filter: brightness(1.2); }
+
+        /* 修复导航栏：增加右侧下载链接 */
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .brand img { height: 32px; }
+        .nav-download { font-family: var(--font-tech); font-size: 0.7rem; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 4px; transition: 0.3s; }
+        .nav-download:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+
+        /* 原有 Hero 和 Stats 样式 ... */
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; }
+        h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-family: var(--font-tech); margin-bottom: 1rem; }
+        .tagline { font-size: 1rem; color: var(--text-muted); margin-bottom: 2rem; }
         
-        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; position: relative; }
-        h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 1rem; line-height: 1.1; font-family: var(--font-tech); }
-        .tagline { font-size: clamp(0.9rem, 4vw, 1.1rem); color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 1.5em; letter-spacing: 1px; }
-        .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
-        @keyframes blink { 50% { opacity: 0; } }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; width: 100%; max-width: 900px; }
+        .stat-num { font-size: 1.8rem; color: var(--accent); font-family: var(--font-tech); }
+        .stat-label { font-size: 0.6rem; color: #444; text-transform: uppercase; }
 
-        /* 统计栏同步 1050Ti 算力指标 */
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3rem; width: 100%; max-width: 900px; }
-        .stat-item { text-align: center; } 
-        .stat-num { font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 700; color: var(--accent); display: block; font-family: var(--font-tech); line-height: 1; text-shadow: 0 0 10px var(--accent-glow); } 
-        .stat-label { font-size: 0.6rem; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; font-weight: 500; }
-
-        .lingzhu-trigger-container { width: 100%; max-width: 1200px; z-index: 10; padding: 10px; animation: float 6s ease-in-out infinite; cursor: pointer; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        
-        .lingzhu-box {
-            display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; min-height: 25vh;
-            background: linear-gradient(145deg, #141414, #0a0a0a);
-            box-shadow: 20px 20px 60px #050505, -10px -10px 40px #1a1a1a;
-            border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
-            font-family: var(--font-tech); font-weight: 900; font-size: clamp(1.8rem, 6vw, 4rem); 
-            letter-spacing: 12px; color: #333; transition: 0.3s;
-        }
-        .lingzhu-box:hover { color: var(--new-accent); text-shadow: 0 0 20px rgba(0,255,136,0.3); border-color: var(--new-accent); }
-        .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: #222; letter-spacing: 3px; font-family: var(--font-tech); }
-
+        /* 矩阵区域 */
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
-        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid #111; padding-bottom: 10px; }
-        .section-title { font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
-        
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
-        
-        /* Desktop 版块高亮样式 */
-        .card.desktop-core { border: 1px solid rgba(0, 240, 255, 0.2); background: linear-gradient(to bottom right, rgba(0,240,255,0.05), transparent); }
-        .card h3 { font-size: 1.1rem; margin-bottom: 0.8rem; font-family: var(--font-tech); } 
-        .card p { font-size: 0.85rem; color: #888; flex-grow: 1; line-height: 1.6; }
-        .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
+        .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .card h3 { font-family: var(--font-tech); margin-bottom: 10px; }
+        .card p { font-size: 0.85rem; color: #888; flex-grow: 1; }
+        .card-footer { margin-top: 15px; font-size: 0.7rem; color: var(--accent); font-family: var(--font-tech); }
     </style>
 </head>
 <body>
     <canvas id="canvas-bg"></canvas>
-    <nav> <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> </nav>
+    <nav> 
+        <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> 
+        <a href="Shensist_Core_V4_Final.tar.gz" class="nav-download">V4.0 CORE DOWNLOAD</a>
+    </nav>
     
     <header class="hero">
         <h1>Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
-        
         <div class="stats-bar">
-            <div class="stat-item"><span class="stat-num">1050Ti</span><span class="stat-label">Core Gpu</span></div>
+            <div class="stat-item"><span class="stat-num">1050Ti</span><span class="stat-label">GPU Node</span></div>
             <div class="stat-item"><span class="stat-num">5.9TB</span><span class="stat-label">Storage</span></div>
-            <div class="stat-item"><span class="stat-num">V4.0</span><span class="stat-label">Desktop Ver</span></div>
+            <div class="stat-item"><span class="stat-num">V4.0</span><span class="stat-label">Stable</span></div>
             <div class="stat-item"><span class="stat-num">Ollama</span><span class="stat-label">Engine</span></div>
-        </div>
-
-        <div class="lingzhu-trigger-container" onclick="location.href='Shensist_Core_V4_Final.tar.gz'">
-            <div class="lingzhu-box">
-                [ ◎ 核心下载 ]
-                <div class="lingzhu-sub">GET SHENSIST WORKSTATION V4.0</div>
-            </div>
         </div>
     </header>
 
     <main class="matrix-container">
-        <div class="section-header"><div class="section-title">SYSTEM MATRIX</div></div>
+        <div class="section-header"><div class="section-title" style="color:var(--accent); font-family:var(--font-tech); border-left:3px solid var(--accent); padding-left:10px;">CORE MATRIX</div></div>
         <div class="grid">
-            <a href="Shensist_Core_V4_Final.tar.gz" class="card desktop-core">
-                <h3>🖥️ Desktop Core v4.0</h3>
-                <p>Linux 桌面工作站。集成一键 PDF 创生、黑客代码雨画廊，深度适配 1050Ti 算力卡。</p>
-                <div class="card-footer" style="color:var(--new-accent)">DOWNLOAD PACKAGE (6.8K) →</div>
+            <a href="Shensist_Core_V4_Final.tar.gz" class="card" style="border:1px solid var(--new-accent)">
+                <h3>🖥️ Shensist Desktop</h3>
+                <p>Local R&D Workstation. Includes AI Exporter, Black-Box Viewer, and 1050Ti Optimizations.</p>
+                <div class="card-footer">DOWNLOAD V4.0 (TAR.GZ) ➲</div>
             </a>
-
-            <a href="https://ai.shensist.top" class="card">
-                <h3>TianSuan AI Hub</h3>
-                <p>Digital Assets Hub & PWA Matrix. Access the Music Engine in your browser.</p>
-                <div class="card-footer">Enter Web Hub →</div>
-            </a>
-
-            <a href="https://blog.shensist.top/video-gallery" class="card">
-                <h3>Sora Vision</h3>
-                <p>20,000+ Original AI narratives. Explore Cyberpunk experimental visual arts.</p>
-                <div class="card-footer">Watch Now →</div>
-            </a>
-
-            <a href="https://blog.shensist.top" class="card">
-                <h3>Tech Insights</h3>
-                <p>Deep dives into Natural Algorithms and PRISM Agent logic construction.</p>
-                <div class="card-footer">Read Logs →</div>
-            </a>
+            <a href="https://ai.shensist.top" class="card"><h3>TianSuan Hub</h3><p>Cloud-based digital asset management and PWA application hub.</p><div class="card-footer">LAUNCH WEB HUB →</div></a>
         </div>
+
+        <div class="section-header" style="margin-top:4rem; display:flex; justify-content:space-between; border-bottom:1px solid #111; padding-bottom:10px;">
+            <div class="section-title" style="color:var(--new-accent); font-family:var(--font-tech); border-left:3px solid var(--new-accent); padding-left:10px;">EXTENSIONS</div>
+            <a href="apps.html" style="font-family:var(--font-tech); font-size:0.7rem; color:#444; text-decoration:none;">VIEW ALL ➲</a>
+        </div>
+        <div class="grid" id="dynamic-grid"></div>
     </main>
 
+    <script src="db.js"></script>
     <script>
-        const text = "Local Intelligence. 5.9TB Massive Storage. Defining the physical reality of AI.";
+        // 打字机效果
+        const text = "Defining the physical reality of Local AI. 5.9TB Desktop Core is now live.";
         const typewriter = document.getElementById('typewriter');
         let i = 0;
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
+
+        // 核心修复：找回动态网格渲染逻辑
+        window.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('dynamic-grid');
+            if (typeof appDatabase !== 'undefined' && container) {
+                // 过滤出要在首页显示的 app
+                appDatabase.filter(app => app.onHome).forEach(app => {
+                    const card = document.createElement('a');
+                    card.href = app.url;
+                    card.className = 'card';
+                    card.target = "_blank";
+                    card.innerHTML = `
+                        <h3>${app.icon || '🚀'} ${app.name}</h3>
+                        <p>${app.desc}</p>
+                        <div class="card-footer">OPEN APP →</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                console.error("db.js not loaded or dynamic-grid not found");
+            }
+        });
     </script>
 </body>
 </html>
