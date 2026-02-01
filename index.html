@@ -59,7 +59,6 @@
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
         .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
 
-        /* 版权底部样式 */
         footer { padding: 4rem 5% 2rem; text-align: center; border-top: 1px solid #111; margin-top: 4rem; }
         .footer-brand { font-family: var(--font-tech); font-size: 0.8rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 10px; }
         .footer-copy { font-size: 0.6rem; color: #333; letter-spacing: 1px; text-transform: uppercase; }
@@ -71,16 +70,17 @@
         }
         #custom-popup-overlay.active { display: flex; }
         .popup-window {
-            width: 90%; max-width: 500px; background: #0a0a0a;
+            width: 90%; max-width: 600px; background: #0a0a0a;
             border: 1px solid var(--accent); box-shadow: 0 0 40px var(--accent-glow);
-            border-radius: 20px; padding: 35px; position: relative;
+            border-radius: 20px; padding: 30px; position: relative; max-height: 85vh; overflow-y: auto;
         }
-        .popup-title { font-family: var(--font-tech); color: var(--accent); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
-        .popup-body { color: #ccc; font-size: 0.85rem; line-height: 1.8; }
-        .popup-step { margin-bottom: 15px; }
-        .popup-step b { color: var(--new-accent); display: block; font-family: var(--font-tech); font-size: 0.7rem; margin-bottom: 4px; }
+        .popup-title { font-family: var(--font-tech); color: var(--accent); font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; text-align: center; }
+        .popup-body { color: #ccc; font-size: 0.85rem; line-height: 1.7; }
+        .popup-section { margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; }
+        .popup-section h5 { color: var(--new-accent); font-family: var(--font-tech); margin-bottom: 8px; font-size: 0.9rem; border-left: 3px solid var(--new-accent); padding-left: 10px; }
+        .popup-body code { background: #000; color: var(--accent); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
         .popup-close-btn { 
-            width: 100%; margin-top: 20px; background: var(--accent); color: #000; 
+            width: 100%; margin-top: 10px; background: var(--accent); color: #000; 
             border: none; padding: 12px; border-radius: 8px; font-family: var(--font-tech);
             font-weight: 900; cursor: pointer; text-transform: uppercase;
         }
@@ -88,21 +88,16 @@
         #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; flex-direction: column; }
         #lingzhu-console.active { display: flex; }
         .console-container-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px; position: relative; }
-        
         .console-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100; }
         .neumorphic-btn { font-family: var(--font-tech); font-size: 10px; cursor: pointer; border-radius: 8px; padding: 6px 12px; border: 1px solid #222; background: #000; color: #666; transition: 0.2s; white-space: nowrap; }
-        
         .console-header { margin-bottom: 1rem; text-align: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 40px 0 1rem 0; flex-shrink: 0; }
         .console-title { font-size: clamp(1.2rem, 5vw, 1.8rem); letter-spacing: 10px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; text-shadow: 0 0 15px var(--accent-glow); }
         .console-subtitle { font-size: 0.6rem; color: #444; margin-top: 5px; text-transform: uppercase; font-family: var(--font-tech); letter-spacing: 3px; }
-        
         .console-stream { flex-grow: 1; overflow-y: auto; padding: 10px 5%; margin-bottom: 10px; }
-        
-        .style-deck { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5px; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; flex-shrink: 0; }
+        .style-deck { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5px; margin-bottom: 10px; scrollbar-width: none; flex-shrink: 0; }
         .style-deck::-webkit-scrollbar { display: none; }
         .style-btn { background: #0a0a0a; border: 1px solid #222; color: #555; padding: 8px 18px; border-radius: 30px; font-size: 9px; font-family: var(--font-tech); cursor: pointer; flex-shrink: 0; transition: 0.3s; text-transform: uppercase; }
         .style-btn.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-        
         .console-input-area { display: flex; gap: 10px; background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; margin-bottom: env(safe-area-inset-bottom); }
         #console-input { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 1rem; width: 50%; }
         #console-send-btn { background: var(--accent); color: #000; border: none; padding: 0 20px; border-radius: 10px; font-weight: 900; font-family: var(--font-tech); cursor: pointer; font-size: 0.7rem; white-space: nowrap; }
@@ -112,7 +107,6 @@
             .lingzhu-box { letter-spacing: 6px; min-height: 20vh; border-radius: 30px; }
             .console-controls { width: 100%; right: 0; left: 0; justify-content: center; top: 15px; padding: 0 10px; }
             .neumorphic-btn { font-size: 8px; padding: 5px 8px; }
-            .console-stream { padding: 10px; }
             .matrix-container { padding: 1rem 5%; }
         }
     </style>
@@ -122,16 +116,17 @@
 
     <div id="custom-popup-overlay">
         <div class="popup-window">
-            <div class="popup-title" id="pop-title">PROTOCOL</div>
+            <div class="popup-title" id="pop-title">INSTALLATION GUIDE</div>
             <div class="popup-body" id="pop-body"></div>
-            <button class="popup-close-btn" onclick="closePopup()">Confirm & Close</button>
+            <button class="popup-close-btn" onclick="closePopup()">Confirm & Start Download</button>
         </div>
     </div>
 
     <nav> 
         <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> 
-        <a href="Shensist_Core_V4_Final.tar.gz" class="nav-download" onclick="handleDownload(event)">Download Desktop v4.0</a>
+        <a href="javascript:void(0)" class="nav-download" onclick="openTechGuide()">Download Desktop v4.0</a>
     </nav>
+
     <header class="hero">
         <h1>Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
@@ -190,7 +185,7 @@
     <div id="lingzhu-console">
         <div class="console-container-inner">
             <div class="console-controls">
-                <div class="neumorphic-btn" onclick="openInstallPopup('SYSTEM GUIDE')">[ ? GUIDE ]</div>
+                <div class="neumorphic-btn" onclick="openTechGuide()">[ ? GUIDE ]</div>
                 <div class="neumorphic-btn" onclick="SIOS.reset()">[ ↻ REBOOT ]</div>
                 <div class="neumorphic-btn" onclick="deactivateLingZhu()">[ ✕ CLOSE ]</div>
             </div>
@@ -225,22 +220,38 @@
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
-        function openInstallPopup(title) {
+        // 核心弹窗逻辑：展示详细安装教程
+        function openTechGuide() {
+            const title = "神思庭 V4.0 全平台详细安装教程";
             const content = `
-                <div class="popup-step"><b>ENV / 环境准备</b>确保 Ubuntu/Linux 系统已安装 Ollama 引擎。推荐 NVIDIA 1050Ti+。</div>
-                <div class="popup-step"><b>SETUP / 解压安装</b>解压包后执行 bash install_launcher.sh 脚本。</div>
-                <div class="popup-step"><b>LAUNCH / 授权启动</b>右键图标选择 "Allow Launching" 即可运行。</div>
+                <div class="popup-section">
+                    <h5>A. Linux 环境 (原生支持，性能最佳)</h5>
+                    <p><b>准备：</b>安装 Ollama 并确保后台运行 <code>ollama serve</code>。</p>
+                    <p><b>解压：</b><code>tar -xzvf Shensist_Core_V4_Final.tar.gz</code></p>
+                    <p><b>安装：</b>在文件夹内终端执行 <code>bash install_launcher.sh</code>。</p>
+                    <p><b>启动：</b>右键桌面图标点击“允许启动”后双击运行。</p>
+                </div>
+                <div class="popup-section">
+                    <h5>B. Windows 环境 (兼容方案)</h5>
+                    <p><b>方案一 (推荐)：</b>安装 WSL2 (Ubuntu)，按 Linux 步骤执行。</p>
+                    <p><b>方案二 (原生)：</b>安装 Python 3.10+、Ollama Windows版。执行 <code>pip install requests</code>。在地址栏输入 <code>cmd</code> 后运行 <code>python bin/shensist_gui.py</code>。</p>
+                </div>
+                <div class="popup-section">
+                    <h5>C. macOS 环境 (苹果芯片支持)</h5>
+                    <p><b>环境：</b>安装 Ollama Mac版。建议通过 Brew 更新 Python。</p>
+                    <p><b>运行：</b>进入目录执行 <code>python3 bin/shensist_gui.py</code>。</p>
+                    <p><b>提示：</b>权限限制无法自动创建快捷方式，建议手动将脚本拖入 Dock 栏。</p>
+                </div>
             `;
             document.getElementById('pop-title').innerText = title;
             document.getElementById('pop-body').innerHTML = content;
             document.getElementById('custom-popup-overlay').classList.add('active');
         }
 
-        function closePopup() { document.getElementById('custom-popup-overlay').classList.remove('active'); }
-
-        function handleDownload(e) {
-            document.getElementById('install-guide').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => { openInstallPopup('DOWNLOAD INITIATED'); }, 600);
+        function closePopup() {
+            document.getElementById('custom-popup-overlay').classList.remove('active');
+            // 关闭弹窗后可以执行实际下载，如果需要的话：
+            // window.location.href = 'Shensist_Core_V4_Final.tar.gz';
         }
 
         const container = document.getElementById('dynamic-grid');
