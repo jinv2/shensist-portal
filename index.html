@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ShenSiST | Natural Algorithm AI R&D Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
-        /* ... 保留你原有的所有 CSS 变量和基础样式 ... */
         :root {
             --bg-color: #050505; --card-bg: rgba(20, 20, 20, 0.6); --text-main: #f0f0f0; --text-muted: #666666;
             --accent: #00f0ff; --accent-glow: rgba(0, 240, 255, 0.4); --new-accent: #00ff88; --alert: #ff3366;
@@ -14,101 +14,208 @@
             --font-tech: 'Orbitron', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none !important; }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; }
+        /* 全站禁止选择复制 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none !important; -webkit-user-select: none !important; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: var(--font-main); overflow-x: hidden; line-height: 1.5; }
+
+        body.zen-active { overflow: hidden; }
+        body.zen-active .hero h1, body.zen-active .tagline, body.zen-active .stats-bar, body.zen-active .matrix-container, body.zen-active nav, body.zen-active footer { filter: blur(20px); opacity: 0; pointer-events: none; transition: all 0.6s ease; }
+        body.zen-active .lingzhu-trigger-container { z-index: 10001; opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(20px); transition: all 0.5s ease; }
+
         #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 120%); }
-
-        /* 修复导航栏：增加右侧下载链接 */
-        nav { display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .brand img { height: 32px; }
-        .nav-download { font-family: var(--font-tech); font-size: 0.7rem; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 4px; transition: 0.3s; }
-        .nav-download:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
-
-        /* 原有 Hero 和 Stats 样式 ... */
-        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; }
-        h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-family: var(--font-tech); margin-bottom: 1rem; }
-        .tagline { font-size: 1rem; color: var(--text-muted); margin-bottom: 2rem; }
         
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; width: 100%; max-width: 900px; }
-        .stat-num { font-size: 1.8rem; color: var(--accent); font-family: var(--font-tech); }
-        .stat-label { font-size: 0.6rem; color: #444; text-transform: uppercase; }
+        /* 导航栏修改：增加 justify-content 使下载按钮靠右 */
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .brand img { height: 32px; filter: brightness(1.2); }
+        
+        /* 右上角下载按钮样式 */
+        .nav-download { 
+            font-family: var(--font-tech); 
+            font-size: 10px; 
+            color: var(--accent); 
+            text-decoration: none; 
+            border: 1px solid var(--accent); 
+            padding: 5px 12px; 
+            border-radius: 4px; 
+            transition: 0.3s; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .nav-download:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+        
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; position: relative; }
+        h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 1rem; line-height: 1.1; font-family: var(--font-tech); }
+        .tagline { font-size: clamp(0.9rem, 4vw, 1.1rem); color: var(--text-muted); max-width: 800px; margin-bottom: 2rem; min-height: 1.5em; letter-spacing: 1px; }
+        .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); margin-left: 5px; animation: blink 1s step-end infinite; vertical-align: middle; }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        /* 矩阵区域 */
+        /* 蓝色指标栏 */
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3rem; width: 100%; max-width: 900px; }
+        .stat-item { text-align: center; } 
+        .stat-num { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; color: var(--accent); display: block; font-family: var(--font-tech); line-height: 1; text-shadow: 0 0 10px var(--accent-glow); } 
+        .stat-label { font-size: 0.65rem; color: #444; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; font-weight: 500; }
+
+        .lingzhu-trigger-container { width: 100%; max-width: 1200px; z-index: 10; padding: 10px; animation: float 6s ease-in-out infinite; cursor: pointer; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        
+        .lingzhu-box {
+            display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%; min-height: 25vh;
+            background: linear-gradient(145deg, #141414, #0a0a0a);
+            box-shadow: 20px 20px 60px #050505, -10px -10px 40px #1a1a1a;
+            border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+            font-family: var(--font-tech); font-weight: 900; font-size: clamp(1.8rem, 6vw, 4rem); 
+            letter-spacing: 12px; color: #333; transition: 0.3s;
+        }
+        .lingzhu-box:hover { color: #fff; text-shadow: 0 0 20px var(--accent); border-color: var(--accent); }
+        .lingzhu-sub { margin-top: 15px; font-size: 0.7rem; color: #222; letter-spacing: 3px; font-family: var(--font-tech); }
+
         .matrix-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; margin-top: 3rem; border-bottom: 1px solid #111; padding-bottom: 10px; }
+        .section-title { font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); letter-spacing: 2px; border-left: 3px solid var(--accent); padding-left: 10px; }
+        .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; display: flex; flex-direction: column; }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .card h3 { font-family: var(--font-tech); margin-bottom: 10px; }
-        .card p { font-size: 0.85rem; color: #888; flex-grow: 1; }
-        .card-footer { margin-top: 15px; font-size: 0.7rem; color: var(--accent); font-family: var(--font-tech); }
+        .card { background: var(--card-bg); border: 1px solid #151515; border-radius: 16px; padding: 1.5rem; text-decoration: none; color: white; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
+        .card h3 { font-size: 1.1rem; margin-bottom: 0.8rem; font-family: var(--font-tech); } 
+        .card p { font-size: 0.85rem; color: #888; flex-grow: 1; line-height: 1.6; }
+        .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
+
+        /* 战情室控制台 */
+        #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; }
+        #lingzhu-console.active { display: flex; }
+        .console-container-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px; position: relative; }
+        
+        .console-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; z-index: 100; }
+        .neumorphic-btn { font-family: var(--font-tech); font-size: 10px; cursor: pointer; border-radius: 8px; padding: 6px 12px; border: 1px solid #222; background: #000; color: #666; transition: 0.2s; }
+        .neumorphic-btn:active { border-color: var(--accent); color: var(--accent); }
+        
+        .console-header { margin-bottom: 1rem; text-align: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; flex-shrink: 0; }
+        .console-title { font-size: 1.8rem; letter-spacing: 10px; color: var(--accent); font-family: var(--font-tech); font-weight: 900; text-shadow: 0 0 15px var(--accent-glow); }
+        .console-subtitle { font-size: 0.7rem; color: #444; margin-top: 5px; text-transform: uppercase; font-family: var(--font-tech); letter-spacing: 3px; }
+
+        .console-stream { flex-grow: 1; overflow-y: auto; padding: 20px 40px; }
+
+        .style-deck { display: flex; gap: 10px; overflow-x: auto; padding: 15px 0; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; }
+        .style-deck::-webkit-scrollbar { display: none; }
+        .style-btn { background: #0a0a0a; border: 1px solid #222; color: #555; padding: 10px 22px; border-radius: 30px; font-size: 10px; font-family: var(--font-tech); cursor: pointer; flex-shrink: 0; transition: 0.3s; text-transform: uppercase; }
+        .style-btn.active { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+
+        .console-input-area { display: flex; gap: 15px; background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+        #console-input { flex-grow: 1; background: transparent; border: none; color: #fff; outline: none; font-size: 1.1rem; }
+        #console-send-btn { background: var(--accent); color: #000; border: none; padding: 0 30px; border-radius: 12px; font-weight: 900; font-family: var(--font-tech); cursor: pointer; }
+
+        @media (max-width: 768px) { 
+            .grid { grid-template-columns: 1fr; }
+            .console-header { padding-top: 60px; } 
+            .console-title { font-size: 1.1rem; letter-spacing: 4px; }
+            .console-subtitle { font-size: 0.6rem; letter-spacing: 2px; }
+            .console-controls { width: 100%; right: 0; left: 0; justify-content: center; top: 15px; }
+            .console-container-inner { padding: 10px; }
+            .console-input-area { flex-direction: column; }
+            #console-send-btn { width: 100%; height: 50px; }
+            .console-stream { padding: 10px; }
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas-bg"></canvas>
     <nav> 
         <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> 
-        <a href="Shensist_Core_V4_Final.tar.gz" class="nav-download">V4.0 CORE DOWNLOAD</a>
+        <a href="Shensist_Core_V4_Final.tar.gz" class="nav-download">Download Desktop v4.0</a>
     </nav>
     
     <header class="hero">
         <h1>Natural Algorithm</h1>
         <div class="tagline"><span id="typewriter"></span><span class="cursor"></span></div>
         <div class="stats-bar">
-            <div class="stat-item"><span class="stat-num">1050Ti</span><span class="stat-label">GPU Node</span></div>
-            <div class="stat-item"><span class="stat-num">5.9TB</span><span class="stat-label">Storage</span></div>
-            <div class="stat-item"><span class="stat-num">V4.0</span><span class="stat-label">Stable</span></div>
-            <div class="stat-item"><span class="stat-num">Ollama</span><span class="stat-label">Engine</span></div>
+            <div class="stat-item"><span class="stat-num">20K+</span><span class="stat-label">AI Videos</span></div>
+            <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">PWA Apps</span></div>
+            <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Agents</span></div>
+            <div class="stat-item"><span class="stat-num">7KM</span><span class="stat-label">AI Symphony</span></div>
+        </div>
+        <div class="lingzhu-trigger-container" onclick="activateLingZhu()">
+            <div class="lingzhu-box">[ ◎ 灵 珠 ]<div class="lingzhu-sub">ACTIVATE SI-OS CORE</div></div>
         </div>
     </header>
 
     <main class="matrix-container">
-        <div class="section-header"><div class="section-title" style="color:var(--accent); font-family:var(--font-tech); border-left:3px solid var(--accent); padding-left:10px;">CORE MATRIX</div></div>
+        <div class="section-header"><div class="section-title">SYSTEM MATRIX</div></div>
         <div class="grid">
-            <a href="Shensist_Core_V4_Final.tar.gz" class="card" style="border:1px solid var(--new-accent)">
-                <h3>🖥️ Shensist Desktop</h3>
-                <p>Local R&D Workstation. Includes AI Exporter, Black-Box Viewer, and 1050Ti Optimizations.</p>
-                <div class="card-footer">DOWNLOAD V4.0 (TAR.GZ) ➲</div>
-            </a>
-            <a href="https://ai.shensist.top" class="card"><h3>TianSuan Hub</h3><p>Cloud-based digital asset management and PWA application hub.</p><div class="card-footer">LAUNCH WEB HUB →</div></a>
+            <a href="https://ai.shensist.top" class="card"><h3>TianSuan AI</h3><p>Digital Assets Hub & PWA Matrix. Access the Music Engine.</p><div class="card-footer">Enter Hub →</div></a>
+            <a href="https://blog.shensist.top" class="card"><h3>Insights</h3><p>Deep dives into Natural Algorithms, PRISM Agent logic.</p><div class="card-footer">Read Logs →</div></a>
+            <a href="https://blog.shensist.top/video-gallery" class="card"><h3>Sora Vision</h3><p>20,000+ Original AI narratives. Cyberpunk experiments.</p><div class="card-footer">Watch Now →</div></a>
+            <a href="https://dev.shensist.top" class="card"><h3>Open Source</h3><p>Explore the architecture behind TianSuan.</p><div class="card-footer">View Code →</div></a>
         </div>
-
-        <div class="section-header" style="margin-top:4rem; display:flex; justify-content:space-between; border-bottom:1px solid #111; padding-bottom:10px;">
-            <div class="section-title" style="color:var(--new-accent); font-family:var(--font-tech); border-left:3px solid var(--new-accent); padding-left:10px;">EXTENSIONS</div>
-            <a href="apps.html" style="font-family:var(--font-tech); font-size:0.7rem; color:#444; text-decoration:none;">VIEW ALL ➲</a>
+        <div class="section-header" style="margin-top:4rem;">
+            <div class="section-title" style="color:var(--new-accent)">EXTENSIONS</div>
+            <a href="apps.html" class="all-apps-btn">VIEW ALL ➲</a>
         </div>
         <div class="grid" id="dynamic-grid"></div>
     </main>
 
+    <div id="lingzhu-console">
+        <div class="console-container-inner">
+            <div class="console-controls">
+                <div class="neumorphic-btn" onclick="SIOS.ui.showHelp()">[ ? GUIDE ]</div>
+                <div class="neumorphic-btn" onclick="SIOS.reset()">[ ↻ REBOOT ]</div>
+                <div class="neumorphic-btn" onclick="deactivateLingZhu()">[ ✕ CLOSE ]</div>
+            </div>
+
+            <div class="console-header">
+                <div class="console-title">[ 灵 珠 · SI-OS ]</div>
+                <div class="console-subtitle">端侧超级个体认知中枢</div>
+            </div>
+
+            <div class="console-stream" id="console-output"></div>
+            
+            <div class="style-deck">
+                <button class="style-btn" data-value="Cinematic" onclick="setMasterStyle(this, 'Cinematic')">Cinematic</button>
+                <button class="style-btn" data-value="Anime" onclick="setMasterStyle(this, 'Anime')">Anime</button>
+                <button class="style-btn" data-value="Cyberpunk" onclick="setMasterStyle(this, 'Cyberpunk')">Cyberpunk</button>
+                <button class="style-btn" data-value="Sitcom" onclick="setMasterStyle(this, 'Sitcom')">Sitcom</button>
+                <button class="style-btn" data-value="Handheld" onclick="setMasterStyle(this, 'Handheld')">Handheld</button>
+                <button class="style-btn" data-value="Fancam" onclick="setMasterStyle(this, 'Fancam')">Fancam</button>
+                <button class="style-btn" data-value="Ghibli" onclick="setMasterStyle(this, 'Ghibli')">Ghibli</button>
+                <button class="style-btn" data-value="Noir" onclick="setMasterStyle(this, 'Noir')">Noir</button>
+                <button class="style-btn" data-value="Golden" onclick="setMasterStyle(this, 'Golden')">Golden</button>
+            </div>
+
+            <div class="console-input-area">
+                <input type="text" id="console-input" placeholder="输入你的主题..." autocomplete="off">
+                <button id="console-send-btn" onclick="SIOS.handleInput(document.getElementById('console-input').value)">[ ✦ MATERIALIZE ]</button>
+            </div>
+        </div>
+    </div>
+
     <script src="db.js"></script>
     <script>
-        // 打字机效果
-        const text = "Defining the physical reality of Local AI. 5.9TB Desktop Core is now live.";
+        const text = "Man is not as good as AI, AI is not as good as Nature. Defining the future of reality.";
         const typewriter = document.getElementById('typewriter');
         let i = 0;
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
-        // 核心修复：找回动态网格渲染逻辑
-        window.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('dynamic-grid');
-            if (typeof appDatabase !== 'undefined' && container) {
-                // 过滤出要在首页显示的 app
-                appDatabase.filter(app => app.onHome).forEach(app => {
-                    const card = document.createElement('a');
-                    card.href = app.url;
-                    card.className = 'card';
-                    card.target = "_blank";
-                    card.innerHTML = `
-                        <h3>${app.icon || '🚀'} ${app.name}</h3>
-                        <p>${app.desc}</p>
-                        <div class="card-footer">OPEN APP →</div>
-                    `;
-                    container.appendChild(card);
-                });
-            } else {
-                console.error("db.js not loaded or dynamic-grid not found");
-            }
-        });
+        const container = document.getElementById('dynamic-grid');
+        if (typeof appDatabase !== 'undefined') {
+            appDatabase.filter(app => app.onHome).forEach(app => {
+                const card = document.createElement('a');
+                card.href = app.url; card.className = 'card'; card.target = "_blank";
+                card.innerHTML = `<h3>${app.icon} ${app.name}</h3><p>${app.desc}</p><div class="card-footer">LAUNCH →</div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function activateLingZhu() { document.body.classList.add('zen-active'); document.getElementById('lingzhu-console').classList.add('active'); SIOS.init(); }
+        function deactivateLingZhu() { document.body.classList.remove('zen-active'); document.getElementById('lingzhu-console').classList.remove('active'); }
+        function setMasterStyle(btn, style) {
+            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            SIOS.state.sharedContext.masterStyle = style;
+            SIOS.ui.log(`[STYLE LOCKED]: ${style}`, "sys");
+        }
     </script>
+    <script src="js/core.js"></script>
 </body>
 </html>
