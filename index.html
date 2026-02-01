@@ -60,7 +60,6 @@
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
         .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
         
-        /* 灵珠控制台核心自适应代码 */
         #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; flex-direction: column; }
         #lingzhu-console.active { display: flex; }
         .console-container-inner { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 20px; position: relative; }
@@ -155,7 +154,7 @@
     <div id="lingzhu-console">
         <div class="console-container-inner">
             <div class="console-controls">
-                <div class="neumorphic-btn" onclick="SIOS.ui.showHelp()">[ ? GUIDE ]</div>
+                <div class="neumorphic-btn" onclick="showGuide()">[ ? GUIDE ]</div>
                 <div class="neumorphic-btn" onclick="SIOS.reset()">[ ↻ REBOOT ]</div>
                 <div class="neumorphic-btn" onclick="deactivateLingZhu()">[ ✕ CLOSE ]</div>
             </div>
@@ -192,11 +191,29 @@
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
+        // 修改 1: 桌面下载弹窗美化
         function handleDownload(e) {
             document.getElementById('install-guide').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-                alert("🚀 正在开始下载...\n\n重要：请查看 [V4.0 DEPLOYMENT PROTOCOL] 安装说明。");
-            }, 500);
+            // 使用控制台样式的日志替代普通 alert (如果 SIOS 已加载)
+            if(window.SIOS && document.getElementById('lingzhu-console').classList.contains('active')) {
+                SIOS.ui.log(">> INITIALIZING DOWNLOAD: Shensist_Core_V4_Final.tar.gz", "sys");
+                SIOS.ui.log(">> PLEASE FOLLOW DEPLOYMENT PROTOCOLS BELOW.", "sys");
+            } else {
+                alert("📡 核心组件下载已发起...\n━━━━━━━━━━━━━━━\n请务必阅读页面下方的 [V4.0 DEPLOYMENT PROTOCOL] 以完成 Linux 环境下的安装授权。");
+            }
+        }
+
+        // 修改 2: 控制台内部帮助弹窗美化
+        function showGuide() {
+            if(window.SIOS) {
+                SIOS.ui.log("--- DEPLOYMENT PROTOCOL v4.0 ---", "sys");
+                SIOS.ui.log("1. ENV: Linux/Ubuntu + Ollama Engine.", "sys");
+                SIOS.ui.log("2. SETUP: Run 'bash install_launcher.sh' in terminal.", "sys");
+                SIOS.ui.log("3. LAUNCH: Right click icon -> 'Allow Launching'.", "sys");
+                SIOS.ui.log("---------------------------------", "sys");
+            } else {
+                alert("安装指南：\n1. 环境：Ubuntu/Linux + Ollama\n2. 安装：执行 install_launcher.sh\n3. 启动：右键桌面图标选择 Allow Launching");
+            }
         }
 
         const container = document.getElementById('dynamic-grid');
@@ -212,7 +229,13 @@
         function activateLingZhu() { 
             document.body.classList.add('zen-active'); 
             document.getElementById('lingzhu-console').classList.add('active'); 
-            if(window.SIOS) SIOS.init(); 
+            if(window.SIOS) {
+                SIOS.init();
+                // 启动时自动在控制台打印欢迎语
+                setTimeout(() => {
+                    SIOS.ui.log("SI-OS COGNITIVE CORE ONLINE.", "sys");
+                }, 500);
+            }
         }
         
         function deactivateLingZhu() { 
