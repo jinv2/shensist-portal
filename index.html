@@ -59,6 +59,11 @@
         .card-footer { margin-top: 1.5rem; font-size: 0.8rem; color: var(--accent); font-family: var(--font-tech); }
         .all-apps-btn { font-family: var(--font-tech); font-size: 0.7rem; color: #444; text-decoration: none; border: 1px solid #222; padding: 5px 15px; border-radius: 20px; transition: 0.3s; }
 
+        /* 版权底部样式 */
+        footer { padding: 4rem 5% 2rem; text-align: center; border-top: 1px solid #111; margin-top: 4rem; }
+        .footer-brand { font-family: var(--font-tech); font-size: 0.8rem; color: var(--accent); letter-spacing: 2px; margin-bottom: 10px; }
+        .footer-copy { font-size: 0.6rem; color: #333; letter-spacing: 1px; text-transform: uppercase; }
+
         #custom-popup-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
@@ -177,6 +182,11 @@
         <div class="grid" id="dynamic-grid"></div>
     </main>
 
+    <footer>
+        <div class="footer-brand">SHENSIST / NATURAL ALGORITHM LAB</div>
+        <div class="footer-copy">&copy; 2026 SI-OS CORE PROTOCOL. ALL RIGHTS RESERVED.</div>
+    </footer>
+
     <div id="lingzhu-console">
         <div class="console-container-inner">
             <div class="console-controls">
@@ -189,7 +199,6 @@
                 <div class="console-subtitle">端侧超级个体认知中枢</div>
             </div>
             <div class="console-stream" id="console-output"></div>
-            
             <div class="style-deck">
                 <button class="style-btn" onclick="setMasterStyle(this, 'Cinematic')">Cinematic</button>
                 <button class="style-btn" onclick="setMasterStyle(this, 'Anime')">Anime</button>
@@ -201,7 +210,6 @@
                 <button class="style-btn" onclick="setMasterStyle(this, 'Noir')">Noir</button>
                 <button class="style-btn" onclick="setMasterStyle(this, 'Golden')">Golden</button>
             </div>
-            
             <div class="console-input-area">
                 <input type="text" id="console-input" placeholder="输入你的主题..." autocomplete="off">
                 <button id="console-send-btn" onclick="SIOS.handleInput(document.getElementById('console-input').value)">[ ✦ MATERIALIZE ]</button>
@@ -228,15 +236,11 @@
             document.getElementById('custom-popup-overlay').classList.add('active');
         }
 
-        function closePopup() {
-            document.getElementById('custom-popup-overlay').classList.remove('active');
-        }
+        function closePopup() { document.getElementById('custom-popup-overlay').classList.remove('active'); }
 
         function handleDownload(e) {
             document.getElementById('install-guide').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-                openInstallPopup('DOWNLOAD INITIATED');
-            }, 600);
+            setTimeout(() => { openInstallPopup('DOWNLOAD INITIATED'); }, 600);
         }
 
         const container = document.getElementById('dynamic-grid');
