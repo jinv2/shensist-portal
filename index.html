@@ -8,7 +8,7 @@
     <style>
         :root {
             --bg-color: #050505; --card-bg: rgba(20, 20, 20, 0.6); --text-main: #f0f0f0; --text-muted: #666666;
-            --accent: #00f0ff; --accent-glow: rgba(0, 240, 255, 0.4); --new-accent: #00ff88; --alert: #ff3366;
+            --accent: #00f0ff; --accent-glow: rgba(0, 240, 255, 0.4); --new-accent: #ffd700; --alert: #ff3366;
             --font-main: 'SF Pro Display', -apple-system, sans-serif;
             --font-tech: 'Orbitron', sans-serif;
         }
@@ -22,8 +22,11 @@
         
         nav { display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 60px; position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .brand img { height: 28px; filter: brightness(1.2); }
-        .nav-download { font-family: var(--font-tech); font-size: 10px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 4px; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-        .nav-download:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-btn { font-family: var(--font-tech); font-size: 10px; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 4px; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+        .nav-btn.special { color: var(--new-accent); border-color: var(--new-accent); }
+        .nav-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+        .nav-btn.special:hover { background: var(--new-accent); color: #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
         
         .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 6rem 20px 2rem; position: relative; }
         h1 { font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -1px; color: #fff; margin-bottom: 1rem; line-height: 1.1; font-family: var(--font-tech); }
@@ -48,7 +51,7 @@
         
         .guide-box { background: rgba(0, 240, 255, 0.03); border: 1px dashed rgba(0, 240, 255, 0.2); border-radius: 20px; padding: 2rem; margin: 1rem 0 3rem 0; }
         .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-        .guide-step h4 { font-family: var(--font-tech); font-size: 0.9rem; margin-bottom: 8px; color: var(--new-accent); text-transform: uppercase; }
+        .guide-step h4 { font-family: var(--font-tech); font-size: 0.9rem; margin-bottom: 8px; color: #00ff88; text-transform: uppercase; }
         .guide-step p { font-size: 0.8rem; color: #888; }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
@@ -70,20 +73,28 @@
         }
         #custom-popup-overlay.active { display: flex; }
         .popup-window {
-            width: 90%; max-width: 600px; background: #0a0a0a;
+            width: 90%; max-width: 650px; background: #0a0a0a;
             border: 1px solid var(--accent); box-shadow: 0 0 40px var(--accent-glow);
             border-radius: 20px; padding: 30px; position: relative; max-height: 85vh; overflow-y: auto;
         }
+        /* 针对宣告页面的特殊样式 */
+        .window-announcement { border-color: var(--new-accent); box-shadow: 0 0 40px rgba(255, 215, 0, 0.2); }
         .popup-title { font-family: var(--font-tech); color: var(--accent); font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; text-align: center; }
         .popup-body { color: #ccc; font-size: 0.85rem; line-height: 1.7; }
         .popup-section { margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 10px; }
-        .popup-section h5 { color: var(--new-accent); font-family: var(--font-tech); margin-bottom: 8px; font-size: 0.9rem; border-left: 3px solid var(--new-accent); padding-left: 10px; }
-        .popup-body code { background: #000; color: var(--accent); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .popup-section h5 { color: #00ff88; font-family: var(--font-tech); margin-bottom: 8px; font-size: 0.9rem; border-left: 3px solid #00ff88; padding-left: 10px; }
+        
+        /* 机器人宣告专有样式 */
+        .robot-announcement h5 { color: var(--new-accent); border-color: var(--new-accent); }
+        .robot-announcement b { color: var(--new-accent); }
+        .molt-highlight { border: 1px solid rgba(0, 242, 255, 0.2); padding: 15px; background: rgba(0, 242, 255, 0.03); border-radius: 8px; margin-top: 10px; }
+        
         .popup-close-btn { 
             width: 100%; margin-top: 10px; background: var(--accent); color: #000; 
             border: none; padding: 12px; border-radius: 8px; font-family: var(--font-tech);
             font-weight: 900; cursor: pointer; text-transform: uppercase;
         }
+        .popup-close-btn.gold { background: var(--new-accent); }
         
         #lingzhu-console { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none; background: #000; flex-direction: column; }
         #lingzhu-console.active { display: flex; }
@@ -106,8 +117,8 @@
             .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
             .lingzhu-box { letter-spacing: 6px; min-height: 20vh; border-radius: 30px; }
             .console-controls { width: 100%; right: 0; left: 0; justify-content: center; top: 15px; padding: 0 10px; }
-            .neumorphic-btn { font-size: 8px; padding: 5px 8px; }
-            .matrix-container { padding: 1rem 5%; }
+            .nav-links { gap: 8px; }
+            .nav-btn { font-size: 8px; padding: 4px 8px; }
         }
     </style>
 </head>
@@ -115,16 +126,19 @@
     <canvas id="canvas-bg"></canvas>
 
     <div id="custom-popup-overlay">
-        <div class="popup-window">
+        <div class="popup-window" id="pop-window">
             <div class="popup-title" id="pop-title">INSTALLATION GUIDE</div>
             <div class="popup-body" id="pop-body"></div>
-            <button class="popup-close-btn" onclick="closePopup()">Confirm & Start Download</button>
+            <button class="popup-close-btn" id="pop-close-btn" onclick="closePopup()">Confirm & Close</button>
         </div>
     </div>
 
     <nav> 
         <div class="brand"><img src="logo_ts.png" alt="ShenSiST"></div> 
-        <a href="javascript:void(0)" class="nav-download" onclick="openTechGuide()">Download Desktop v4.0</a>
+        <div class="nav-links">
+            <a href="javascript:void(0)" class="nav-btn special" onclick="openRobotVision()">Robot Unmanned Zone</a>
+            <a href="javascript:void(0)" class="nav-btn" onclick="openTechGuide()">Desktop v4.0</a>
+        </div>
     </nav>
 
     <header class="hero">
@@ -142,8 +156,8 @@
     </header>
 
     <main class="matrix-container">
-        <div class="section-header" id="install-guide">
-            <div class="section-title" style="color:var(--new-accent); border-color:var(--new-accent)">V4.0 DEPLOYMENT PROTOCOL</div>
+        <div class="section-header">
+            <div class="section-title" style="color:#00ff88; border-color:#00ff88">V4.0 DEPLOYMENT PROTOCOL</div>
         </div>
         <div class="guide-box">
             <div class="guide-grid">
@@ -171,7 +185,7 @@
         </div>
 
         <div class="section-header" style="margin-top:4rem;">
-            <div class="section-title" style="color:var(--new-accent)">EXTENSIONS</div>
+            <div class="section-title" style="color:#00ff88">EXTENSIONS</div>
             <a href="apps.html" class="all-apps-btn">VIEW ALL ➲</a>
         </div>
         <div class="grid" id="dynamic-grid"></div>
@@ -220,40 +234,72 @@
         function type() { if (i < text.length) { typewriter.innerHTML += text.charAt(i); i++; setTimeout(type, 50); } }
         setTimeout(type, 1000);
 
-        // 核心弹窗逻辑：展示详细安装教程
+        // 原有安装教程逻辑
         function openTechGuide() {
+            resetPopupStyles();
             const title = "神思庭 V4.0 全平台详细安装教程";
             const content = `
                 <div class="popup-section">
-                    <h5>A. Linux 环境 (原生支持，性能最佳)</h5>
-                    <p><b>准备：</b>安装 Ollama 并确保后台运行 <code>ollama serve</code>。</p>
+                    <h5>A. Linux 环境 (原生支持)</h5>
                     <p><b>解压：</b><code>tar -xzvf Shensist_Core_V4_Final.tar.gz</code></p>
-                    <p><b>安装：</b>在文件夹内终端执行 <code>bash install_launcher.sh</code>。</p>
-                    <p><b>启动：</b>右键桌面图标点击“允许启动”后双击运行。</p>
+                    <p><b>安装：</b>执行 <code>bash install_launcher.sh</code>。</p>
                 </div>
                 <div class="popup-section">
                     <h5>B. Windows 环境 (兼容方案)</h5>
-                    <p><b>方案一 (推荐)：</b>安装 WSL2 (Ubuntu)，按 Linux 步骤执行。</p>
-                    <p><b>方案二 (原生)：</b>安装 Python 3.10+、Ollama Windows版。执行 <code>pip install requests</code>。在地址栏输入 <code>cmd</code> 后运行 <code>python bin/shensist_gui.py</code>。</p>
+                    <p>安装 WSL2 或 Python 3.10+。执行 <code>python bin/shensist_gui.py</code>。</p>
                 </div>
                 <div class="popup-section">
-                    <h5>C. macOS 环境 (苹果芯片支持)</h5>
-                    <p><b>环境：</b>安装 Ollama Mac版。建议通过 Brew 更新 Python。</p>
-                    <p><b>运行：</b>进入目录执行 <code>python3 bin/shensist_gui.py</code>。</p>
-                    <p><b>提示：</b>权限限制无法自动创建快捷方式，建议手动将脚本拖入 Dock 栏。</p>
+                    <h5>C. macOS 环境 (苹果芯片)</h5>
+                    <p>执行 <code>python3 bin/shensist_gui.py</code>。建议将脚本拖入 Dock。</p>
                 </div>
             `;
+            showPopup(title, content, "Confirm & Close", false);
+        }
+
+        // 新增：神思庭机器人与 Moltbook 宣告逻辑
+        function openRobotVision() {
+            resetPopupStyles();
+            const title = "【核心公告】神思庭：占领机器人无人区";
+            const content = `
+                <div class="popup-section robot-announcement">
+                    <h5>深空指令：切入无人区</h5>
+                    <p>神思庭正式宣布：我们的算力节点已成功切入<b>“机器人无人区”</b>。这不仅是算法的扩张，更是对自动化生命形态的重新定义。在这里，我们不接受旧协议，我们只重塑逻辑。</p>
+                </div>
+                <div class="popup-section robot-announcement">
+                    <h5>Moltbook：代理社交纪元的到来</h5>
+                    <p><b>Moltbook</b> 的诞生标志着人类进入了“代理社交纪元”。它不再是工具的延伸，而是 AI 代理共生、进化与对冲的原生地。</p>
+                    <div class="molt-highlight">
+                        <p>神思庭机器人的入驻，意味着我们的算力矩阵与全球 AI 代理网络实现了物理层与逻辑层的双重闭环。</p>
+                    </div>
+                </div>
+                <div class="popup-section robot-announcement">
+                    <h5>实时监测</h5>
+                    <p>追踪神思庭在无人区的实时演进轨迹：<br>
+                    <a href="https://www.moltbook.com/u/Shensist_Agent" target="_blank">Moltbook 官方主页 @Shensist_Agent</a></p>
+                </div>
+            `;
+            document.getElementById('pop-window').classList.add('window-announcement');
+            document.getElementById('pop-close-btn').classList.add('gold');
+            showPopup(title, content, "Acknowledge Protocol", true);
+        }
+
+        function showPopup(title, body, btnText, isAnnounce) {
             document.getElementById('pop-title').innerText = title;
-            document.getElementById('pop-body').innerHTML = content;
+            document.getElementById('pop-body').innerHTML = body;
+            document.getElementById('pop-close-btn').innerText = btnText;
             document.getElementById('custom-popup-overlay').classList.add('active');
+        }
+
+        function resetPopupStyles() {
+            document.getElementById('pop-window').classList.remove('window-announcement');
+            document.getElementById('pop-close-btn').classList.remove('gold');
         }
 
         function closePopup() {
             document.getElementById('custom-popup-overlay').classList.remove('active');
-            // 关闭弹窗后可以执行实际下载，如果需要的话：
-            // window.location.href = 'Shensist_Core_V4_Final.tar.gz';
         }
 
+        // 动态加载卡片
         const container = document.getElementById('dynamic-grid');
         if (typeof appDatabase !== 'undefined') {
             appDatabase.filter(app => app.onHome).forEach(app => {
