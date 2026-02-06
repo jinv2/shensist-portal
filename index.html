@@ -302,6 +302,19 @@
         <div class="section-header"><div class="section-title">SYSTEM MATRIX</div></div>
         <div class="grid">
             <a href="https://ai.shensist.top" class="card"><h3>TianSuan AI</h3><p>Digital Assets Hub & PWA Matrix. Access the Music Engine.</p><div class="card-footer">Enter Hub →</div></a>
+            <a onclick="openDeepFocusPortal()" class="card" style="border-color: var(--new-accent); position: relative; overflow: hidden; cursor: pointer;">
+    <div style="position: absolute; top: 0; right: 0; background: var(--new-accent); color: #000; font-size: 9px; font-family: var(--font-tech); padding: 2px 10px; font-weight: 900; transform: rotate(0deg);">
+        MVP PROTOCOL
+    </div>
+    
+    <div style="margin-bottom: 15px; font-size: 1.5rem;">🎯</div>
+    <h3>Deep Focus Agent</h3>
+    <p>拒绝臃肿。利用 L-A-T-T 逻辑将复杂的巨头产品拆解为极简的 MVP 方案。做深不做广，直击核心需求。</p>
+    
+    <div class="card-footer" style="color: var(--new-accent); margin-top: auto;">
+        DEPLOY VERSION 1.5.0 ➲
+    </div>
+</a>
             <a href="https://blog.shensist.top" class="card"><h3>Insights</h3><p>Deep dives into Natural Algorithms, PRISM Agent logic.</p><div class="card-footer">Read Logs →</div></a>
             <a href="https://blog.shensist.top/video-gallery" class="card"><h3>Sora Vision</h3><p>20,000+ Original AI narratives. Cyberpunk experiments.</p><div class="card-footer">Watch Now →</div></a>
             <a href="https://dev.shensist.top" class="card"><h3>Open Source</h3><p>Explore the architecture behind TianSuan.</p><div class="card-footer">View Code →</div></a>
@@ -311,7 +324,22 @@
             <div class="section-title" style="color:#00ff88">EXTENSIONS</div>
             <a href="apps.html" class="all-apps-btn">VIEW ALL ➲</a>
         </div>
-        <div class="grid" id="dynamic-grid"></div>
+
+        <div class="grid">
+            <a href="https://github.com/jinv2/deepfocus-agent/releases/latest" class="card" style="border-color: var(--new-accent);">
+                <h3>🎯 Deep Focus Agent</h3>
+                <p>做深不做广。利用 L-A-T-T 逻辑拆解极简 MVP 方案，直击产品核心。</p>
+                <div class="card-footer" style="color: var(--new-accent);">DEPLOY V1.5.0 ➲</div>
+            </a>
+
+            <a href="https://todo.shensist.top" class="card">
+                <h3>V Neumorphism Todo</h3>
+                <p>极简拟态风格任务管理器，专注你的每日核心事项。</p>
+                <div class="card-footer">LAUNCH →</div>
+            </a>
+            
+            <div id="dynamic-grid" style="display: contents;"></div>
+        </div>
     </main>
 
     <footer>
@@ -453,7 +481,30 @@
                 SIOS.ui.log(`[STYLE LOCKED]: ${style}`, "sys");
             }
         }
+
+        function openDeepFocusPortal() {
+            resetPopupStyles();
+            const title = "DEEP FOCUS | 极简拆解协议";
+            const content = `
+                <div class="popup-section">
+                    <h5 style="color: var(--new-accent); border-color: var(--new-accent);">L-A-T-T 核心框架</h5>
+                    <p style="font-size: 0.8rem; line-height: 1.8;">
+                        <b style="color:#fff">L</b>everage: 利用开源杠杆<br>
+                        <b style="color:#fff">A</b>I Enhance: 智能交互增强<br>
+                        <b style="color:#fff">T</b>rim: 砍掉 80% 无效功能<br>
+                        <b style="color:#fff">T</b>arget: 锁定极小众受众
+                    </p>
+                </div>
+                <div class="popup-section">
+                    <h5>分发终端</h5>
+                    <p>检测到系统环境：Windows / Linux / macOS</p>
+                    <p><a href="https://github.com/jinv2/deepfocus-agent/releases/latest" target="_blank" style="color:var(--accent); text-decoration: underline;">点击下载二进制执行文件 (.exe / .AppImage)</a></p>
+                </div>
+            `;
+            showPopup(title, content, "Initiate Protocol", false);
+        }
     </script>
     <script src="js/core.js"></script>
 </body>
 </html>
+
